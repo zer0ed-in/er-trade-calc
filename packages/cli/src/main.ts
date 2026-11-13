@@ -10,6 +10,8 @@ import {
   type AttackChoice, type Build, type CommonOptions, type Context, type ScenarioName, type SideOverrides, type StatKey,
 } from "@ertc/engine";
 
+import { registerBalance } from "./balance.ts";
+
 const ctx = (): Context => ({ data: loadGameData(), ruleset: loadLadderRuleset() });
 
 function readBuild(path: string, c: Context): Build {
@@ -165,9 +167,11 @@ program
 
 program
   .command("assumptions")
-  .description("list A1–A9 with status")
+  .description("list A1–A10 with status")
   .option("--json", "machine-readable JSON")
   .action((o: Opts) => out(o, apiAssumptions(), `${renderAssumptions()}\n\n${CREDIT_LINE}`));
+
+registerBalance(program);
 
 try {
   await program.parseAsync();

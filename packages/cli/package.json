@@ -9,6 +9,7 @@
     "@ertc/builds": "workspace:*",
     "@ertc/data": "workspace:*",
     "@ertc/engine": "workspace:*",
-    "commander": "15.1.0"
+    "commander": "15.1.0",
+    "yaml": "2.6.1"
   }
 }

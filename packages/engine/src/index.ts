@@ -16,3 +16,7 @@ export * from "./interaction/trade.ts";
 export * from "./legality/ladder.ts";
 export * from "./sweep/sweep.ts";
 export * from "./api.ts";
+export * from "./balance/setups.ts";
+export * from "./balance/basket.ts";
+export * from "./balance/search.ts";
+export * from "./balance/report.ts";
