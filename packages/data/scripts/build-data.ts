@@ -279,14 +279,14 @@ const params = <T>(name: string) => {
   write("hits.json", rowsOut, `${plannerAttacksRaw.file} + ${atkParam.file}`);
   if (missingAtkParam.length) console.warn(`  note: ${missingAtkParam.length} hit rows have no AtkParam_Pc row (atkParam: null)`);
 
-  const anims = params<Record<string, { name: string; events?: Record<string, unknown> }>>("animations.json");
+  const anims = params<Record<string, { name: string; labels?: string[]; events?: Record<string, unknown> }>>("animations.json");
   const animOut: Record<string, unknown> = {};
   for (const file of usedFiles) {
     const a = anims.rows[file];
     if (!a) continue;
     const e = a.events ?? {};
     // Frames as listed (A1: already speed-adjusted). `gradients` deliberately dropped so nothing can re-apply them.
-    animOut[file] = { name: a.name, activeFrames: e.activeFrames ?? [], hyperArmour: e.hyperArmour ?? [], spEffects: e.spEffects ?? [], iframes: e.iframes ?? [], canBeParried: e.canBeParried ?? [] };
+    animOut[file] = { name: a.name, labels: a.labels ?? [], activeFrames: e.activeFrames ?? [], hyperArmour: e.hyperArmour ?? [], spEffects: e.spEffects ?? [], iframes: e.iframes ?? [], canBeParried: e.canBeParried ?? [] };
   }
   write("animations.json", animOut, anims.file);
 }

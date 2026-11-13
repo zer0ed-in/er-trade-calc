@@ -45,3 +45,15 @@ describe("mounted attacks are removed", () => {
     expect(() => resolveAttack(data, lance, { attack: "Mounted R1 1" })).toThrow(/can't do/);
   });
 });
+
+describe("hit selectors on a real 2-hit attack", () => {
+  it("Messmer Soldier's Spear 2h Charged R2 1 with hits '2' returns the second hit", () => {
+    const b = mk(strBody, { weapon: "Messmer Soldier's Spear", infusion: "Standard", upgrade: 25 });
+    const attack = resolveAttack(data, b, { attack: "2h Charged R2 1", hits: "2" });
+    expect(attack.hits.map((h) => h.index)).toEqual([2]);
+    expect(attack.hits[0]!.id).toBe(attack.allHits[1]!.id);
+    const r = computeAttack(data, prepareFighter(data, b, { scenario: "base" }), attack, prepareFighter(data, dextra, { scenario: "base" }));
+    expect(r.attack.hitsLanded).toEqual([2]);
+    expect(r.attack.hitsTotal).toBe(2);
+  });
+});

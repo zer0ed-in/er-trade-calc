@@ -136,6 +136,8 @@ export interface HitRow {
 
 export interface AnimationFrames {
   name: string;
+  /** FDE labels, e.g. Attack, WeaponSkill, HasBullet, HyperArmour. */
+  labels?: string[];
   activeFrames: { range: [number, number]; params?: { AtkParamID?: string[] } }[];
   hyperArmour: { range: [number, number]; id?: number; super?: boolean }[];
   spEffects: { range: [number, number]; id: number }[];
