@@ -1,5 +1,5 @@
 // `pnpm data:regulation` — extract the game tables we use from a local regulation.bin into packages/data/gen/regulation/<patch>/.
-// The .bin and the paramdefs stay local (game-files/, gitignored). No network.
+// The .bin and the paramdefs stay local (game-files/, gitignored; paramdefs are GPL-3.0 and never vendored). No network.
 // Where Emilia's copy already holds a table and matches the game file, we keep her copy and only record the check here.
 import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";

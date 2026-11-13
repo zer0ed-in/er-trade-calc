@@ -3,7 +3,7 @@
  "regulationVersion": 11730034,
  "sha256": "b8cdab84c0772f66811fdc5176a381877ca6657b37d420cc2c1562a90d63870e",
  "source": "regulation.bin from TKGP's ER Regulation Archive (Nexus Mods, Elden Ring mod 4262)",
- "paramdefs": "Source: https://github.com/vawser/Smithbox (GPL-3.0), src/Smithbox.Data/Assets/PARAM/ER/Defs, commit de81a39826561c2004a3b09308e7adf6d5d18f58, fetched 2026-11-13.\nLocal only: not committed (licence decision pending).",
+ "paramdefs": "Source: https://github.com/vawser/Smithbox (GPL-3.0), src/Smithbox.Data/Assets/PARAM/ER/Defs, commit de81a39826561c2004a3b09308e7adf6d5d18f58, fetched 2026-11-13.\nLocal only: never committed (GPL-3.0; Zer0, 2026-11-13).",
  "extractedAt": "2026-11-13",
  "files": {
   "SpEffectParam.json.gz": "SpEffectParam, all 11354 rows",

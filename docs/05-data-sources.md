@@ -56,7 +56,10 @@ sha256 `b8cdab84c0772f66811fdc5176a381877ca6657b37d420cc2c1562a90d63870e`) comes
 `pnpm data:regulation` reads it (`packages/data/scripts/lib/regulation.ts`: AES-256-CBC → DCX/ZSTD → BND4 → PARAM) and writes
 only the tables we use to `packages/data/gen/regulation/1.17.3/`, with a manifest (version, sha256, date, checks).
 - Field layouts come from the Elden Ring paramdefs in Smithbox (vawser, GPL-3.0; they add FirstVersion/RemovedVersion to Paramdex's defs).
-  They are kept locally in `game-files/paramdefs/` and **not vendored** until the licence question is settled.
+  They are kept locally in `game-files/paramdefs/` and **never vendored** (GPL-3.0; Zer0, 2026-11-13). The source repo and commit are
+  recorded in `game-files/paramdefs/SOURCE.txt` and copied into the gen manifest (`paramdefs`).
+  **Re-extracting needs the local defs:** put the ER defs from that commit in `game-files/paramdefs/ER/` (or set `PARAMDEFS`) and the
+  .bin in `game-files/<patch>/` (or set `REGULATION_BIN`), then run `pnpm data:regulation`. Without them the game-file tests skip (e.g. in CI).
 - Emilia's copies are kept where they match. Checked on every extraction: AtkParam_Pc (11,017 rows), BehaviorParam_PC (13,865),
   Bullet (15,475), EquipParamWeapon, EquipParamAccessory, EquipParamGoods, ToughnessParam, FinalDamageRateParam and her SpEffectParam rows
   all equal 1.17.3 on every same-named field, except Bullet row 20003309 (Piquebone Arrow): `atkId_Bullet` 0 in her 1.17 copy, 1 in 1.17.3.
