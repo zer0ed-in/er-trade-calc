@@ -137,10 +137,15 @@ export function apiAssumptions() {
 // ---- text rendering (CLI tables; MCP returns JSON + this text) -----------------------------------
 const flagLine = (g: LegalityGate) => (g.ignoredViolations?.length ? [`⚠ ignore-rules: NOT LADDER-LEGAL — ${g.ignoredViolations.join("; ")}`] : []);
 const attackLine = (r: AttackResult | { unavailable: string }) =>
-  "unavailable" in r ? r.unavailable : `${r.attacker} → ${r.defender}: ${r.attack.name} = ${r.total ?? "unknown"} damage (${r.hits.map((h) => h.damage ?? "?").join(" + ")}), poise damage ${r.poiseDamage ?? "not supported"}`;
+  "unavailable" in r ? r.unavailable
+    : `${r.attacker} → ${r.defender}: ${r.attack.name} = ${r.total ?? "unknown"} damage (${r.hits.map((h) => h.damage ?? "?").join(" + ")}), poise damage ${round1(r.poiseDamage)}` +
+      `\n  hitstun: ${r.hitEffects.map((e) => `hit ${e.hit} ${e.hitstun.name} (level ${e.hitstun.level})`).join(", ")}; stamina: ${r.hitEffects.map((e) => `hit ${e.hit} ${e.note}`).join(", ")}`;
+const round1 = (x: number) => Math.round(x * 10) / 10;
 
 export function renderHit(r: HitResponse, breakdown = false): string {
   const lines = [...r.meta.warnings, ...r.meta.notSupported, ...flagLine(r.legality), attackLine(r.aToB), attackLine(r.bToA)];
+  const durationLine = [r.aToB, r.bToA].find((x): x is AttackResult => !("unavailable" in x))?.hitstunDuration;
+  if (durationLine) lines.push(durationLine);
   for (const side of [r.aToB, r.bToA]) if (!("unavailable" in side)) for (const h of side.hits) for (const w of [...h.warnings, ...(h.unknownReason ? [h.unknownReason] : [])]) lines.push(`  note: ${w}`);
   if (breakdown) for (const side of [r.aToB, r.bToA]) if (!("unavailable" in side)) lines.push("", ...explainAttack(side));
   return [...lines, "", ...footer(r.meta)].join("\n");
@@ -154,7 +159,7 @@ export function renderTrade(r: TradeResponse, breakdown = false): string {
     const poise = !p ? "not hit" : p.kind === "super-armour" ? "super armour" : p.kind === "unknown" ? `unknown (${p.reason})` : `${p.kind === "hyper-armour" ? "HA " : ""}${p.poise.toFixed(1)} poise`;
     return [
       `${name} ${s.label}: ${s.attack} — hit frame ${s.timing.hitFrame} (startup ${s.timing.startupFrame}, shown ${s.timing.startupFrame + ASSUMPTIONS.A2.choice.displayOffset}f; input delay ${s.timing.inputDelay}; offset ${s.timing.offset})`,
-      `   damage dealt: ${s.landed ? (s.damage?.total ?? "unknown") : "— (staggered first)"}${s.counterHitOnOther ? " [counter hit]" : ""}; poise damage ${s.poiseDamageDealt}${s.staggeredOther ? " → staggers" : ""}; own poise when hit: ${poise}`,
+      `   damage dealt: ${s.landed ? (s.damage?.total ?? "unknown") : "— (staggered first)"}${s.counterHitOnOther ? " [counter hit]" : ""}; poise damage ${round1(s.poiseDamageDealt)}${s.staggeredOther ? " → staggers" : ""}; own poise when hit: ${poise}`,
       `   hits to kill: ${s.hitsToKill?.attacks ?? "unknown"}${s.hitsToKill?.steps.some((x) => x.event) ? ` (${s.hitsToKill.steps.filter((x) => x.event).map((x) => x.event).join("; ")})` : ""}`,
       ...(s.poiseToTankFollowUps.length ? [`   poise to tank follow-ups: ${s.poiseToTankFollowUps.map((f) => `hit ${f.hit} ≥ ${f.poiseNeeded}`).join(", ")}`] : []),
     ];

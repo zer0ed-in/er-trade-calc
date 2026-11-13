@@ -98,6 +98,20 @@ export interface WeaponMeta {
   requirements: Record<string, number>;
   somber: boolean;
   defaultSkillId: number;
+  /** EquipParamWeapon: raw poise damage base (× hit atkSuperArmorCorrection / 100). */
+  saWeaponDamage: number;
+  /** EquipParamWeapon: weapon toughness used in hyper armour (× 1000 = display poise, as the planner shows it). */
+  toughnessCorrectRate: number;
+}
+
+/** ToughnessParam row (hyper-armour window strength). Field names from the 1.17.3 paramdef. */
+export interface ToughnessRow {
+  correctionRate: number;
+  minToughness: number;
+  isNonEffectiveCorrectionForMin: boolean;
+  proCorrectionRate: number;
+  pvpToughnessDamageRate: number;
+  pvpHpDamageRate: number;
 }
 
 export interface PlannerAttackEntry {
@@ -116,13 +130,19 @@ export interface HitRow {
   physicalDamageMV: number; magicDamageMV: number; fireDamageMV: number; lightningDamageMV: number; holyDamageMV: number;
   physicalDamageFlat: number; magicDamageFlat: number; fireDamageFlat: number; lightningDamageFlat: number; holyDamageFlat: number;
   physDamageRateFinal: number; magicDamageRateFinal: number; fireDamageRateFinal: number; lightningDamageRateFinal: number; holyDamageRateFinal: number;
-  poiseDamageFlat: number;
+  /** Planner's precomputed PvP poise damage (display units); null on rows built from regulation tables (Kick). */
+  poiseDamageFlat: number | null;
   poiseDamageMV: number;
+  /** PvP poise rate (FinalDamageRateParam saRate: 2.2 normal attacks, 2.7 skills). */
+  saDamageRateFinal: number;
   statusMV: number;
   buffMV: number;
   staminaCost: number;
   physAttribute: string;
-  startup: number;
+  /** null = the hit's active frames aren't in the data (Kick). */
+  startup: number | null;
+  /** Set on rows built from regulation tables instead of the planner (Kick). */
+  source?: string;
   bloodBuildup: number; frostBuildup: number; poisonBuidup: number; scarletRotBuidup: number; sleepBuildup: number; madnessBuildup: number; curseBuildup: number;
   /**
    * The AtkParam_Pc row the game uses for this hit: hit id → BehaviorParam_PC (refType 0 → AtkParam, 1 → Bullet → AtkParam),
@@ -186,6 +206,10 @@ export interface RawGameData {
   hits: Record<string, HitRow>;
   animations: Record<string, AnimationFrames>;
   speffects: Record<string, unknown>[];
+  /** ToughnessParam rows by id (hyper-armour windows name a row). */
+  toughness: Record<string, ToughnessRow>;
+  /** GameSystemCommonParam.baseToughnessRecoverTime (s) and PlayerCommonParam.toughnessRecoverCorrection (regulation.bin). */
+  poiseRecovery: { baseToughnessRecoverTime: number; toughnessRecoverCorrection: number };
   plannerRulesets: unknown;
   /** Which ash fits which weapon and infusion (gen ash-compat.json, planner rule verified against EquipParamGem). */
   ashCompat: AshCompat;

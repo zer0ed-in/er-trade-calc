@@ -7,6 +7,9 @@ import { fileURLToPath } from "node:url";
 import { gunzipSync } from "node:zlib";
 import { buildAshCompat, extractPlannerAshes } from "./lib/ash-compat.ts";
 import { hitResolver } from "./lib/hit-resolution.ts";
+
+const KICK_BEHAVIOR_IDS = [300000085, 300000086];
+const KICK_ANIMATION = "a712_040000";
 import { evalDefaultExportModule, extractAssignedLiteral, extractLiteralContaining, identFromUsage } from "./lib/js-literal.ts";
 
 const PATCH = process.env.GAME_PATCH ?? "1.17";
@@ -167,15 +170,44 @@ const params = <T>(name: string) => {
 {
   type ArmamentRow = { id: number; name: string; category: string; weight: number; is_buffable: boolean; allow_ash_of_war: boolean; attack_attributes: string[]; requirements: Record<string, number>; default_skill_id: number; upgrade_material: string };
   const { rows, file } = params<Record<string, ArmamentRow>>("armaments.json");
+  // Poise fields from EquipParamWeapon (base row; infusions share them, e.g. Shamshir/Heavy/Keen all 5 and 0.015).
+  const equipWeapon = params<Record<string, number | string>[]>("EquipParamWeapon.json");
+  const weaponRow = new Map(equipWeapon.rows.map((r) => [r["Row ID"] as number, r]));
   write(
     "weapons.json",
-    Object.values(rows).map((w) => ({
-      id: w.id, name: w.name, category: w.category, weight: w.weight, isBuffable: w.is_buffable, allowAshOfWar: w.allow_ash_of_war,
-      attackAttributes: w.attack_attributes, requirements: w.requirements, defaultSkillId: w.default_skill_id,
-      somber: /somber/i.test(w.upgrade_material),
-    })),
+    Object.values(rows).map((w) => {
+      const row = weaponRow.get(w.id);
+      if (!row) throw new Error(`EquipParamWeapon has no row ${w.id} (${w.name})`);
+      return {
+        id: w.id, name: w.name, category: w.category, weight: w.weight, isBuffable: w.is_buffable, allowAshOfWar: w.allow_ash_of_war,
+        attackAttributes: w.attack_attributes, requirements: w.requirements, defaultSkillId: w.default_skill_id,
+        somber: /somber/i.test(w.upgrade_material),
+        // saWeaponDamage: raw poise damage base (× the hit's atkSuperArmorCorrection/100). toughnessCorrectRate: weapon toughness for HA.
+        saWeaponDamage: row.saWeaponDamage as number, toughnessCorrectRate: row.toughnessCorrectRate as number,
+      };
+    }),
+    `${file} + ${equipWeapon.file}`,
+  );
+}
+
+// Hyper-armour rows (ToughnessParam). Emilia's copy names two fields by position; the 1.17.3 paramdef names them
+// pvpToughnessDamageRate (her "unk1") and pvpHpDamageRate (her "finalDamageRate"); values are identical (docs/05 E).
+{
+  const { rows, file } = params<Record<string, number | string>[]>("ToughnessParam.json");
+  write(
+    "toughness.json",
+    Object.fromEntries(rows.map((r) => [r["Row ID"], {
+      correctionRate: r.correctionRate, minToughness: r.minToughness, isNonEffectiveCorrectionForMin: r.isNonEffectiveCorrectionForMin === 1,
+      proCorrectionRate: r.proCorrectionRate, pvpToughnessDamageRate: r.unk1, pvpHpDamageRate: r.finalDamageRate,
+    }])),
     file,
   );
+}
+
+// Poise recovery: only in regulation.bin (GameSystemCommonParam / PlayerCommonParam), extracted by `pnpm data:regulation`.
+{
+  const f = "gen/regulation/1.17.3/toughness-recover.json";
+  write("poise-recovery.json", JSON.parse(readFileSync(join(DATA_ROOT, f), "utf8")), `${f} (regulation.bin 1.17.3)`);
 }
 
 // SpEffects actually used by the engine (counter frames #45). Kept as full rows.
@@ -288,6 +320,40 @@ const params = <T>(name: string) => {
           }
         : null,
     };
+  }
+  // Kick: no planner or FDE hit row. Its behaviors 300000085/86 → AtkParam 301100800/801 (BehaviorParam_PC "Shared [AOW] Kick").
+  // Built in the planner's row shape from AtkParam_Pc + FinalDamageRateParam; frames are unknown (FDE a712_040000 has no
+  // active-frame events), so startup is null.
+  {
+    const finalRates = new Map(params<Record<string, number>[]>("FinalDamageRateParam.json").rows.map((r) => [r["Row ID"], r]));
+    const behaviors = new Map(behaviorParam.rows.map((r) => [r["Row ID"] as number, r]));
+    usedFiles.add(KICK_ANIMATION); // no planner entry references it; the engine adds Kick to every weapon that allows it
+    for (const behaviorId of KICK_BEHAVIOR_IDS) {
+      const resolved = resolver.resolve(behaviorId);
+      if ("unresolved" in resolved) throw new Error(`Kick: ${resolved.unresolved}`);
+      const a = resolved.row as Record<string, number>;
+      const rate = finalRates.get(a.finalDamageRateId!);
+      if (!rate) throw new Error(`Kick: no FinalDamageRateParam row ${a.finalDamageRateId}`);
+      if (a.atkAttribute !== 1) throw new Error(`Kick: atkAttribute ${a.atkAttribute}, expected 1 (strike)`);
+      rowsOut[`${behaviorId}:kick`] = {
+        damageLevel: a.dmgLevel,
+        physicalDamageMV: a.atkPhysCorrection, magicDamageMV: a.atkMagCorrection, fireDamageMV: a.atkFireCorrection, lightningDamageMV: a.atkThunCorrection, holyDamageMV: a.atkDarkCorrection,
+        physicalDamageFlat: a.atkPhys, magicDamageFlat: a.atkMag, fireDamageFlat: a.atkFire, lightningDamageFlat: a.atkThun, holyDamageFlat: a.atkDark,
+        physDamageRateFinal: rate.physRate, magicDamageRateFinal: rate.magRate, fireDamageRateFinal: rate.fireRate, lightningDamageRateFinal: rate.thunRate, holyDamageRateFinal: rate.darkRate,
+        saDamageRateFinal: rate.saRate,
+        poiseDamageFlat: null, poiseDamageMV: a.atkSuperArmorCorrection, statusMV: 0, buffMV: 0,
+        staminaCost: behaviors.get(behaviorId)!.stamina,
+        physAttribute: "Strike",
+        startup: null,
+        bloodBuildup: 0, frostBuildup: 0, poisonBuidup: 0, scarletRotBuidup: 0, sleepBuildup: 0, madnessBuildup: 0, curseBuildup: 0,
+        source: "regulation (BehaviorParam_PC → AtkParam_Pc)",
+        atkParam: {
+          id: resolved.atkParamId, via: resolved.via, isAddBaseAtk: a.isAddBaseAtk, overwriteAttackElementCorrectId: a.overwriteAttackElementCorrectId,
+          isDisableBothHandsAtkBonus: a.isDisableBothHandsAtkBonus, finalDamageRateId: a.finalDamageRateId, atkAttribute: a.atkAttribute,
+          atkSuperArmor: a.atkSuperArmor, atkSuperArmorCorrection: a.atkSuperArmorCorrection, atkStam: a.atkStam, dmgLevel: a.dmgLevel, dmgLevel_vsPlayer: a.dmgLevel_vsPlayer,
+        },
+      };
+    }
   }
   write("hits.json", rowsOut, `${plannerAttacksRaw.file} + ${atkParam.file} (via ${behaviorParam.file}, ${bulletParam.file})`);
   console.log(`  note: hit rows resolved via ${JSON.stringify(resolvedVia)}`);

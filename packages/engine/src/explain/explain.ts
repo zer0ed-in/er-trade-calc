@@ -19,7 +19,7 @@ export function resultMeta(patch: string, used: Iterable<AssumptionId>, notSuppo
 export function explainHit(h: HitDamage, label: string): string[] {
   const out: string[] = [];
   out.push(`${label} — hit ${h.hit.index} (${h.hit.kind}, ${h.hit.physAttribute}, id ${h.hit.id})`);
-  out.push(`  2H str bonus: ${h.twoHandBonusApplied ? `yes (str counts as ${h.effectiveStr})` : "no"} — ${h.hit.disable2H.source === "AtkParam" ? "AtkParam flag" : "A8 (no AtkParam row)"}${h.hit.disable2H.value ? ", disabled for this hit" : ""}`);
+  out.push(`  2H str bonus: ${h.twoHandBonusApplied ? `yes (str counts as ${h.effectiveStr})` : "no"} — ${h.hit.disable2H.source === "AtkParam" ? "AtkParam flag" : "unknown (no AtkParam row)"}${h.hit.disable2H.value ? ", disabled for this hit" : ""}`);
   if (h.skill) {
     out.push(`  Skill flat damage: ${h.skill.note}; upgrade rate ×${n(h.skill.upgradeRate, 3)}`);
     for (const s of h.skill.scaling) out.push(`    ${s.stat}: override ${s.override} × correct rate ${n(s.correctRate, 3)} × curve ${n(s.curve, 4)}`);

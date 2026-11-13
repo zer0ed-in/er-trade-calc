@@ -17,14 +17,45 @@ export interface TradeOptions {
   /** Additive input delay per player, frames (A7: default 0, never multiplied). */
   inputDelayA?: number;
   inputDelayB?: number;
-  /** Poise damage each player has already taken (default 0; no regen timers in phase 1). */
+  /** Poise damage each player has already taken (default 0). */
   poiseTakenA?: number;
   poiseTakenB?: number;
+  /** Seconds since that damage was taken; at ≥ the recovery time (30 s) poise is full again. Default 0. */
+  secondsSinceHitA?: number;
+  secondsSinceHitB?: number;
+}
+
+/** Seconds after the last hit until current poise refills: GameSystemCommonParam.baseToughnessRecoverTime × PlayerCommonParam.toughnessRecoverCorrection. */
+export const poiseRecoverySeconds = (data: GameData): number =>
+  data.raw.poiseRecovery.baseToughnessRecoverTime * data.raw.poiseRecovery.toughnessRecoverCorrection;
+
+export interface PoiseStep { hit: number; atSecond: number; poiseBefore: number; poiseDamage: number; broke: boolean; poiseAfter: number }
+
+/**
+ * Current poise over a sequence of hits (display units). Damage chips poise; a hit breaks it when current poise − damage ≤ 0;
+ * current poise refills to full once `recoverySeconds` pass without a hit; after a break it resets to full (A12).
+ */
+export function simulatePoise(maxPoise: number, hits: { poiseDamage: number; atSecond: number }[], recoverySeconds: number): { steps: PoiseStep[]; assumptions: AssumptionId[] } {
+  const steps: PoiseStep[] = [];
+  let current = maxPoise;
+  let lastHit = -Infinity;
+  let usedA12 = false;
+  hits.forEach((h, i) => {
+    if (h.atSecond - lastHit >= recoverySeconds) current = maxPoise;
+    const before = current;
+    const after = before - h.poiseDamage;
+    const broke = after <= 0;
+    if (broke && i < hits.length - 1) usedA12 = true;
+    current = broke && ASSUMPTIONS.A12.choice.resetToFullAfterBreak ? maxPoise : after;
+    lastHit = h.atSecond;
+    steps.push({ hit: i + 1, atSecond: h.atSecond, poiseBefore: before, poiseDamage: h.poiseDamage, broke, poiseAfter: current });
+  });
+  return { steps, assumptions: usedA12 ? ["A12"] : [] };
 }
 
 export type PoiseState =
   | { kind: "normal"; poise: number }
-  | { kind: "hyper-armour"; poise: number; damageMultiplier: number; formula: string }
+  | { kind: "hyper-armour"; poise: number; damageMultiplier: number; formula: string; toughnessRow: number; assumption?: AssumptionId }
   | { kind: "super-armour" }
   | { kind: "unknown"; reason: string };
 
@@ -73,7 +104,14 @@ function validateFrames(name: string, v: number | undefined): number {
   return x;
 }
 
-/** Poise state of `fighter` at its own animation frame `frame` of `attack` (frame < 0 = not started yet: plain poise). */
+/**
+ * Poise state of `fighter` at its own animation frame `frame` of `attack` (frame < 0 = not started yet: plain poise).
+ * Hyper armour comes from the ToughnessParam row the animation's HA window names (game data):
+ *   max     = (armour poise × proCorrectionRate + weapon toughness × correctionRate) × poise multipliers
+ *   current = max(max − taken, minToughness floor)   — current poise is raised to the floor at window start
+ *   incoming poise damage × pvpToughnessDamageRate, HP damage × pvpHpDamageRate.
+ * Weapon toughness = toughnessCorrectRate × 1000 and floor = minToughness × 10 (display units, as the planner converts them).
+ */
 export function poiseAtFrame(data: GameData, fighter: Fighter, attack: ResolvedAttack, frame: number, poiseTaken: number): PoiseState {
   const plain: PoiseState = { kind: "normal", poise: fighter.poise.total - poiseTaken };
   if (frame < 0) return plain;
@@ -82,17 +120,28 @@ export function poiseAtFrame(data: GameData, fighter: Fighter, attack: ResolvedA
   const window = anim.hyperArmour.find((w) => frame >= w.range[0] && frame <= w.range[1]);
   if (!window) return plain;
   if (window.super) return { kind: "super-armour" };
-  const ha = attack.entry.ha;
-  if (!ha) return { kind: "unknown", reason: `${attack.name} has a hyper-armour window at frames ${window.range.join("–")} but no HA strength data` };
-  // planner (router) effective HA poise: (armourPoise × armourPoiseContribution + poiseContribution) × poiseMultipliers / poiseDamageMultiplier
-  const poise = ((fighter.poise.armour * ha.armourPoiseContribution + ha.poiseContribution) * fighter.poise.multiplier) / ha.poiseDamageMultiplier - poiseTaken;
+  const row = window.id === undefined ? undefined : data.raw.toughness[String(window.id)];
+  if (!row) {
+    return { kind: "unknown", reason: new NotSupportedError(`Hyper armour of ${attack.name}`, `its window at frames ${window.range.join("–")} names no ToughnessParam row${window.id === undefined ? "" : ` (${window.id} missing)`}`, "animation data").line };
+  }
+  const weapon = data.weaponMeta.get(attack.slot.weapon);
+  if (!weapon) throw new EngineError(`No weapon data for ${attack.slot.weapon}`, "missing-data");
+  const weaponToughness = weapon.toughnessCorrectRate * 1000 * row.correctionRate;
+  const max = (fighter.poise.armour * row.proCorrectionRate + weaponToughness) * fighter.poise.multiplier;
+  // A13: without isNonEffectiveCorrectionForMin the floor is scaled by the weapon-toughness factor.
+  const floor = row.isNonEffectiveCorrectionForMin ? row.minToughness * 10 : row.minToughness * 10 * weapon.toughnessCorrectRate * row.correctionRate;
+  const current = Math.max(max - poiseTaken, floor);
+  const floorDecides = floor > max - poiseTaken;
   return {
     kind: "hyper-armour",
-    poise,
-    damageMultiplier: ha.damageMultiplier,
-    formula: `(${fighter.poise.armour} × ${ha.armourPoiseContribution} + ${ha.poiseContribution}) × ${fighter.poise.multiplier} / ${ha.poiseDamageMultiplier}${poiseTaken ? ` − ${poiseTaken} taken` : ""}`,
+    poise: current / row.pvpToughnessDamageRate,
+    damageMultiplier: row.pvpHpDamageRate,
+    toughnessRow: window.id!,
+    ...(floorDecides && !row.isNonEffectiveCorrectionForMin && { assumption: "A13" as const }),
+    formula: `max((${fighter.poise.armour} × ${row.proCorrectionRate} + ${round2(weaponToughness)}) × ${fighter.poise.multiplier}${poiseTaken ? ` − ${poiseTaken} taken` : ""}, floor ${round2(floor)}) / ${row.pvpToughnessDamageRate} (ToughnessParam ${window.id})`,
   };
 }
+const round2 = (x: number) => Math.round(x * 100) / 100;
 
 export function inCounterWindow(data: GameData, attack: ResolvedAttack, frame: number): boolean {
   if (frame < 0) return false;
@@ -119,14 +168,19 @@ export function computeTrade(data: GameData, a: Fighter, b: Fighter, choiceA: At
   const atkA = resolveAttack(data, a.build, choiceA);
   const atkB = resolveAttack(data, b.build, choiceB);
   if (!atkA.hits.length || !atkB.hits.length) throw new EngineError("Each attack needs at least one landed hit.", "invalid-hits");
-  // A verdict needs both sides' timing and poise damage; Kick has neither in the data (A10).
-  if ([...atkA.hits, ...atkB.hits].some((h) => h.poiseAndTimingUnknown)) throw new NotSupportedError(...KICK_NOT_SUPPORTED);
+  // A verdict needs both sides' timing; Kick's active frames aren't in the data.
+  if ([...atkA.hits, ...atkB.hits].some((h) => h.timingUnknown)) throw new NotSupportedError(...KICK_NOT_SUPPORTED);
   const offset = validateFrames("offset", opts.offset);
   const delayA = validateFrames("input delay A", opts.inputDelayA);
   const delayB = validateFrames("input delay B", opts.inputDelayB);
-  const takenA = opts.poiseTakenA ?? 0;
-  const takenB = opts.poiseTakenB ?? 0;
-  if (takenA < 0 || takenB < 0) throw new EngineError("Poise taken can't be negative.", "invalid-option");
+  const recovery = poiseRecoverySeconds(data);
+  const sinceA = opts.secondsSinceHitA ?? 0;
+  const sinceB = opts.secondsSinceHitB ?? 0;
+  if ((opts.poiseTakenA ?? 0) < 0 || (opts.poiseTakenB ?? 0) < 0) throw new EngineError("Poise taken can't be negative.", "invalid-option");
+  if (sinceA < 0 || sinceB < 0) throw new EngineError("Seconds since the last hit can't be negative.", "invalid-option");
+  // Poise refills to full once the recovery time passes without a hit.
+  const takenA = sinceA >= recovery ? 0 : opts.poiseTakenA ?? 0;
+  const takenB = sinceB >= recovery ? 0 : opts.poiseTakenB ?? 0;
 
   // A7: input delay is additive frames only. The B side's animation starts at offset + delayB.
   const startA = delayA;
@@ -165,6 +219,7 @@ export function computeTrade(data: GameData, a: Fighter, b: Fighter, choiceA: At
     defenderDamageMultiplier: defState.kind === "hyper-armour" ? defState.damageMultiplier : 1,
   });
   const used = new Set<AssumptionId>();
+  for (const st of [aPoise, bPoise]) if (st.kind === "hyper-armour" && st.assumption) used.add(st.assumption);
   const dmgA = aLands ? computeAttack(data, a, atkA, b, situation(a, b, counterOnB, bPoise)) : null;
   const dmgB = bLands ? computeAttack(data, b, atkB, a, situation(b, a, counterOnA, aPoise)) : null;
   dmgA?.assumptionsUsed.forEach((x) => used.add(x));
@@ -189,7 +244,7 @@ export function computeTrade(data: GameData, a: Fighter, b: Fighter, choiceA: At
     b: side(b, atkB, timing(atkB, delayB, offset, tB), bLands, aLands ? bPoise : null, bStaggersA === true && tB < tA, counterOnA, dmgB, htkB),
     caveats: [
       "Same-frame start unless an offset is given; no latency; no distance or reach.",
-      `Poise assumed fresh unless poise-taken is given (A: ${takenA}, B: ${takenB}); no poise regen modelled.`,
+      `Poise assumed fresh unless poise-taken is given (A: ${takenA}, B: ${takenB}); poise refills to full ${recovery} s after the last hit.`,
       "Only each side's first landed hit decides the verdict; later hits of a multi-hit attack are assumed to land.",
     ],
     meta: resultMeta(data.patch, used),

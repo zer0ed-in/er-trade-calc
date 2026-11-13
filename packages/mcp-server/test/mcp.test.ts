@@ -60,7 +60,7 @@ describe("MCP tools (in-memory)", () => {
     const sweep = jsonOf(await client.callTool({ name: "sweep_rune_level", arguments: { buildA: A, buildB: B, attackA: { attack: "2h R1 1" }, attackB: { attack: "2h R1 1" }, rlA: "107..109:2" } }));
     expect(sweep.rows.map((r: { aToB: number }) => r.aToB)).toEqual([250, 255]);
     expect(jsonOf(await client.callTool({ name: "check_legality", arguments: { build: A } })).legal).toBe(true);
-    expect(jsonOf(await client.callTool({ name: "list_assumptions", arguments: {} })).assumptions).toHaveLength(10);
+    expect(jsonOf(await client.callTool({ name: "list_assumptions", arguments: {} })).assumptions).toHaveLength(12);
     expect((await client.callTool({ name: "explain_formula", arguments: { topic: "defence curve" } })).content).toBeTruthy();
   });
 });

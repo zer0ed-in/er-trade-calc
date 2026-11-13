@@ -14,7 +14,8 @@ export interface Assumption<TChoice> {
   tests: string[];
 }
 
-export type AssumptionId = "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "A9" | "A10";
+// A10 (Kick fixed at 1 damage) was removed on 2026-11-13: Kick now comes from its AtkParam rows.
+export type AssumptionId = "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "A9" | "A11" | "A12" | "A13";
 
 export type CounterHitModel = "pierce-negation-minus-points" | "pierce-damage-multiplier";
 
@@ -112,35 +113,57 @@ export const ASSUMPTIONS = {
   },
   A8: {
     id: "A8",
-    question: "2H str bonus for a hit that resolves to no AtkParam_Pc row",
-    choice: { missingRowNormalAttack2H: true, missingRowSkillHit2H: false },
-    alternative: { missingRowNormalAttack2H: false, missingRowSkillHit2H: false },
-    status: "assumed",
+    question: "2H str bonus per hit",
+    choice: { source: "resolved AtkParam_Pc isDisableBothHandsAtkBonus", noRow: "not-supported" },
+    alternative: { source: "resolved AtkParam_Pc isDisableBothHandsAtkBonus", noRow: "not-supported" },
+    status: "confirmed",
     reason:
-      "Hits resolve through BehaviorParam_PC/Bullet to AtkParam_Pc; only Taker's Flames (300314902) has no row. Row present → read isDisableBothHandsAtkBonus. No row → normal attacks get 2H, skill/ash hits never (in-game tests: ashes ignore 2H).",
-    source: "Zer0, 2026-11-12",
-    tests: ["packages/engine/test/damage.test.ts", "packages/engine/test/attacks.test.ts"],
+      "Game data: every hit resolves through BehaviorParam_PC/Bullet to its AtkParam_Pc row, and the row's isDisableBothHandsAtkBonus decides. It is off on every ash, on backstabs/ripostes, and on some 2H normal attacks (e.g. Barbaric Roar R2s, Lizard Greatsword and Bloodfiend's Arm charged R2s, Serpent Flail R2s); the planner applies 2H to those. The one hit with no row (Taker's Flames 300314902) is not supported when two-handed.",
+    source: "regulation data (AtkParam_Pc, equal to 1.17.3), 2026-11-13",
+    tests: ["packages/engine/test/damage.test.ts", "packages/engine/test/attacks.test.ts", "packages/engine/test/poise.test.ts"],
   },
   A9: {
     id: "A9",
     question: "Lightning Slash weapon buff value",
     choice: { lightningFlat: 85, durationSeconds: 40, appliesToLightningInfusion: true },
     alternative: { lightningFlat: 0, durationSeconds: 0, appliesToLightningInfusion: false },
-    status: "assumed",
-    reason: "Wiki-sourced, curated entry: the copy has SpEffect rows 1675/1677 \"[Weapon] Lightning Slash\", but they only point to cycle effects 1676/1678, which are not in the copy; the planner has no effect for it.",
-    source: "wiki.gg (Zer0, 2026-11-12)",
-    tests: ["packages/engine/test/hit.test.ts"],
+    status: "confirmed",
+    reason:
+      "Game data: SpEffect 1675/1677 \"[Weapon] Lightning Slash\" cycle into 1676/1678, which set thunderAttackPower 85 and effectEndurance 40 s (full SpEffectParam from regulation.bin 1.17.3). That it also applies on a Lightning-infused weapon is from the wiki (not checked in-game).",
+    source: "regulation.bin 1.17.3 (value, duration); wiki.gg (Lightning infusion), 2026-11-13",
+    tests: ["packages/engine/test/hit.test.ts", "packages/data/test/regulation-effects.test.ts"],
   },
-  A10: {
-    id: "A10",
-    question: "Kick damage (no hit row for Kick in FDE or our AtkParam copy; animation a712_040000 exists)",
-    choice: { fixedPhysicalDamage: 1, scaled: false },
-    alternative: { fixedPhysicalDamage: 0, scaled: false },
+  A11: {
+    id: "A11",
+    question: "PvP poise rate for a hit with no planner rate (Kick)",
+    choice: { fromFinalDamageRateParam: true, kickSaRate: 2.7 },
+    alternative: { fromFinalDamageRateParam: false, kickSaRate: 2.7 },
+    status: "confirmed",
+    reason:
+      "Game data: the planner's per-hit saDamageRateFinal equals FinalDamageRateParam[finalDamageRateId].saRate on 12,868 of 12,869 hits. Kick's rows (AtkParam 301100800/801) name FinalDamageRateParam 10000: saRate 2.7, the same rate as other skills. Kick hit 1 = 6 × 2.7 × 10 = 162 poise.",
+    source: "regulation data (FinalDamageRateParam), 2026-11-13",
+    tests: ["packages/engine/test/kick.test.ts"],
+  },
+  A12: {
+    id: "A12",
+    question: "Current poise after a poise break",
+    choice: { resetToFullAfterBreak: true },
+    alternative: { resetToFullAfterBreak: false },
+    status: "assumed",
+    reason: "Community knowledge, not in the game tables: once poise breaks, current poise goes back to full. Refill without a break is in the data (30 s after the last hit).",
+    source: "Zer0 / planning session, 2026-11-13",
+    tests: ["packages/engine/test/poise.test.ts"],
+  },
+  A13: {
+    id: "A13",
+    question: "Hyper-armour minimum poise when ToughnessParam.isNonEffectiveCorrectionForMin is 0",
+    choice: { minScaledByWeaponToughness: true },
+    alternative: { minScaledByWeaponToughness: false },
     status: "assumed",
     reason:
-      "In-game Kick does ~0–2 damage; its value is stagger and guard break. Fixed at 1 (not 0) so ratios and hits to kill stay finite. Its poise damage is unknown and its active frames aren't in FDE, so stagger, trade and timing verdicts with Kick are not supported; guard break needs blocking, which isn't modelled.",
-    source: "Zer0, 2026-11-13",
-    tests: ["packages/engine/test/kick.test.ts"],
+      "The paramdef says the flag stops the toughness correction multiplier from applying to minToughness; it doesn't say which multiplier. We read it as the weapon-toughness factor (toughnessCorrectRate × correctionRate), the same one the window's weapon part uses. Rows with the flag set (e.g. Storm Stomp, Kick) use minToughness × 10 unscaled and don't depend on this.",
+    source: "paramdef description (Smithbox ToughnessParam), 2026-11-13",
+    tests: ["packages/engine/test/poise.test.ts"],
   },
 } as const satisfies Record<AssumptionId, Assumption<unknown>>;
 
