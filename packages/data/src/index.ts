@@ -37,7 +37,10 @@ export function loadRawGameData(patch = DEFAULT_PATCH): RawGameData {
     hits: read("hits.json"),
     animations: read("animations.json"),
     speffects: read("speffects.json"),
+    toughness: read("toughness.json"),
+    poiseRecovery: read("poise-recovery.json"),
     plannerRulesets: read("planner-rulesets.json"),
+    ashCompat: read("ash-compat.json"),
   };
 }
 

@@ -51,6 +51,7 @@ const attackHand = (ctx: LegalityContext) => ctx.attack?.hand;
 
 const hasTalisman = (...names: string[]): Check => (ctx) => ctx.fighter.equipped.talismans.filter((t) => names.includes(t)).map((t) => `talisman ${t} equipped`);
 const hasTear = (...names: string[]): Check => (ctx) => ctx.fighter.equipped.tears.filter((t) => names.includes(t)).map((t) => `crystal tear ${t} equipped`);
+const FAST_SWORD_DANCE_CLASSES = new Set(["Dagger", "Throwing Blade", "Straight Sword", "Light Greatsword", "Curved Sword", "Katana", "Axe", "Backhand Blade"]);
 const hasAsh = (...names: string[]): Check => (ctx) => slots(ctx, "any").filter(({ s }) => s.ashOfWar && names.includes(s.ashOfWar)).map(({ s }) => `ash of war ${s.ashOfWar} on ${s.weapon}`);
 const hasWeapon = (pred: (s: WeaponSlot, cat: string | undefined) => boolean, hand: "right" | "left" | "any", label: string): Check => (ctx) =>
   slots(ctx, hand).filter(({ s }) => pred(s, category(ctx, s.weapon))).map(({ s, hand: h }) => `${s.weapon} in the ${h} hand (${label})`);
@@ -169,7 +170,15 @@ export const LADDER_RULE_TABLE: Record<string, RuleEntry> = {
   "Blind Spot": { check: hasAsh("Blind Spot") },
   "Needle Piercer": { check: hasAsh("Needle Piercer") },
   "Red Bear Hunt": { check: hasAsh("Red Bear Hunt") },
-  "Fast Sword Dance": { check: hasAsh("Fast Sword Dance") },
+  // "Fast Sword Dance" isn't an ash name: it's Sword Dance on the light-weapon tier, which starts faster (wiki.gg Skill: Sword Dance;
+  // the game has separate variants per tier — a624_0402xx great weapons, a624_0403xx polearms, a624_0424xx twinblades).
+  // Great Katana is in the great-weapon tier, so Sword Dance on it is legal.
+  "Fast Sword Dance": {
+    check: (ctx) =>
+      slots(ctx, "any")
+        .filter(({ s }) => s.ashOfWar === "Sword Dance" && FAST_SWORD_DANCE_CLASSES.has(category(ctx, s.weapon) ?? ""))
+        .map(({ s }) => `Sword Dance on ${s.weapon} (${category(ctx, s.weapon)}: light-weapon tier = Fast Sword Dance)`),
+  },
   "Barbaric Roar": { check: hasAsh("Barbaric Roar") },
   "Shriek of Sorrow": { check: hasAsh("Shriek of Sorrow") },
   "Painful Strikes": { check: hasAsh("Painful Strikes") },

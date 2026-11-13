@@ -10,16 +10,16 @@ const pct = (x: number) => `${(100 * x).toFixed(3)}%`;
 /** Shown whenever a result uses A3, until the friend test confirms the projectile formula (Zer0, 2026-11-12). */
 export const A3_WARNING = "⚠ Projectile damage uses an unverified formula (A3)";
 
-export function resultMeta(patch: string, used: Iterable<AssumptionId>): ResultMeta {
+export function resultMeta(patch: string, used: Iterable<AssumptionId>, notSupported: string[] = []): ResultMeta {
   const assumptionsUsed = unconfirmedAssumptions(used);
-  return { patch, assumptionsUsed, warnings: assumptionsUsed.includes("A3") ? [A3_WARNING] : [], credit: CREDIT_LINE };
+  return { patch, assumptionsUsed, warnings: assumptionsUsed.includes("A3") ? [A3_WARNING] : [], notSupported, credit: CREDIT_LINE };
 }
 
 /** Plain-text breakdown of one hit: AR per type → flat adds → MV → multipliers → defence & ratio → curve → negation → final rate → total. */
 export function explainHit(h: HitDamage, label: string): string[] {
   const out: string[] = [];
   out.push(`${label} — hit ${h.hit.index} (${h.hit.kind}, ${h.hit.physAttribute}, id ${h.hit.id})`);
-  out.push(`  2H str bonus: ${h.twoHandBonusApplied ? `yes (str counts as ${h.effectiveStr})` : "no"} — ${h.hit.disable2H.source === "AtkParam" ? "AtkParam flag" : "A8 (no AtkParam row)"}${h.hit.disable2H.value ? ", disabled for this hit" : ""}`);
+  out.push(`  2H str bonus: ${h.twoHandBonusApplied ? `yes (str counts as ${h.effectiveStr})` : "no"} — ${h.hit.disable2H.source === "AtkParam" ? "AtkParam flag" : "unknown (no AtkParam row)"}${h.hit.disable2H.value ? ", disabled for this hit" : ""}`);
   if (h.skill) {
     out.push(`  Skill flat damage: ${h.skill.note}; upgrade rate ×${n(h.skill.upgradeRate, 3)}`);
     for (const s of h.skill.scaling) out.push(`    ${s.stat}: override ${s.override} × correct rate ${n(s.correctRate, 3)} × curve ${n(s.curve, 4)}`);

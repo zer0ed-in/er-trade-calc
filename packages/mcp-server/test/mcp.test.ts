@@ -40,7 +40,9 @@ describe("MCP tools (in-memory)", () => {
     expect(j.verdict.kind).toBe("trade");
     expect([j.a.damage.total, j.b.damage.total]).toEqual([286, 243]);
     expect(j.meta).toMatchObject({ patch: "1.17", credit: CREDIT_LINE });
-    expect(j.meta.assumptionsUsed).toContain("A8");
+    // The 2H R1 rows now resolve through BehaviorParam_PC, so the 2H flag comes from AtkParam, not A8.
+    expect(j.meta.assumptionsUsed).toEqual(expect.any(Array));
+    expect(j.meta.assumptionsUsed).not.toContain("A8");
   });
   it("compute_hit accepts builds as JSON strings and returns both directions", async () => {
     const j = jsonOf(await client.callTool({ name: "compute_hit", arguments: { buildA: JSON.stringify(A), buildB: B, attackA: { attack: "1h R1 1" } } }));
@@ -58,7 +60,7 @@ describe("MCP tools (in-memory)", () => {
     const sweep = jsonOf(await client.callTool({ name: "sweep_rune_level", arguments: { buildA: A, buildB: B, attackA: { attack: "2h R1 1" }, attackB: { attack: "2h R1 1" }, rlA: "107..109:2" } }));
     expect(sweep.rows.map((r: { aToB: number }) => r.aToB)).toEqual([250, 255]);
     expect(jsonOf(await client.callTool({ name: "check_legality", arguments: { build: A } })).legal).toBe(true);
-    expect(jsonOf(await client.callTool({ name: "list_assumptions", arguments: {} })).assumptions).toHaveLength(9);
+    expect(jsonOf(await client.callTool({ name: "list_assumptions", arguments: {} })).assumptions).toHaveLength(12);
     expect((await client.callTool({ name: "explain_formula", arguments: { topic: "defence curve" } })).content).toBeTruthy();
   });
 });

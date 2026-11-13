@@ -1,11 +1,11 @@
 // One attack (all landed hits, in order) from one fighter into another, plus the same choice both directions.
 import type { AssumptionId } from "../assumptions.ts";
-import { resolveAttack, type AttackChoice, type ResolvedAttack } from "../attacks/attacks.ts";
+import { HITSTUN_DURATION_NOT_SUPPORTED, KICK, resolveAttack, type AttackChoice, type ResolvedAttack } from "../attacks/attacks.ts";
 import { explainHit, resultMeta } from "../explain/explain.ts";
 import type { GameData } from "../game-data.ts";
 import { computeHit, NEUTRAL_SITUATION, type HitDamage, type HitSituation } from "../hit/hit.ts";
 import { hitsToProc, procDamage, resistances, STATUS_RESISTANCE } from "../stats/status.ts";
-import type { ResultMeta } from "../types.ts";
+import { NotSupportedError, type ResultMeta } from "../types.ts";
 import type { Fighter } from "./fighter.ts";
 
 export interface StatusSummary {
@@ -24,8 +24,15 @@ export interface AttackResult {
   hits: HitDamage[];
   /** Σ hit damage; null if any landed hit's damage is unknown. */
   total: number | null;
+  /** Σ PvP poise damage of the landed hits (display units; hit.poise has the formula). */
   poiseDamage: number;
+  /** Per landed hit: hitstun level and stamina damage if blocked (blocking itself is not supported). */
+  hitEffects: { hit: number; hitstun: { level: number; name: string }; staminaDamage: number | null; note: string }[];
+  /** Hitstun duration is never computed (needs the hit-reaction animations). */
+  hitstunDuration: string;
   status: StatusSummary[];
+  /** "Not supported right now: …" lines for parts of this result we can't compute. */
+  notSupported: string[];
   assumptionsUsed: AssumptionId[];
 }
 
@@ -63,7 +70,18 @@ export function computeAttack(data: GameData, attacker: Fighter, attack: Resolve
     hits,
     total,
     poiseDamage: attack.hits.reduce((a, h) => a + h.poiseDamage, 0),
+    hitEffects: attack.hits.map((h) => ({
+      hit: h.index,
+      hitstun: h.hitstun,
+      staminaDamage: h.staminaDamage,
+      // Kick guard-breaks shields and weapon blocks instantly (Zer0, in-game, 2026-11-13; NOTES.md §1).
+      // atkStam is the hit's own stamina damage; weapon hits with atkStam 0 deal the weapon's stamina attack instead (not modelled).
+      note: !h.staminaDamage ? "stamina damage not supported (blocking isn't modelled)"
+        : `${h.staminaDamage} stamina damage${attack.skillName === KICK ? ", guard break if blocked" : " if blocked"} (blocking not supported)`,
+    })),
+    hitstunDuration: new NotSupportedError(...HITSTUN_DURATION_NOT_SUPPORTED).line,
     status,
+    notSupported: [...new Set(attack.hits.flatMap((h) => (h.timingUnknown ? [h.timingUnknown] : [])))],
     assumptionsUsed: [...assumptions].sort(),
   };
 }
@@ -97,5 +115,6 @@ export function computeHitBothWays(data: GameData, a: Fighter, b: Fighter, choic
   const aToB = run(a, b, choiceA);
   const bToA = run(b, a, choiceB);
   const used = [...("assumptionsUsed" in aToB ? aToB.assumptionsUsed : []), ...("assumptionsUsed" in bToA ? bToA.assumptionsUsed : [])];
-  return { aToB, bToA, meta: resultMeta(data.patch, used) };
+  const notSupported = [...new Set([...("notSupported" in aToB ? aToB.notSupported : []), ...("notSupported" in bToA ? bToA.notSupported : [])])];
+  return { aToB, bToA, meta: resultMeta(data.patch, used, notSupported) };
 }

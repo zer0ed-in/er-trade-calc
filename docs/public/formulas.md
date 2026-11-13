@@ -60,8 +60,11 @@ $$
 So 54 str two-handed counts as 81, already past the 80 soft cap — which is why extra str after ~54 adds little damage when two-handing.
 
 **Not every attack gets it.** The game data has a per-attack switch that turns the bonus off. Every ash of war has it switched off,
-and so do a few normal attacks (e.g. Starscourge Greatsword 2H R1). We read the switch for each hit. Our copy of the data is missing
-that row for most normal attacks; for those we assume the bonus applies to normal attacks and never to ashes ⚠️ (assumption A8).
+and so do backstabs/ripostes and some normal attacks (e.g. Barbaric Roar R2s, the Lizard Greatsword and Bloodfiend's Arm charged R2s,
+Serpent Flail R2s). We read the switch for each hit, from the attack row the game actually uses: an attack's hit points to a behavior
+row, which points either straight to an attack row or to a projectile that names one. Emilia's planner applies the bonus to these attacks,
+so results there are marked "game data, differs from planner". Paired weapons (fists, claws, backhand blades…) never get the bonus.
+Only one hit has no attack row (Blasphemous Blade's Taker's Flames); two-handed, it is "not supported".
 
 **Requirements.** If you don't meet a weapon's stat requirement, the game cuts that weapon's AR by 40% and drops the scaling. The calculator
 does the same and warns you.
@@ -108,10 +111,11 @@ Which stats count is decided by the skill itself, not your infusion:
 
 The stat list is confirmed from the game data; the exact formula above is still an assumption.
 
-Some skill hits can't be calculated yet: our copy of the data lacks their scaling row (e.g. Ice Spear's projectile, the first
-Beast's Roar hit). The calculator says **unknown** for those hits instead of guessing.
+Each skill hit's fixed damage and scaling table come from the attack row found the same way (behavior → attack row, or behavior →
+projectile → attack row). Example: Ice Spear's projectile is 230 magic with the dex + int table. A hit that still has no row would be shown
+as **unknown**, never guessed.
 
-**Lightning Slash** adds +85 lightning for 40 s. This value isn't in our data copy; it comes from the wiki ⚠️ (assumption A9).
+**Lightning Slash** adds +85 lightning for 40 s (game data: its effect rows in regulation.bin).
 Buffs and greases add to the weapon's own hits (the ones with a motion value), not to a skill's separate projectile.
 
 ### Ashes of war ignore two-handing ✅
@@ -267,14 +271,19 @@ Example: 286 per hit into 1900 HP is 7 hits; with Bubbletear it's ⌈(1900 + 570
 
 ## 11. Poise and stagger ✅
 
-You stagger when the poise damage you've taken reaches your poise.
+**Poise damage of a hit** (PvP, in the units the game menu shows) comes from the hit's attack row and the weapon:
 
 $$
-\text{Stagger if } \sum \underbrace{\text{PD}_i}_{\text{poise damage of each hit}} \;\ge\; \underbrace{P}_{\text{your poise}}
+\text{PD} = \big(\underbrace{a}_{\text{hit's flat poise}} + \underbrace{w}_{\text{weapon poise base}} \times \underbrace{c}_{\text{hit's poise MV}} / 100\big) \times \underbrace{r}_{\text{PvP poise rate}} \times 10
 $$
 
-Example: Shamshir 1H R1 deals **110** poise damage, so it breaks anyone at 110 poise or less. The 2H R1 deals **143**,
-so it breaks everyone on the ladder (maximum 133) — unless they're in hyper armour.
+The PvP rate is 2.2 for normal attacks and 2.7 for skills (it differs on some weapons). Examples: Shamshir 1H R1 = (0 + 5 × 100/100) × 2.2 × 10 = **110**;
+2H R1 = **143**; Lion's Claw on a Knight's Greatsword = 5.5 × 600/100 = 33 → **891**. Skill hits with their own flat poise count it too:
+Beast's Roar does 6 × 2.7 × 10 = **162** per hit (Emilia's planner shows 0 for these). Kick: hit 1 = 6 × 2.7 × 10 = **162**, hit 2 = half the weapon's poise base.
+
+**Poise over time.** Each hit lowers your current poise ("chip"). The hit that brings it to 0 or below staggers you (110 damage breaks
+110 poise; 111 survives). Your poise refills to full **30 s** after the last hit you took (game values: 30 s × 1.0). After a break it
+goes back to full ⚠️ (assumption A12: community knowledge, not in the game tables).
 
 **Your poise** is the sum of your armour's poise times talisman effects (Bull-Goat's Talisman ×1.33). At 40 endurance with a Shamshir
 at medium load, the best legal set is Verdigris with Steel Gauntlets: 100 × 1.33 = **133** — the ladder maximum (computed from the armour data).
@@ -282,11 +291,25 @@ at medium load, the best legal set is Verdigris with Steel Gauntlets: 100 × 1.3
 **Multi-hit attacks:** to tank hit *k* you must stay standing after hits 1…*k*, so you need more poise than their total poise damage.
 
 ### Hyper armour (HA) and super armour (SA)
-During certain frames of some attacks, your poise is boosted (HA) or you can't be staggered at all (SA). The frames come from the game's animation data.
+During certain frames of some attacks, your poise is boosted (HA) or you can't be staggered at all (SA). The frames come from the game's
+animation data; each HA window names a row of the game's hyper-armour table, which sets how strong it is:
 
 $$
-P_{\text{HA}} = \frac{\big(\underbrace{P}_{\text{armour poise}} \times \underbrace{c_a}_{\text{armour share}} + \underbrace{c_p}_{\text{attack's bonus}}\big) \times \underbrace{m}_{\text{poise effects}}}{\underbrace{d_p}_{\text{poise-damage multiplier}}}
+P_{\text{max}} = \big(\underbrace{P}_{\text{armour poise}} \times \underbrace{c_a}_{\text{armour share}} + \underbrace{T}_{\text{weapon toughness}} \times \underbrace{c_w}_{\text{weapon share}}\big) \times \underbrace{m}_{\text{poise effects}}
 $$
+
+At the start of the window your current poise is **raised to the window's minimum** if it is lower. That's why moves like Kick or
+Storm Stomp "reset" your poise: Storm Stomp's minimum is 300, so it starts at 300 poise even if you were nearly broken. Incoming
+poise damage during HA is multiplied by the window's rate (e.g. ×0.5), and HP damage by its own rate (e.g. ×0.925).
+For windows without the "minimum isn't scaled" switch we assume the minimum is scaled like the weapon toughness ⚠️ (assumption A13).
+If an attack's HA window names no row, the calculator says "not supported".
+
+### Hitstun
+Each hit has a stagger level (the game's damage level against players): 1 short, 2 moderate, 3 long, 4 knockback, 5 push + long stagger,
+6 faceplant, 7 knockdown, 8 very short, 9 launch, 10 knockdown, 11 knockback + down (names from wiki.gg). The calculator reports the
+level; how long the stagger lasts needs the reaction animations and is **not supported** yet.
+
+**Stamina damage if blocked** is reported where the hit's row has its own value (e.g. Kick: 999, a guard break). Blocking itself isn't modelled.
 
 ---
 
@@ -316,6 +339,10 @@ $$
 
 The game's own "Counter Frames" effect lists pierce damage ×1.15; which model is right in PvP isn't settled yet, so this is an assumption
 (the other model is one switch away).
+
+The data settles who it applies to: SpEffect #45 "[HKS] Counter Frames" is part of every attack's animation, not tied to any talisman,
+and its only value is pierce ×1.15 — so it's pierce hits only, the physical part only, any infusion, somber weapons included, with the
+Spear Talisman stacking on top. The engine already does this; only the size (−15 points vs ×1.15) and the talisman stacking stay A4.
 
 ---
 
@@ -347,11 +374,13 @@ For Heavy Knight, that's simply **RL = (sum of all eight stats) − 79**.
 |---|---|---|
 | A3 | Exact skill projectile damage formula (section 3) — which stats count is confirmed | Storm Blade wind, Beast's Roar, Sacred Blade wave |
 | A4 | Counter hits: −15 points of pierce negation (planner) vs pierce ×1.15 (game effect); Spear Talisman stacking | Pierce counter hits only |
-| A8 | Two-handing bonus for attacks whose data row is missing from our copy: normal attacks yes, ashes no | Most normal 2H attacks |
-| A9 | Lightning Slash buff = +85 lightning, 40 s (wiki value) | Lightning Slash builds |
+| A12 | Poise goes back to full after a break | Poise across several hits |
+| A13 | Hyper-armour minimum is scaled by weapon toughness when the row doesn't say otherwise | HA windows of normal attacks |
 
 Confirmed since the first draft: frame numbers already include animation speed changes; the planner's "+1" on startup is a counting setting;
-defence parts are rounded down separately (section 5); the ladder poise maximum of 133 (section 11).
+defence parts are rounded down separately (section 5); the ladder poise maximum of 133 (section 11); two-handing per hit,
+Lightning Slash's value, and Kick's damage and poise now come from the game data (regulation.bin 1.17.3). Kick's timing isn't in the
+animation data, so trades with Kick still aren't judged.
 
 Values for talismans, tears and greases come from Emilia's planner tables (her data copy doesn't include the raw effect rows).
 

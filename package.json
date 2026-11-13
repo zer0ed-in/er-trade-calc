@@ -10,6 +10,7 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "data:build": "tsx packages/data/scripts/build-data.ts",
+    "data:regulation": "tsx packages/data/scripts/extract-regulation.ts",
     "data:snapshot": "tsx packages/data/scripts/snapshot-emilia.ts",
     "ertc": "tsx packages/cli/src/main.ts",
     "mcp:stdio": "tsx packages/mcp-server/src/stdio.ts",

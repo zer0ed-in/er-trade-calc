@@ -9,7 +9,7 @@ import type { HitDef, ResolvedAttack } from "../attacks/attacks.ts";
 import { attackerModifiers, counterHitEffects, defenderModifiers, type HitContext, type IgnoredEffect } from "../effects/effects.ts";
 import type { Fighter } from "../duel/fighter.ts";
 import { GREASE_INFUSIONS, type GameData } from "../game-data.ts";
-import { DAMAGE_TYPES, EngineError, type DamageType, type NegationType, type PerType } from "../types.ts";
+import { DAMAGE_TYPES, EngineError, NotSupportedError, type DamageType, type NegationType, type PerType } from "../types.ts";
 
 /** Planner `adjustForDefense` factor (docs/03 rule 2): share of attack kept after defence, by ratio r = A/D. */
 export function defenceCurve(ratio: number): number {
@@ -117,10 +117,18 @@ function skillFlat(data: GameData, attacker: Fighter, attack: ResolvedAttack, hi
 
 export function computeHit(data: GameData, attacker: Fighter, attack: ResolvedAttack, hit: HitDef, defender: Fighter, situation: HitSituation = NEUTRAL_SITUATION): HitDamage {
   const assumptions = new Set<AssumptionId>();
-  if (hit.disable2H.source === "A8" && attack.twoHanded) assumptions.add("A8");
+  const notes: string[] = [];
 
-  // Weapon AR for this hit: the 2H bonus applies only if the attack is two-handed and the hit doesn't disable it.
-  const ar = weaponAr(data, attack.slot, attacker.stats, { twoHanded: attack.twoHanded, disableTwoHandBonus: hit.disable2H.value });
+  // Weapon AR for this hit: the 2H bonus applies only if the attack is two-handed and the hit's AtkParam row doesn't disable it (A8, data).
+  const ar = weaponAr(data, attack.slot, attacker.stats, { twoHanded: attack.twoHanded, disableTwoHandBonus: hit.disable2H.value ?? false });
+  let unknown2H: string | undefined;
+  if (attack.twoHanded && hit.disable2H.value === null) {
+    unknown2H = new NotSupportedError(`2H bonus for hit ${hit.id}`, "the hit resolves to no AtkParam row, so whether the 2H bonus applies is unknown", "regulation data").line;
+  } else if (attack.twoHanded && hit.disable2H.value && !ar.twoHandBonusApplied) {
+    // Label only where it changes the number: the weapon would get the bonus (not paired) if the flag allowed it.
+    const wouldApply = weaponAr(data, attack.slot, attacker.stats, { twoHanded: true, disableTwoHandBonus: false }).twoHandBonusApplied;
+    if (wouldApply && !attack.isSkill) notes.push("2H str bonus off for this hit: game data, differs from planner (the planner applies it)");
+  }
 
   // Buffs: right-hand weapon only (docs/03 rule 9; Q7), weapon must be buffable (data), added before MV.
   const meta = data.weaponMeta.get(attack.slot.weapon);
@@ -157,10 +165,10 @@ export function computeHit(data: GameData, attacker: Fighter, attack: ResolvedAt
 
   let skillPart: PerType = { physical: 0, magic: 0, fire: 0, lightning: 0, holy: 0 };
   let skill: SkillScalingDetail | undefined;
-  let unknownReason: string | undefined;
+  let unknownReason: string | undefined = unknown2H;
   if (hit.kind !== "weapon") {
     assumptions.add("A3");
-    if (hit.flatUnknownReason) unknownReason = hit.flatUnknownReason;
+    if (hit.flatUnknownReason) unknownReason ??= hit.flatUnknownReason;
     else ({ perType: skillPart, detail: skill } = skillFlat(data, attacker, attack, hit));
   }
 
@@ -208,9 +216,10 @@ export function computeHit(data: GameData, attacker: Fighter, attack: ResolvedAt
     attackerEffects: atk.applied,
     defenderEffects: def.applied,
     ignoredEffects: [...atk.ignored, ...def.ignored],
-    warnings: ar.ineffectiveAttributes.length
-      ? [`${attack.slot.weapon} requirements not met (${ar.ineffectiveAttributes.join(", ")}): AR penalised by 40%, no scaling for those damage types`]
-      : [],
+    warnings: [
+      ...(ar.ineffectiveAttributes.length ? [`${attack.slot.weapon} requirements not met (${ar.ineffectiveAttributes.join(", ")}): AR penalised by 40%, no scaling for those damage types`] : []),
+      ...notes,
+    ],
     assumptions: [...assumptions].sort(),
   };
 }

@@ -77,13 +77,17 @@ describe("evidence-pve: every ash does identical damage 1H and 2H", () => {
       });
     }
   }
-  it("Ice Spear: swing is computed; projectile is unknown (no AtkParam row in the copy), so the total is unknown — never guessed", () => {
+  it("Ice Spear: the projectile resolves behavior 300000075 → Bullet 2490 → AtkParam 300200075 and is computed (A3)", () => {
     const b = mk(hk({ str: 61, dex: 12 }), { weapon: "Banished Knight's Halberd", infusion: "Heavy", upgrade: 25, ashOfWar: "Ice Spear" });
     const r = attackInto(b, { attack: "Ice Throw" });
+    const projectile = r.hits[1]!;
+    expect(projectile.hit.id.split(":")[0]).toBe("300000075");
+    expect(projectile.hit.row.atkParam).toMatchObject({ id: 300200075, via: "bullet", bulletId: 2490, overwriteAttackElementCorrectId: 51100, isAddBaseAtk: 1, isDisableBothHandsAtkBonus: 1, atkSuperArmor: 25, dmgLevel: 3 });
+    expect(projectile.hit.skillTable).toBe(51100);
     expect(r.hits[0]!.damage).toBeGreaterThan(0);
-    expect(r.hits[1]!.damage).toBeNull();
-    expect(r.hits[1]!.unknownReason).toMatch(/no AtkParam row/);
-    expect(r.total).toBeNull();
+    expect(projectile.damage).toBeGreaterThan(0);
+    expect(r.total).toBe(r.hits[0]!.damage! + projectile.damage!);
+    expect(r.assumptionsUsed).toContain("A3");
   });
   it("attack totals are the plain sum of the landed hits (Storm Blade)", () => {
     const b = mk(strB, { weapon: "Wakizashi", infusion: "Heavy", upgrade: 25, ashOfWar: "Storm Blade" });
@@ -96,12 +100,14 @@ describe("evidence-pve: every ash does identical damage 1H and 2H", () => {
   });
 });
 
-describe("Q13: Beast's Roar first hit id has no AtkParam row", () => {
-  it("is reported unknown rather than joined to the similar-looking row 30000841", () => {
+describe("Q13: Beast's Roar hits resolve through Bullet 2800", () => {
+  it("hit 1: behavior 300000841 → Bullet 2800 → AtkParam 30000841; hit 2: AtkParam 30000842 (Bullet 2800's HitBulletID 2801)", () => {
     const b = mk(hk({ dex: 57 }), { weapon: "Wakizashi", infusion: "Keen", upgrade: 25, ashOfWar: "Beast's Roar" });
     const r = attackInto(b, { attack: "Beast's Roar - Roar" });
     expect(r.hits[0]!.hit.id).toBe("300000841:5373");
-    expect(r.hits[0]!.damage).toBeNull();
+    expect(r.hits[0]!.hit.row.atkParam).toMatchObject({ id: 30000841, via: "bullet", bulletId: 2800, overwriteAttackElementCorrectId: 51020, atkSuperArmor: 6, dmgLevel: 5 });
+    expect(r.hits[1]!.hit.row.atkParam).toMatchObject({ id: 30000842, via: "atk" });
+    expect(r.hits[0]!.damage).toBeGreaterThan(0);
     expect(r.hits[1]!.damage).toBeGreaterThan(0);
   });
 });

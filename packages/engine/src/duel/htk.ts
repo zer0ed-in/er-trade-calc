@@ -4,6 +4,7 @@ import type { ResolvedAttack } from "../attacks/attacks.ts";
 import { pvpValue } from "../effects/effects.ts";
 import type { GameData } from "../game-data.ts";
 import { computeHit } from "../hit/hit.ts";
+import { procDamage, resistances, STATUS_RESISTANCE } from "../stats/status.ts";
 import type { Fighter } from "./fighter.ts";
 
 export interface HtkStep {
@@ -39,7 +40,7 @@ function bubbletear(defender: Fighter): { threshold: number; heal: number } | nu
  * The attacker repeats `attack` into `defender` from the defender's starting HP. The attacker's own HP stays at its
  * starting fraction (the defender isn't hitting back in this count), so e.g. Ritual Sword stays on if the attacker starts at full HP.
  */
-export function hitsToKill(data: GameData, attacker: Fighter, attack: ResolvedAttack, defender: Fighter, opts: { counterHit?: boolean } = {}): HitsToKill {
+export function hitsToKill(data: GameData, attacker: Fighter, attack: ResolvedAttack, defender: Fighter, opts: { counterHit?: boolean; statusProcs?: boolean } = {}): HitsToKill {
   const startHp = Math.trunc(defender.maxHp * defender.startHpFraction);
   let hp = startHp;
   const steps: HtkStep[] = [];
@@ -48,6 +49,10 @@ export function hitsToKill(data: GameData, attacker: Fighter, attack: ResolvedAt
   const tear = bubbletear(defender);
   let tearUsed = false;
   let hitCount = 0;
+  // Optional status procs: buildup adds up per hit; a proc deals its direct damage once the defender's
+  // resistance is reached, then buildup restarts. No decay and no post-proc resistance change are modelled (noted).
+  const buildup: Record<string, number> = {};
+  const res = opts.statusProcs ? resistances(data, defender.stats, defender.armour, defender.effects) : null;
   for (let n = 1; n <= MAX_ATTACKS; n++) {
     for (const h of attack.hits) {
       const r = computeHit(data, attacker, attack, h, defender, {
@@ -61,6 +66,25 @@ export function hitsToKill(data: GameData, attacker: Fighter, attack: ResolvedAt
       hp -= r.damage;
       hitCount++;
       const step: HtkStep = { attack: n, hit: h.index, damage: r.damage, hpAfter: hp };
+      if (res) {
+        for (const [status, amount] of Object.entries(r.status)) {
+          const kind = STATUS_RESISTANCE[status];
+          if (!kind || amount <= 0) continue;
+          buildup[status] = (buildup[status] ?? 0) + amount;
+          if (buildup[status]! < res.values[kind]) continue;
+          buildup[status] = 0;
+          const proc = procDamage(status, defender.maxHp);
+          if (proc.damage === null) {
+            if (!notes.some((x) => x.startsWith(`${status} proc`))) notes.push(`${status} proc: ${proc.note}`);
+            continue;
+          }
+          hp -= proc.damage;
+          step.damage += proc.damage;
+          step.hpAfter = hp;
+          step.event = [step.event, `${status} proc ${proc.damage}`].filter(Boolean).join("; ");
+          if (!notes.some((x) => x.startsWith("status procs"))) notes.push("status procs: buildup has no decay and no post-proc resistance change (not modelled)");
+        }
+      }
       if (hp <= 0) {
         steps.push(step);
         return { attacks: n, hits: hitCount, steps, startHp, notes, assumptionsUsed: [...assumptions].sort() };

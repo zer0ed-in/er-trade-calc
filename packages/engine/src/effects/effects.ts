@@ -206,13 +206,13 @@ export function scenarioHpFraction(opts: ScenarioOptions): number {
   return opts.scenario === "low-hp" ? 0.5 : 1;
 }
 
-/** Lightning Slash's buff is not in the copy; A9 supplies it (wiki-sourced). */
+/** Lightning Slash buff (A9, confirmed: SpEffect 1676/1678 in regulation.bin 1.17.3). */
 function a9LightningSlash(): SourcedEffect {
   const a9 = ASSUMPTIONS.A9.choice;
   return {
     source: "Lightning Slash",
     kind: "buff",
-    cite: "A9 (wiki)",
+    cite: "A9 (SpEffect 1676/1678)",
     effect: { attribute: "Lightning Attack Power", model: "additive", value: a9.lightningFlat, duration: a9.durationSeconds },
   };
 }

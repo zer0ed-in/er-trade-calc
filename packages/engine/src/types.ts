@@ -98,6 +98,20 @@ export interface WeaponMeta {
   requirements: Record<string, number>;
   somber: boolean;
   defaultSkillId: number;
+  /** EquipParamWeapon: raw poise damage base (× hit atkSuperArmorCorrection / 100). */
+  saWeaponDamage: number;
+  /** EquipParamWeapon: weapon toughness used in hyper armour (× 1000 = display poise, as the planner shows it). */
+  toughnessCorrectRate: number;
+}
+
+/** ToughnessParam row (hyper-armour window strength). Field names from the 1.17.3 paramdef. */
+export interface ToughnessRow {
+  correctionRate: number;
+  minToughness: number;
+  isNonEffectiveCorrectionForMin: boolean;
+  proCorrectionRate: number;
+  pvpToughnessDamageRate: number;
+  pvpHpDamageRate: number;
 }
 
 export interface PlannerAttackEntry {
@@ -107,6 +121,8 @@ export interface PlannerAttackEntry {
   type: string; // "Attack" | "WeaponSkill" | "Casting" | "Item"
   categories: string[];
   ha?: { damageMultiplier: number; poiseContribution: number; poiseDamageMultiplier: number; armourPoiseContribution: number };
+  /** Where the entry came from: the planner's per-weapon table (default) or FDE's animation `users` lists (ashes the planner lacks). */
+  source?: "fde-animation-users";
 }
 
 export interface HitRow {
@@ -114,26 +130,48 @@ export interface HitRow {
   physicalDamageMV: number; magicDamageMV: number; fireDamageMV: number; lightningDamageMV: number; holyDamageMV: number;
   physicalDamageFlat: number; magicDamageFlat: number; fireDamageFlat: number; lightningDamageFlat: number; holyDamageFlat: number;
   physDamageRateFinal: number; magicDamageRateFinal: number; fireDamageRateFinal: number; lightningDamageRateFinal: number; holyDamageRateFinal: number;
-  poiseDamageFlat: number;
+  /** Planner's precomputed PvP poise damage (display units); null on rows built from regulation tables (Kick). */
+  poiseDamageFlat: number | null;
   poiseDamageMV: number;
+  /** PvP poise rate (FinalDamageRateParam saRate: 2.2 normal attacks, 2.7 skills). */
+  saDamageRateFinal: number;
   statusMV: number;
   buffMV: number;
   staminaCost: number;
   physAttribute: string;
-  startup: number;
+  /** null = the hit's active frames aren't in the data (Kick). */
+  startup: number | null;
+  /** Set on rows built from regulation tables instead of the planner (Kick). */
+  source?: string;
   bloodBuildup: number; frostBuildup: number; poisonBuidup: number; scarletRotBuidup: number; sleepBuildup: number; madnessBuildup: number; curseBuildup: number;
+  /**
+   * The AtkParam_Pc row the game uses for this hit: hit id → BehaviorParam_PC (refType 0 → AtkParam, 1 → Bullet → AtkParam),
+   * or the id itself when it is an AtkParam id (child projectiles). null = no row in the copy.
+   */
   atkParam: null | {
     id: number;
+    via: "behavior" | "bullet" | "atk";
+    bulletId?: number;
     isAddBaseAtk: number;
     overwriteAttackElementCorrectId: number;
     isDisableBothHandsAtkBonus: number;
     finalDamageRateId: number;
     atkAttribute: number;
+    /** Flat poise damage (raw). */
+    atkSuperArmor: number;
+    /** Poise damage MV (raw). */
+    atkSuperArmorCorrection: number;
+    atkStam: number;
+    dmgLevel: number;
+    /** Damage level against players (raw; not used by the engine yet, see docs/09). */
+    dmgLevel_vsPlayer: number;
   };
 }
 
 export interface AnimationFrames {
   name: string;
+  /** FDE labels, e.g. Attack, WeaponSkill, HasBullet, HyperArmour. */
+  labels?: string[];
   activeFrames: { range: [number, number]; params?: { AtkParamID?: string[] } }[];
   hyperArmour: { range: [number, number]; id?: number; super?: boolean }[];
   spEffects: { range: [number, number]; id: number }[];
@@ -168,7 +206,18 @@ export interface RawGameData {
   hits: Record<string, HitRow>;
   animations: Record<string, AnimationFrames>;
   speffects: Record<string, unknown>[];
+  /** ToughnessParam rows by id (hyper-armour windows name a row). */
+  toughness: Record<string, ToughnessRow>;
+  /** GameSystemCommonParam.baseToughnessRecoverTime (s) and PlayerCommonParam.toughnessRecoverCorrection (regulation.bin). */
+  poiseRecovery: { baseToughnessRecoverTime: number; toughnessRecoverCorrection: number };
   plannerRulesets: unknown;
+  /** Which ash fits which weapon and infusion (gen ash-compat.json, planner rule verified against EquipParamGem). */
+  ashCompat: AshCompat;
+}
+
+export interface AshCompat {
+  weapons: Record<string, { category: string; somber: boolean; ashes: Record<string, string[]> }>;
+  ashes: Record<string, { default_affinity: string; affinities: string[]; weapon_classes: string[]; usable_from_off_hand: boolean }>;
 }
 
 // ---- Results --------------------------------------------------------------------------------------
@@ -184,13 +233,27 @@ export interface ResultMeta {
   assumptionsUsed: AssumptionId[];
   /** Loud warnings to show at the top of any rendering (e.g. projectile damage uses unverified A3). */
   warnings: string[];
+  /** "Not supported right now: <what> — <why> — <what will fix it>" lines; empty when everything was computed. */
+  notSupported: string[];
   credit: string;
 }
 
 /** Engine errors are user-facing: plain English, naming the rule or missing data. */
+export const NOT_SUPPORTED = "Not supported right now";
+export const notSupportedLine = (what: string, why: string, fix: string) => `${NOT_SUPPORTED}: ${what} — ${why} — ${fix}`;
+
 export class EngineError extends Error {
   constructor(message: string, readonly code: string) {
     super(message);
     this.name = "EngineError";
+  }
+}
+
+/** Data we don't have (never guessed). Batches catch it, continue, and list it at the end. */
+export class NotSupportedError extends EngineError {
+  readonly line: string;
+  constructor(what: string, why: string, fix: string) {
+    super(notSupportedLine(what, why, fix), "not-supported");
+    this.line = notSupportedLine(what, why, fix);
   }
 }

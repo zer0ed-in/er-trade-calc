@@ -10,3 +10,8 @@ coverage/
 START_HERE.md
 reference/prototype/
 fixtures/golden/prototype.json
+
+Claude outputs/
+
+# Game files and paramdefs: local only (never commit regulation.bin; paramdef licence decision pending)
+game-files/

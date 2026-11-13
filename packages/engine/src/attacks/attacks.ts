@@ -1,7 +1,7 @@
 // Attack → ordered list of hits. Attack names are the planner's (e.g. "2h R1 1", "Storm Blade - Wind Slash 1").
-import { ASSUMPTIONS, type AssumptionId } from "../assumptions.ts";
+import type { AssumptionId } from "../assumptions.ts";
 import { requireFrom, type GameData } from "../game-data.ts";
-import { DAMAGE_TYPES, EngineError, type Build, type HitRow, type PerType, type PhysAttribute, type PlannerAttackEntry, type WeaponSlot } from "../types.ts";
+import { DAMAGE_TYPES, EngineError, NotSupportedError, type Build, type HitRow, type PerType, type PhysAttribute, type PlannerAttackEntry, type WeaponSlot } from "../types.ts";
 
 export type Hand = "right" | "left";
 
@@ -29,17 +29,40 @@ export interface HitDef {
   flat: PerType;
   finalRate: PerType;
   physAttribute: PhysAttribute;
+  /** PvP poise damage, display units (see `poise`). */
   poiseDamage: number;
+  poise: PoiseDamageDetail;
   damageLevel: number;
-  /** Data frame index of the hit (0-based; planner shows +1, A2). */
+  /** Hitstun level the defender gets (dmgLevel_vsPlayer if set, else dmgLevel). Duration is not supported (needs animations). */
+  hitstun: { level: number; name: string };
+  /** The hit's own stamina damage if blocked (AtkParam atkStam; 0 on most weapon hits, which use the weapon's stamina attack). null without a row. Blocking is not modelled. */
+  staminaDamage: number | null;
+  /** Data frame index of the hit (0-based; planner shows +1, A2). 0 with `timingUnknown` when frames aren't in the data. */
   startup: number;
-  /** Whether the 2H strength bonus is disabled for this hit, and why. */
-  disable2H: { value: boolean; source: "AtkParam" | "A8" };
+  /** Whether the 2H strength bonus is disabled for this hit (null = unknown: no AtkParam row). */
+  disable2H: { value: boolean | null; source: "AtkParam" | "none" };
   /** Skill scaling table (overwriteAttackElementCorrectId) when the hit carries its own flat damage. */
   skillTable: number | null;
-  /** Hit's flat damage can't be scaled because its AtkParam row is missing from the copy. */
+  /** Hit's flat damage can't be scaled because it resolves to no AtkParam row. */
   flatUnknownReason?: string;
+  /** Set when the hit's active frames aren't in the data (Kick): trades and timing can't be judged. */
+  timingUnknown?: string;
 }
+
+export interface PoiseDamageDetail {
+  /** "regulation": (atkSuperArmor + saWeaponDamage × atkSuperArmorCorrection/100) × saRate × 10. "planner": no AtkParam row. */
+  source: "regulation" | "planner";
+  formula: string;
+  /** The planner's own value for this hit when it differs (it omits the flat part, e.g. Beast's Roar). */
+  plannerValue?: number;
+}
+
+/** Damage level names (wiki.gg "Damage Level"). */
+export const HITSTUN_NAMES: Record<number, string> = {
+  0: "none", 1: "short", 2: "moderate", 3: "long", 4: "knockback", 5: "push + long stagger", 6: "faceplant", 7: "knockdown",
+  8: "very short", 9: "launch", 10: "knockdown", 11: "knockback + down",
+};
+export const HITSTUN_DURATION_NOT_SUPPORTED: [string, string, string] = ["Hitstun duration", "needs the hit-reaction animations, which aren't in the data", "animation data"];
 
 export interface ResolvedAttack {
   name: string;
@@ -72,14 +95,42 @@ export function slotSkillName(data: GameData, slot: WeaponSlot): string | undefi
   return data.raw.weaponArts.find((a) => a.id === meta.defaultSkillId)?.name;
 }
 
-/** Attacks this slot can perform from this hand. */
-export function attacksForSlot(data: GameData, slot: WeaponSlot, hand: Hand): PlannerAttackEntry[] {
+// Kick has no planner or FDE hit row. Its behaviors 300000085/86 → AtkParam 301100800/801 are built into hits.json by the
+// data build (source "regulation"). Its animation a712_040000 has no active-frame events, so its timing is unknown.
+export const KICK = "Kick";
+export const KICK_HIT_IDS = ["300000085:kick", "300000086:kick"];
+const KICK_ENTRY: PlannerAttackEntry = { name: KICK, filename: "a712_040000", hitIds: KICK_HIT_IDS, type: "WeaponSkill", categories: [KICK] };
+export const KICK_NOT_SUPPORTED: [string, string, string] = ["Kick trade / timing", "Kick's active frames aren't in the data (FDE a712_040000 has no hit events for behaviors 85/86)", "animation data"];
+
+/** Whether the game lets this weapon carry this ash (ash-compat; the weapon's own default skill always counts). */
+function gameAllowsAsh(data: GameData, weapon: string, ash: string): boolean {
+  return !!data.raw.ashCompat.weapons[weapon]?.ashes[ash];
+}
+
+/**
+ * Why this slot's skill can't be computed, or null if it can. A skill the game allows but our copy has no attack data for
+ * is "not supported" (never borrowed from another weapon class); one the game doesn't allow is an illegal-ash error.
+ */
+export function skillSupport(data: GameData, slot: WeaponSlot): NotSupportedError | null {
+  const skill = slotSkillName(data, slot);
+  if (!skill || skill === KICK) return null;
+  const moveset = requireFrom(data.movesets, slot.weapon, "weapon moveset");
+  if (moveset.some((a) => a.type === "WeaponSkill" && a.categories[0] === skill)) return null;
+  if (slot.ashOfWar && !gameAllowsAsh(data, slot.weapon, slot.ashOfWar)) {
+    throw new EngineError(`${slot.ashOfWar} can't be used on ${slot.weapon} (the game doesn't allow this ash on this weapon).`, "illegal-ash");
+  }
+  return new NotSupportedError(`${skill} on ${slot.weapon}`, "no attack data for this skill on this weapon in our copy (planner table or FDE animations)", "animation data for this weapon's ash section (NOTES.md §3)");
+}
+
+/** Attacks this slot can perform from this hand. With `strict` (default), an unsupported skill throws NotSupportedError. */
+export function attacksForSlot(data: GameData, slot: WeaponSlot, hand: Hand, strict = true): PlannerAttackEntry[] {
   const moveset = requireFrom(data.movesets, slot.weapon, "weapon moveset");
   const skill = slotSkillName(data, slot);
-  if (slot.ashOfWar && !moveset.some((a) => a.type === "WeaponSkill" && a.categories[0] === slot.ashOfWar)) {
-    throw new EngineError(`${slot.ashOfWar} can't be used on ${slot.weapon} (no such skill in the weapon's attack data).`, "illegal-ash");
-  }
-  return moveset.filter((a) => {
+  if (slot.ashOfWar === KICK && !gameAllowsAsh(data, slot.weapon, KICK)) throw new EngineError(`Kick can't be used on ${slot.weapon} (the game doesn't allow this ash on this weapon).`, "illegal-ash");
+  const unsupported = skillSupport(data, slot);
+  if (unsupported && strict) throw unsupported;
+  const kick = skill === KICK && !moveset.some((a) => a.categories[0] === KICK) && hand === "right" ? [KICK_ENTRY] : [];
+  return [...moveset, ...kick].filter((a) => {
     if (a.type === "WeaponSkill") return hand === "right" && a.categories[0] === skill; // skills are used from the right-hand weapon
     const offhand = /^(Offhand|Paired)\b/.test(a.name);
     return hand === "left" ? offhand || /^2h /.test(a.name) : !offhand;
@@ -92,6 +143,8 @@ export interface AttackListing {
   weapon: string;
   skill?: string;
   attacks: { name: string; type: string; hits: number }[];
+  /** Skill attacks we can't list (no data); the normal moveset is still listed. */
+  notSupported?: string;
 }
 
 export function listAttacks(data: GameData, build: Build): AttackListing[] {
@@ -101,9 +154,12 @@ export function listAttacks(data: GameData, build: Build): AttackListing[] {
     slots.forEach((slot, i) => {
       if (!slot) return;
       const skill = slotSkillName(data, slot);
+      // Only an explicitly mounted ash is flagged here; a default skill without data (e.g. Quickstep) is flagged when asked for.
+      const unsupported = hand === "right" && slot.ashOfWar ? skillSupport(data, slot) : null;
       out.push({
         hand, slot: i, weapon: slot.weapon, ...(skill && { skill }),
-        attacks: attacksForSlot(data, slot, hand).map((a) => ({ name: a.name, type: a.type, hits: a.hitIds.length })),
+        attacks: attacksForSlot(data, slot, hand, false).map((a) => ({ name: a.name, type: a.type, hits: a.hitIds.length })),
+        ...(unsupported && { notSupported: unsupported.line }),
       });
     });
   }
@@ -116,32 +172,58 @@ function toPhysAttribute(s: string): PhysAttribute {
   throw new EngineError(`Unexpected physical attribute "${s}" in hit data.`, "missing-data");
 }
 
-function hitDef(data: GameData, id: string, index: number, isSkill: boolean): { hit: HitDef; assumptions: AssumptionId[] } {
+const notSupportedLineFor = ([what, why, fix]: [string, string, string]) => new NotSupportedError(what, why, fix).line;
+
+/**
+ * PvP poise damage in display units: (atkSuperArmor + saWeaponDamage × atkSuperArmorCorrection/100) × saRate × 10.
+ * Matches the planner on every normal attack (Shamshir 1H R1 5 raw → 110); the planner leaves out the flat part (atkSuperArmor),
+ * so flat-poise skill hits (Beast's Roar, Ice Spear) show 0 there.
+ */
+function poiseOf(row: HitRow, weaponName: string, data: GameData): { value: number; detail: PoiseDamageDetail } {
+  const a = row.atkParam;
+  if (!a) {
+    if (row.poiseDamageFlat === null) throw new EngineError(`Hit has neither an AtkParam row nor a planner poise value.`, "missing-data");
+    return { value: row.poiseDamageFlat, detail: { source: "planner", formula: `${row.poiseDamageFlat} (planner; no AtkParam row)` } };
+  }
+  const weapon = requireFrom(data.weaponMeta, weaponName, "weapon");
+  const raw = a.atkSuperArmor + weapon.saWeaponDamage * (a.atkSuperArmorCorrection / 100);
+  const value = raw * row.saDamageRateFinal * 10;
+  const detail: PoiseDamageDetail = {
+    source: "regulation",
+    formula: `(${a.atkSuperArmor} + ${weapon.saWeaponDamage} × ${a.atkSuperArmorCorrection}/100) × ${row.saDamageRateFinal} × 10`,
+  };
+  if (row.poiseDamageFlat !== null && Math.abs(row.poiseDamageFlat - value) > 0.01) detail.plannerValue = row.poiseDamageFlat;
+  return { value, detail };
+}
+
+function hitDef(data: GameData, id: string, index: number, weaponName: string): { hit: HitDef; assumptions: AssumptionId[] } {
   const row = requireFrom(data.hits, id, "hit row");
   const mv = perType(row, "DamageMV");
   const flat = perType(row, "DamageFlat");
   const hasMv = DAMAGE_TYPES.some((t) => mv[t] > 0);
   const hasFlat = DAMAGE_TYPES.some((t) => flat[t] > 0);
   const assumptions: AssumptionId[] = [];
-  let disable2H: HitDef["disable2H"];
-  if (row.atkParam) disable2H = { value: row.atkParam.isDisableBothHandsAtkBonus === 1, source: "AtkParam" };
-  else {
-    const a8 = ASSUMPTIONS.A8.choice;
-    disable2H = { value: isSkill ? !a8.missingRowSkillHit2H : !a8.missingRowNormalAttack2H, source: "A8" };
-  }
+  // A8 (confirmed, data): the resolved AtkParam row decides; no row → unknown (not supported when two-handed).
+  const disable2H: HitDef["disable2H"] = row.atkParam ? { value: row.atkParam.isDisableBothHandsAtkBonus === 1, source: "AtkParam" } : { value: null, source: "none" };
   const overwrite = row.atkParam?.overwriteAttackElementCorrectId ?? null;
+  const poise = poiseOf(row, weaponName, data);
+  const level = row.atkParam ? (row.atkParam.dmgLevel_vsPlayer || row.atkParam.dmgLevel) : row.damageLevel;
   const hit: HitDef = {
     index, id, row, mv, flat,
     kind: hasMv && hasFlat ? "mixed" : hasFlat ? "flat" : "weapon",
     finalRate: Object.fromEntries(DAMAGE_TYPES.map((t) => [t, row[ROW_RATES[t]] as number])) as PerType,
     physAttribute: toPhysAttribute(row.physAttribute),
-    poiseDamage: row.poiseDamageFlat,
-    damageLevel: row.damageLevel,
-    startup: row.startup,
+    poiseDamage: poise.value,
+    poise: poise.detail,
+    damageLevel: level,
+    hitstun: { level, name: HITSTUN_NAMES[level] ?? `level ${level}` },
+    staminaDamage: row.atkParam?.atkStam ?? null,
+    startup: row.startup ?? 0,
     disable2H,
     skillTable: hasFlat && overwrite !== null && overwrite >= 0 ? overwrite : null,
   };
-  if (hasFlat && !row.atkParam) hit.flatUnknownReason = `hit ${id} has its own flat damage but no AtkParam row in the copy, so its scaling table is unknown`;
+  if (row.startup === null) hit.timingUnknown = notSupportedLineFor(KICK_NOT_SUPPORTED);
+  if (hasFlat && !row.atkParam) hit.flatUnknownReason = `hit ${id} has its own flat damage but resolves to no AtkParam row, so its scaling table is unknown`;
   if (hasFlat) assumptions.push("A3");
   return { hit, assumptions };
 }
@@ -174,19 +256,22 @@ export function resolveAttack(data: GameData, build: Build, choice: AttackChoice
     const slotIndex = choice.slot ?? 0;
     const slot = slots[slotIndex];
     if (!slot) return undefined;
-    const entry = attacksForSlot(data, slot, hand).find((a) => a.name === choice.attack);
-    if (!entry) return undefined;
+    // Normal attacks stay available when the slot's skill has no data; asking for the skill itself reports it as not supported.
+    const entry = attacksForSlot(data, slot, hand, false).find((a) => a.name === choice.attack);
+    if (!entry) {
+      const unsupported = hand === "right" ? skillSupport(data, slot) : null;
+      if (unsupported && choice.attack.startsWith(slotSkillName(data, slot)!)) throw unsupported;
+      return undefined;
+    }
     const isSkill = entry.type === "WeaponSkill";
     const assumptions = new Set<AssumptionId>();
     const allHits = entry.hitIds.map((id, i) => {
-      const { hit, assumptions: a } = hitDef(data, id, i + 1, isSkill);
+      const { hit, assumptions: a } = hitDef(data, id, i + 1, slot.weapon);
       a.forEach((x) => assumptions.add(x));
       return hit;
     });
     const twoHanded = isSkill ? choice.grip === "2h" : /^2h /.test(entry.name);
     const hits = selectHits(allHits, choice.hits);
-    // A8 matters only when it decides whether a two-handed hit gets the str bonus.
-    if (twoHanded && hits.some((h) => h.disable2H.source === "A8")) assumptions.add("A8");
     if (!hits.some((h) => h.kind !== "weapon")) assumptions.delete("A3");
     return {
       name: entry.name, type: entry.type, isSkill, ...(isSkill && { skillName: entry.categories[0] }),
