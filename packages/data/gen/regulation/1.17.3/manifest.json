@@ -1,0 +1,124 @@
+{
+ "patch": "1.17.3",
+ "regulationVersion": 11730034,
+ "sha256": "b8cdab84c0772f66811fdc5176a381877ca6657b37d420cc2c1562a90d63870e",
+ "source": "regulation.bin from TKGP's ER Regulation Archive (Nexus Mods, Elden Ring mod 4262)",
+ "paramdefs": "Source: https://github.com/vawser/Smithbox (GPL-3.0), src/Smithbox.Data/Assets/PARAM/ER/Defs, commit de81a39826561c2004a3b09308e7adf6d5d18f58, fetched 2026-11-13.\nLocal only: not committed (licence decision pending).",
+ "extractedAt": "2026-11-13",
+ "files": {
+  "SpEffectParam.json.gz": "SpEffectParam, all 11354 rows",
+  "toughness-recover.json": "GameSystemCommonParam.baseToughnessRecoverTime, PlayerCommonParam.toughnessRecoverCorrection"
+ },
+ "comparedWithEmiliaCopies": {
+  "AtkParam_Pc": {
+   "copy": "raw/emilia/1.17/AtkParam_Pc.json",
+   "rowsInCopy": 11017,
+   "rowsInGame": 11017,
+   "fieldsCompared": 162,
+   "copyFieldsWithOtherNames": [
+    "finalDamageRateId"
+   ],
+   "mismatches": []
+  },
+  "BehaviorParam_PC": {
+   "copy": "raw/emilia/1.17/BehaviorParam_PC.json",
+   "rowsInCopy": 13865,
+   "rowsInGame": 13865,
+   "fieldsCompared": 8,
+   "copyFieldsWithOtherNames": [],
+   "mismatches": []
+  },
+  "Bullet": {
+   "copy": "raw/emilia/1.17/Bullet.json",
+   "rowsInCopy": 15475,
+   "rowsInGame": 15475,
+   "fieldsCompared": 103,
+   "copyFieldsWithOtherNames": [],
+   "mismatches": [
+    {
+     "id": 20003309,
+     "field": "atkId_Bullet",
+     "game": 1,
+     "copy": 0
+    }
+   ]
+  },
+  "EquipParamWeapon": {
+   "copy": "raw/emilia/1.17/EquipParamWeapon.json",
+   "rowsInCopy": 3636,
+   "rowsInGame": 3636,
+   "fieldsCompared": 200,
+   "copyFieldsWithOtherNames": [
+    "unknown_0x17c_5",
+    "restrictSpecialSwordArt"
+   ],
+   "mismatches": []
+  },
+  "EquipParamAccessory": {
+   "copy": "raw/emilia/1.17/EquipParamAccessory.json",
+   "rowsInCopy": 157,
+   "rowsInGame": 157,
+   "fieldsCompared": 27,
+   "copyFieldsWithOtherNames": [],
+   "mismatches": []
+  },
+  "EquipParamGoods": {
+   "copy": "raw/emilia/1.17/EquipParamGoods.json",
+   "rowsInCopy": 2329,
+   "rowsInGame": 2329,
+   "fieldsCompared": 80,
+   "copyFieldsWithOtherNames": [
+    "unknown_0x73_1"
+   ],
+   "mismatches": []
+  },
+  "ToughnessParam": {
+   "copy": "raw/emilia/1.17/ToughnessParam.json",
+   "rowsInCopy": 84,
+   "rowsInGame": 84,
+   "fieldsCompared": 5,
+   "copyFieldsWithOtherNames": [
+    "unk1",
+    "finalDamageRate"
+   ],
+   "mismatches": []
+  },
+  "FinalDamageRateParam": {
+   "copy": "raw/emilia/1.17/FinalDamageRateParam.json",
+   "rowsInCopy": 377,
+   "rowsInGame": 377,
+   "fieldsCompared": 7,
+   "copyFieldsWithOtherNames": [],
+   "mismatches": []
+  },
+  "SpEffectParam": {
+   "copy": "raw/emilia/1.17/SpEffectParam.json",
+   "rowsInCopy": 729,
+   "rowsInGame": 11354,
+   "fieldsCompared": 332,
+   "copyFieldsWithOtherNames": [
+    "isDestinedDeathHpMult",
+    "isHpBurnEffect",
+    "unknown_0x352_6",
+    "unknown_0x352_7",
+    "unknown_0x353_0",
+    "unknown_0x353_1",
+    "unknown_0x353_2",
+    "unknown_0x353_3",
+    "unknown_0x353_4",
+    "unknown_0x353_5"
+   ],
+   "mismatches": []
+  }
+ },
+ "knownDifferences": [
+  {
+   "param": "Bullet",
+   "id": 20003309,
+   "field": "atkId_Bullet",
+   "copy": 0,
+   "game": 1,
+   "note": "Piquebone Arrow"
+  }
+ ]
+}

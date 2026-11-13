@@ -24,4 +24,5 @@ Builds are exports from Emilia's ER Build Planner ("Export and save"). Commands,
 ## Credits
 Data: Emilia (sovietspaceship) — [ER Build Planner](https://er-build-planner.nyasu.business) & [Frame Data Explorer](https://er-frame-data.nyasu.business).
 AR calculation based on Tom Clark's [elden-ring-weapon-calculator](https://github.com/ThomasJClark/elden-ring-weapon-calculator) (MIT).
-Param field definitions: [soulsmods/Paramdex](https://github.com/soulsmods/Paramdex).
+Param field definitions: [soulsmods/Paramdex](https://github.com/soulsmods/Paramdex) and [Smithbox](https://github.com/vawser/Smithbox).
+Game file (regulation.bin 1.17.3): TKGP's [ER Regulation Archive](https://www.nexusmods.com/eldenring/mods/4262).
