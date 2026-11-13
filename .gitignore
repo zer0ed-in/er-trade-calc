@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+*.zip
+.DS_Store
+*.log
+.env
+*.bin
+# Kickoff-only files: kept locally, not tracked
+START_HERE.md
+reference/prototype/
+fixtures/golden/prototype.json

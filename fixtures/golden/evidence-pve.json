@@ -1,0 +1,92 @@
+{
+ "description": "Zer0's in-game tests vs one Giant Troll (PvE, near Secluded Cell), 2026-11-12. EVIDENCE ONLY: the troll's defences are unknown and the calculator is PvP-only, so these are NOT exact damage tests.",
+ "usableAsTests": [
+  "1H damage == 2H damage for every ash entry below (exact equality, independent of defender) -> the engine must return equal 1H/2H damage for these ash hits",
+  "Full Ice Spear = first hit + projectile (402+844=1246, 300+928=1228, 391+1107=1498, 320+1061=1381) -> totals are sums of hits"
+ ],
+ "directionOnly": [
+  "Beast's Roar: dex build beats str build on every infusion including str-scaling Fire -> projectile driven by dex (table 51020)",
+  "Storm Blade wind: str build wins on Fire, dex build wins on Lightning, best setups close -> str+dex table 51030"
+ ],
+ "builds": {
+  "str": {
+   "class": "Heavy Knight",
+   "rl": 125,
+   "stats": {
+    "vig": 60,
+    "end": 40,
+    "str": 61,
+    "dex": 11
+   },
+   "helm": "Divine Bird Helm (+3 str, +4 dex -> 64/15)",
+   "armour": "Verdigris except Divine Bird Helm",
+   "talismans": []
+  },
+  "dex": {
+   "class": "Heavy Knight",
+   "rl": 125,
+   "stats": {
+    "vig": 60,
+    "end": 40,
+    "str": 15,
+    "dex": 57
+   },
+   "helm": "Divine Bird Helm (-> 18/61)",
+   "armour": "same",
+   "talismans": []
+  }
+ },
+ "results": {
+  "str": {
+   "Wakizashi Beast's Roar": {
+    "Heavy": 354,
+    "Lightning": 401,
+    "Fire": 381
+   },
+   "Wakizashi Storm Blade (wind only)": {
+    "Heavy": 716,
+    "Lightning": 644,
+    "Fire": 690
+   },
+   "Banished Knight's Halberd Ice Spear": {
+    "Heavy": {
+     "projectile": 844,
+     "firstHit": 402,
+     "total": 1246
+    },
+    "Cold": {
+     "projectile": 928,
+     "firstHit": 300,
+     "total": 1228
+    }
+   }
+  },
+  "dex": {
+   "Wakizashi Beast's Roar": {
+    "Keen": 595,
+    "Lightning": 535,
+    "Fire": 457,
+    "Cold": 518
+   },
+   "Wakizashi Storm Blade (wind only)": {
+    "Keen": 744,
+    "Lightning": 760,
+    "Fire": 651,
+    "Cold": 693
+   },
+   "Banished Knight's Halberd Ice Spear": {
+    "Keen": {
+     "projectile": 1107,
+     "firstHit": 391,
+     "total": 1498
+    },
+    "Cold": {
+     "projectile": 1061,
+     "firstHit": 320,
+     "total": 1381
+    }
+   }
+  },
+  "note": "Every value above was identical one-handed and two-handed."
+ }
+}

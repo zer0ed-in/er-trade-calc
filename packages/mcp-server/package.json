@@ -1,0 +1,18 @@
+{
+  "name": "@ertc/mcp-server",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@ertc/builds": "workspace:*",
+    "@ertc/data": "workspace:*",
+    "@ertc/engine": "workspace:*",
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "tsx": "4.23.15"
+  }
+}

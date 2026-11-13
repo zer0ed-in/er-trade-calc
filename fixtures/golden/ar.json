@@ -1,0 +1,103 @@
+{
+ "description": "Weapon AR (attack rating) at +25. 'ar' is the weapon's own AR before motion value.",
+ "cases": [
+  {
+   "id": "ar-heavy-1h",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "weapon": "Shamshir",
+   "infusion": "Heavy",
+   "upgrade": 25,
+   "stats": {
+    "str": 59,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "twoHanded": false,
+   "expected": {
+    "physical": 489
+   }
+  },
+  {
+   "id": "ar-keen-1h",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "weapon": "Shamshir",
+   "infusion": "Keen",
+   "upgrade": 25,
+   "stats": {
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "twoHanded": false,
+   "expected": {
+    "physical": 493
+   }
+  },
+  {
+   "id": "ar-heavy-2h",
+   "status": "prototype",
+   "note": "Tom Clark calculator; planner table shows 564 = this x 1.03 (MV)",
+   "weapon": "Shamshir",
+   "infusion": "Heavy",
+   "upgrade": 25,
+   "stats": {
+    "str": 59,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "twoHanded": true,
+   "expected": {
+    "physical": 548.5,
+    "tolerance": 0.5
+   }
+  },
+  {
+   "id": "ar-keen-2h",
+   "status": "prototype",
+   "note": "Tom Clark calculator; planner table shows 515 = this x 1.03",
+   "weapon": "Shamshir",
+   "infusion": "Keen",
+   "upgrade": 25,
+   "stats": {
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "twoHanded": true,
+   "expected": {
+    "physical": 500.2,
+    "tolerance": 0.5
+   }
+  },
+  {
+   "id": "ar-keen-optimal-lightning",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "note": "planner weapon card 'Optimal: AR 577 Lightning' for the dex build's stats",
+   "weapon": "Shamshir",
+   "infusion": "Lightning",
+   "upgrade": 25,
+   "stats": {
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "twoHanded": false,
+   "expected": {
+    "total": 577
+   }
+  }
+ ]
+}

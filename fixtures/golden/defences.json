@@ -1,0 +1,585 @@
+{
+ "description": "Defence per damage type. Probes change one stat at a time, so RL changes too (RL = sum(stats) - 79 for Heavy Knight). Shows: lightning = level only; fire uses vigor with its own curve; magic=int, holy=arc share one curve.",
+ "absorption": {
+  "status": "planner",
+  "verifiedOn": "2026-10-21",
+  "armour": {
+   "head": "Verdigris Helm",
+   "body": "Verdigris Armor",
+   "arms": "Verdigris Gauntlets",
+   "legs": "Verdigris Greaves"
+  },
+  "expectedPercent": {
+   "physical": 38.505,
+   "strike": 33.937,
+   "slash": 37.278,
+   "pierce": 35.588,
+   "magic": 26.501,
+   "fire": 26.174,
+   "lightning": 28.349,
+   "holy": 26.174
+  }
+ },
+ "cases": [
+  {
+   "id": "def-base",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 125,
+   "expected": {
+    "physical": 132,
+    "magic": 141,
+    "fire": 187,
+    "lightning": 127,
+    "holy": 145
+   }
+  },
+  {
+   "id": "def-end10",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 10,
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 95,
+   "expected": {
+    "physical": 125,
+    "magic": 134,
+    "fire": 180,
+    "lightning": 120,
+    "holy": 138
+   }
+  },
+  {
+   "id": "def-end25",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 25,
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 110,
+   "expected": {
+    "physical": 129,
+    "magic": 138,
+    "fire": 184,
+    "lightning": 124,
+    "holy": 142
+   }
+  },
+  {
+   "id": "def-end60",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 60,
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 145,
+   "expected": {
+    "physical": 136,
+    "magic": 145,
+    "fire": 191,
+    "lightning": 131,
+    "holy": 149
+   }
+  },
+  {
+   "id": "def-vig30",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 30,
+    "mnd": 8,
+    "end": 40,
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 95,
+   "expected": {
+    "physical": 125,
+    "magic": 134,
+    "fire": 140,
+    "lightning": 120,
+    "holy": 138
+   }
+  },
+  {
+   "id": "def-vig40",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 40,
+    "mnd": 8,
+    "end": 40,
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 105,
+   "expected": {
+    "physical": 128,
+    "magic": 137,
+    "fire": 163,
+    "lightning": 123,
+    "holy": 141
+   }
+  },
+  {
+   "id": "def-int20",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 15,
+    "dex": 57,
+    "int": 20,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 138,
+   "expected": {
+    "physical": 135,
+    "magic": 170,
+    "fire": 190,
+    "lightning": 130,
+    "holy": 148
+   }
+  },
+  {
+   "id": "def-int40",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 15,
+    "dex": 57,
+    "int": 40,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 158,
+   "expected": {
+    "physical": 139,
+    "magic": 186,
+    "fire": 194,
+    "lightning": 134,
+    "holy": 152
+   }
+  },
+  {
+   "id": "def-arc20",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 20
+   },
+   "rl": 136,
+   "expected": {
+    "physical": 134,
+    "magic": 143,
+    "fire": 189,
+    "lightning": 129,
+    "holy": 169
+   }
+  },
+  {
+   "id": "def-arc40",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 40
+   },
+   "rl": 156,
+   "expected": {
+    "physical": 138,
+    "magic": 147,
+    "fire": 193,
+    "lightning": 133,
+    "holy": 185
+   }
+  },
+  {
+   "id": "def-phys-str59",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 59,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 125,
+   "expected": {
+    "physical": 156
+   }
+  },
+  {
+   "id": "def-phys-str57",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 57,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 123,
+   "expected": {
+    "physical": 153
+   }
+  },
+  {
+   "id": "def-phys-str55",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 55,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 121,
+   "expected": {
+    "physical": 152
+   }
+  },
+  {
+   "id": "def-phys-str53",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 53,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 119,
+   "expected": {
+    "physical": 150
+   }
+  },
+  {
+   "id": "def-phys-str51",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 51,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 117,
+   "expected": {
+    "physical": 148
+   }
+  },
+  {
+   "id": "def-phys-str49",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 49,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 115,
+   "expected": {
+    "physical": 146
+   }
+  },
+  {
+   "id": "def-phys-str47",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 47,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 113,
+   "expected": {
+    "physical": 144
+   }
+  },
+  {
+   "id": "def-phys-str45",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 45,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 111,
+   "expected": {
+    "physical": 142
+   }
+  },
+  {
+   "id": "def-phys-str43",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 43,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 109,
+   "expected": {
+    "physical": 140
+   }
+  },
+  {
+   "id": "def-phys-str41",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 41,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 107,
+   "expected": {
+    "physical": 138
+   }
+  },
+  {
+   "id": "def-phys-str39",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 39,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 105,
+   "expected": {
+    "physical": 137
+   }
+  },
+  {
+   "id": "def-phys-str37",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 37,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 103,
+   "expected": {
+    "physical": 135
+   }
+  },
+  {
+   "id": "def-phys-str35",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 35,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 101,
+   "expected": {
+    "physical": 134
+   }
+  },
+  {
+   "id": "def-phys-str33",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 33,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 99,
+   "expected": {
+    "physical": 132
+   }
+  },
+  {
+   "id": "def-phys-str31",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 31,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 97,
+   "expected": {
+    "physical": 131
+   }
+  },
+  {
+   "id": "def-phys-str29",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "class": "Heavy Knight",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 29,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rl": 95,
+   "expected": {
+    "physical": 129
+   }
+  }
+ ]
+}

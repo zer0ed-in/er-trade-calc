@@ -1,0 +1,57 @@
+{
+ "description": "Other planner-verified facts.",
+ "cases": [
+  {
+   "id": "rl-heavy-knight",
+   "status": "planner",
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "expected": {
+    "rl": 125
+   }
+  },
+  {
+   "id": "hp-vig60",
+   "status": "planner",
+   "stats": {
+    "vig": 60
+   },
+   "expected": {
+    "hp": 1900
+   }
+  },
+  {
+   "id": "weight-verdigris-full",
+   "status": "planner",
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "expected": {
+    "weight": 61.6
+   }
+  },
+  {
+   "id": "load-end40",
+   "status": "planner",
+   "note": "Verdigris full + Shamshir (3.5) = 65.1 shown as 71.6% Heavy at 40 end",
+   "stats": {
+    "end": 40
+   },
+   "expected": {
+    "maxLoad": 90.9,
+    "tolerance": 0.1
+   }
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+{
+ "description": "Poise damage and break thresholds (planner Poise Damage Calculator, defender poise varied).",
+ "cases": [
+  {
+   "id": "poise-1h-r1",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "weapon": "Shamshir",
+   "attack": "1h R1 1",
+   "expected": {
+    "poiseDamage": 110,
+    "breaksAtOrBelow": 110,
+    "survivesFrom": 111
+   }
+  },
+  {
+   "id": "poise-2h-r1",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "weapon": "Shamshir",
+   "attack": "2h R1 1",
+   "expected": {
+    "poiseDamage": 143,
+    "breaksAtOrBelow": 143,
+    "survivesFrom": 144
+   }
+  }
+ ],
+ "ladderMaxPoise": {
+  "value": 133,
+  "status": "stated-by-zer0",
+  "note": "confirm with armour data (Q4)"
+ }
+}

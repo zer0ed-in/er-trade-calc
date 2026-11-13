@@ -1,0 +1,29 @@
+{
+  "name": "er-trade-calc",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.18.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "data:build": "tsx packages/data/scripts/build-data.ts",
+    "data:snapshot": "tsx packages/data/scripts/snapshot-emilia.ts",
+    "ertc": "tsx packages/cli/src/main.ts",
+    "mcp:stdio": "tsx packages/mcp-server/src/stdio.ts",
+    "mcp:http": "tsx packages/mcp-server/src/http.ts",
+    "report:prototype": "tsx packages/data/scripts/compare-prototype.ts",
+    "report:friend-test": "tsx packages/cli/scripts/friend-test-sheet.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0"
+  },
+  "dependencies": {
+    "tsx": "4.23.15",
+    "zod": "4.6.7"
+  }
+}

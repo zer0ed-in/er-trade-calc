@@ -1,0 +1,946 @@
+{
+    "buildUrl": "",
+    "description": "",
+    "id": "db9f1efd80402c",
+    "inventory": {
+        "slots": [
+            {
+                "name": "Shamshir",
+                "infusion": "Keen",
+                "order": 0,
+                "weaponArt": "Spinning Slash",
+                "upgrade": null,
+                "equipIndex": 0,
+                "equipSet": [
+                    0
+                ],
+                "full_hex_id": "006B45D1",
+                "weapon_hex_id": "006B44F0",
+                "affinity_hex_id": "006B45B8",
+                "upgrade_hex_id": "0019",
+                "ash_of_war_hex_id": "8000283C"
+            }
+        ],
+        "sorting": {
+            "direction": "asc",
+            "method": "acquisition"
+        }
+    },
+    "talismans": {
+        "slots": [
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 0,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 1,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 2,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 3,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 4,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 5,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 6,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 7,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 8,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 9,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 10,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 11,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 12,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 13,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 14,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 15,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 16,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 17,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 18,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 19,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 20,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 21,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 22,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 23,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Blue-Feathered Branchsword",
+                "order": 24,
+                "full_hex_id": "20000FF0"
+            },
+            {
+                "name": "Dragoncrest Greatshield Talisman",
+                "order": 25,
+                "full_hex_id": "20000FA3"
+            },
+            {
+                "name": "Ritual Shield Talisman",
+                "order": 26,
+                "full_hex_id": "20000FFA"
+            },
+            {
+                "name": "Two-Headed Turtle Talisman",
+                "order": 27,
+                "full_hex_id": "20001B76"
+            },
+            {
+                "name": "Ritual Sword Talisman",
+                "order": 28,
+                "full_hex_id": "20000802"
+            },
+            {
+                "name": "Dragoncrest Greatshield Talisman",
+                "order": 29,
+                "full_hex_id": "20000FA3"
+            },
+            {
+                "name": "Rotten Winged Sword Insignia",
+                "order": 30,
+                "full_hex_id": "20000821"
+            },
+            {
+                "name": "Godskin Swaddling Cloth",
+                "order": 31,
+                "full_hex_id": "200013B0"
+            },
+            {
+                "name": "Bull-Goat's Talisman",
+                "order": 32,
+                "full_hex_id": "200004BA"
+            },
+            {
+                "name": "Shard of Alexander",
+                "order": 33,
+                "full_hex_id": "200004CF"
+            },
+            {
+                "name": "Rotten Winged Sword Insignia",
+                "order": 34,
+                "full_hex_id": "20000821"
+            },
+            {
+                "name": "Golden Braid",
+                "order": 35,
+                "full_hex_id": "20001BD0"
+            },
+            {
+                "name": "Lacerating Crossed-Tree",
+                "order": 36,
+                "full_hex_id": "20001FCC"
+            },
+            {
+                "name": "Retaliatory Crossed-Tree",
+                "order": 37,
+                "full_hex_id": "20001FC2"
+            },
+            {
+                "name": "Spear Talisman",
+                "order": 38,
+                "full_hex_id": "2000080C"
+            },
+            {
+                "name": "Golden Braid",
+                "order": 39,
+                "full_hex_id": "20001BD0"
+            },
+            {
+                "name": "Pearldrake Talisman +3",
+                "order": 40,
+                "full_hex_id": "20001BDA"
+            },
+            {
+                "name": "Claw Talisman",
+                "order": 41,
+                "full_hex_id": "20000884"
+            },
+            {
+                "name": "Prosthesis-Wearer Heirloom",
+                "order": 42,
+                "full_hex_id": "2000042E"
+            },
+            {
+                "name": "Axe Talisman",
+                "order": 43,
+                "full_hex_id": "20000852"
+            },
+            {
+                "name": "Pearldrake Talisman +3",
+                "order": 44,
+                "full_hex_id": "20001BDA"
+            },
+            {
+                "name": "Boltdrake Talisman +3",
+                "order": 45,
+                "full_hex_id": "20001BC6"
+            },
+            {
+                "name": "Arrow's Soaring Sting Talisman",
+                "order": 46,
+                "full_hex_id": "20001F86"
+            },
+            {
+                "name": "Hammer Talisman",
+                "order": 47,
+                "full_hex_id": "20000816"
+            },
+            {
+                "name": "Arrow's Sting Talisman",
+                "order": 48,
+                "full_hex_id": "20000866"
+            },
+            {
+                "name": "Boltdrake Talisman +3",
+                "order": 49,
+                "full_hex_id": "20001BC6"
+            },
+            {
+                "name": "Retaliatory Crossed-Tree",
+                "order": 50,
+                "full_hex_id": "20001FC2"
+            },
+            {
+                "name": "Crimson Amber Medallion +3",
+                "order": 51,
+                "full_hex_id": "20001B58"
+            },
+            {
+                "name": "Lacerating Crossed-Tree",
+                "order": 52,
+                "full_hex_id": "20001FCC"
+            },
+            {
+                "name": "Erdtree's Favor +2",
+                "order": 53,
+                "full_hex_id": "20000412"
+            },
+            {
+                "name": "Flamedrake Talisman +3",
+                "order": 54,
+                "full_hex_id": "20001BBC"
+            },
+            {
+                "name": "Godskin Swaddling Cloth",
+                "order": 55,
+                "full_hex_id": "200013B0"
+            },
+            {
+                "name": "Millicent's Prosthesis",
+                "order": 56,
+                "full_hex_id": "200004E2"
+            },
+            {
+                "name": "Bull-Goat's Talisman",
+                "order": 57,
+                "full_hex_id": "200004BA"
+            },
+            {
+                "name": "Great-Jar's Arsenal",
+                "order": 58,
+                "full_hex_id": "20000408"
+            },
+            {
+                "name": "Spelldrake Talisman +3",
+                "order": 59,
+                "full_hex_id": "20001BB2"
+            },
+            {
+                "name": "Clarifying Horn Charm +2",
+                "order": 60,
+                "full_hex_id": "20001B94"
+            },
+            {
+                "name": "Stalwart Horn Charm +2",
+                "order": 61,
+                "full_hex_id": "20001B80"
+            },
+            {
+                "name": "Spear Talisman",
+                "order": 62,
+                "full_hex_id": "2000080C"
+            },
+            {
+                "name": "Mottled Necklace +2",
+                "order": 63,
+                "full_hex_id": "20001BA8"
+            },
+            {
+                "name": "Prince of Death's Cyst",
+                "order": 64,
+                "full_hex_id": "200004A7"
+            },
+            {
+                "name": "Starscourge Heirloom",
+                "order": 65,
+                "full_hex_id": "20000424"
+            },
+            {
+                "name": "Immunizing Horn Charm +2",
+                "order": 66,
+                "full_hex_id": "20001B8A"
+            },
+            {
+                "name": "Two Fingers Heirloom",
+                "order": 67,
+                "full_hex_id": "20000442"
+            },
+            {
+                "name": "Two-Headed Turtle Talisman",
+                "order": 68,
+                "full_hex_id": "20001B76"
+            },
+            {
+                "name": "Outer God Heirloom",
+                "order": 69,
+                "full_hex_id": "20001F54"
+            }
+        ],
+        "sorting": {
+            "direction": "asc",
+            "method": "acquisition"
+        }
+    },
+    "name": "dextra_erpvp_test",
+    "stats": {
+        "rl": 125,
+        "arc": 9,
+        "dex": 57,
+        "fth": 8,
+        "int": 7,
+        "mnd": 8,
+        "str": 15,
+        "vig": 60,
+        "vit": 40
+    },
+    "spells": {
+        "slots": [
+            {
+                "name": "Bestial Vitality",
+                "order": 0
+            }
+        ]
+    },
+    "protectors": {
+        "arms": {
+            "slots": [
+                {
+                    "name": "Verdigris Gauntlets",
+                    "order": 0,
+                    "full_hex_id": "104C7318"
+                },
+                {
+                    "name": "Gauntlets of Solitude",
+                    "order": 1,
+                    "full_hex_id": "104E47D8"
+                },
+                {
+                    "name": "Steel Gauntlets",
+                    "order": 2,
+                    "equipSet": [
+                        1
+                    ],
+                    "equipIndex": 1,
+                    "full_hex_id": "1051F158"
+                },
+                {
+                    "name": "Gaius's Gauntlets",
+                    "order": 3,
+                    "full_hex_id": "102DEE98"
+                },
+                {
+                    "name": "Godskin Noble Bracelets",
+                    "order": 4,
+                    "full_hex_id": "10081718"
+                },
+                {
+                    "name": "Zamor Bracelets",
+                    "order": 5,
+                    "full_hex_id": "10105478"
+                },
+                {
+                    "name": "Fire Monk Gauntlets",
+                    "order": 6,
+                    "full_hex_id": "100557F8"
+                },
+                {
+                    "name": "Bull-Goat Gauntlets",
+                    "order": 7,
+                    "full_hex_id": "100223A8"
+                },
+                {
+                    "name": "Blackflame Monk Gauntlets",
+                    "order": 8,
+                    "full_hex_id": "10055BE0"
+                },
+                {
+                    "name": "Fingerprint Gauntlets",
+                    "order": 9,
+                    "full_hex_id": "100E7FB8"
+                }
+            ],
+            "sorting": {
+                "direction": "asc",
+                "method": "acquisition"
+            }
+        },
+        "body": {
+            "slots": [
+                {
+                    "name": "Bull-Goat Armor",
+                    "order": 0,
+                    "full_hex_id": "10022344"
+                },
+                {
+                    "name": "Armor of Solitude (Altered)",
+                    "order": 1,
+                    "full_hex_id": "104E4B5C"
+                },
+                {
+                    "name": "Verdigris Armor",
+                    "order": 2,
+                    "equipSet": [
+                        1
+                    ],
+                    "equipIndex": 1,
+                    "full_hex_id": "104C72B4"
+                },
+                {
+                    "name": "Fire Prelate Armor (Altered)",
+                    "order": 3,
+                    "full_hex_id": "1005828C"
+                },
+                {
+                    "name": "Tree Sentinel Armor",
+                    "order": 4,
+                    "full_hex_id": "10041F14"
+                },
+                {
+                    "name": "Lionel's Armor",
+                    "order": 5,
+                    "full_hex_id": "1009C464"
+                },
+                {
+                    "name": "Armor of Solitude",
+                    "order": 6,
+                    "full_hex_id": "104E4774"
+                },
+                {
+                    "name": "Gaius's Armor",
+                    "order": 7,
+                    "full_hex_id": "102DEE34"
+                },
+                {
+                    "name": "Fire Prelate Armor",
+                    "order": 8,
+                    "full_hex_id": "10057EA4"
+                },
+                {
+                    "name": "Tree Sentinel Armor (Altered)",
+                    "order": 9,
+                    "full_hex_id": "100422FC"
+                },
+                {
+                    "name": "Leda's Armor",
+                    "order": 10,
+                    "full_hex_id": "104C4BA4"
+                },
+                {
+                    "name": "Veteran's Armor (Altered)",
+                    "order": 11,
+                    "full_hex_id": "100BEB2C"
+                },
+                {
+                    "name": "Veteran's Armor",
+                    "order": 12,
+                    "full_hex_id": "100BE744"
+                },
+                {
+                    "name": "Divine Bird Warrior Armor",
+                    "order": 13,
+                    "full_hex_id": "105027EC"
+                },
+                {
+                    "name": "Divine Beast Warrior Armor",
+                    "order": 14,
+                    "full_hex_id": "10502404"
+                }
+            ],
+            "sorting": {
+                "direction": "asc",
+                "method": "acquisition"
+            }
+        },
+        "head": {
+            "slots": [
+                {
+                    "name": "Circlet of Light",
+                    "order": 0,
+                    "full_hex_id": "105071C0"
+                },
+                {
+                    "name": "Imp Head (Lion)",
+                    "order": 1,
+                    "full_hex_id": "10515450"
+                },
+                {
+                    "name": "Divine Bird Helm",
+                    "order": 2,
+                    "equipSet": [
+                        1
+                    ],
+                    "equipIndex": 1,
+                    "full_hex_id": "10502788"
+                },
+                {
+                    "name": "Fire Knight Helm",
+                    "order": 3,
+                    "full_hex_id": "104F0A60"
+                },
+                {
+                    "name": "Mushroom Crown",
+                    "order": 4,
+                    "full_hex_id": "101EAB90"
+                },
+                {
+                    "name": "Steel Helm",
+                    "order": 5,
+                    "full_hex_id": "1051F090"
+                },
+                {
+                    "name": "Pumpkin Helm",
+                    "order": 6,
+                    "full_hex_id": "1006B6C0"
+                },
+                {
+                    "name": "Divine Beast Head",
+                    "order": 7,
+                    "full_hex_id": "1050B810"
+                },
+                {
+                    "name": "Divine Beast Helm",
+                    "order": 8,
+                    "full_hex_id": "105023A0"
+                },
+                {
+                    "name": "Helm of Solitude",
+                    "order": 9,
+                    "full_hex_id": "104E4710"
+                }
+            ],
+            "sorting": {
+                "direction": "asc",
+                "method": "acquisition"
+            }
+        },
+        "legs": {
+            "slots": [
+                {
+                    "name": "Bull-Goat Greaves",
+                    "order": 0,
+                    "full_hex_id": "1002240C"
+                },
+                {
+                    "name": "Greaves of Solitude",
+                    "order": 1,
+                    "full_hex_id": "104E483C"
+                },
+                {
+                    "name": "Verdigris Greaves",
+                    "order": 2,
+                    "equipSet": [
+                        1
+                    ],
+                    "equipIndex": 1,
+                    "full_hex_id": "104C737C"
+                },
+                {
+                    "name": "Fire Prelate Greaves",
+                    "order": 3,
+                    "full_hex_id": "10057F6C"
+                },
+                {
+                    "name": "Banished Knight Greaves",
+                    "order": 4,
+                    "full_hex_id": "10030E6C"
+                }
+            ],
+            "sorting": {
+                "direction": "asc",
+                "method": "acquisition"
+            }
+        }
+    },
+    "items": {
+        "ammo": {},
+        "tools": {
+            "slots": [
+                {
+                    "name": "Flask of Crimson Tears",
+                    "order": 0,
+                    "full_hex_id": "400003E9"
+                },
+                {
+                    "name": "Flask of Cerulean Tears",
+                    "order": 1,
+                    "equipIndex": 12,
+                    "full_hex_id": "4000041B"
+                },
+                {
+                    "name": "Flask of Wondrous Physick",
+                    "order": 2,
+                    "full_hex_id": "400000FB"
+                },
+                {
+                    "name": "Rune Arc",
+                    "order": 3,
+                    "full_hex_id": "400000BE"
+                },
+                {
+                    "name": "Starlight Shards",
+                    "order": 4,
+                    "full_hex_id": "4000050A"
+                },
+                {
+                    "name": "Lulling Branch",
+                    "order": 5,
+                    "full_hex_id": "401E880E"
+                },
+                {
+                    "name": "Neutralizing Boluses",
+                    "order": 6,
+                    "full_hex_id": "40000384"
+                },
+                {
+                    "name": "Preserving Boluses",
+                    "order": 7,
+                    "full_hex_id": "400003AC"
+                },
+                {
+                    "name": "Stanching Boluses",
+                    "order": 8,
+                    "equipIndex": 10,
+                    "full_hex_id": "4000038E"
+                },
+                {
+                    "name": "Thawfrost Boluses",
+                    "order": 9,
+                    "full_hex_id": "40000398"
+                },
+                {
+                    "name": "Stimulating Boluses",
+                    "order": 10,
+                    "equipIndex": 15,
+                    "full_hex_id": "400003A2"
+                },
+                {
+                    "name": "Clarifying Boluses",
+                    "order": 11,
+                    "equipIndex": 14,
+                    "full_hex_id": "400003C0"
+                },
+                {
+                    "name": "Rejuvenating Boluses",
+                    "order": 12,
+                    "full_hex_id": "400003B6"
+                },
+                {
+                    "name": "Hefty Lightning Pot",
+                    "order": 13,
+                    "full_hex_id": "401E85C0"
+                },
+                {
+                    "name": "Freezing Pot",
+                    "order": 14,
+                    "equipIndex": 11,
+                    "full_hex_id": "40000168"
+                },
+                {
+                    "name": "Hefty Freezing Pot",
+                    "order": 15,
+                    "full_hex_id": "401E85E8"
+                },
+                {
+                    "name": "Roped Lightning Pot",
+                    "order": 16,
+                    "full_hex_id": "400001A4"
+                },
+                {
+                    "name": "Roped Fly Pot",
+                    "order": 17,
+                    "full_hex_id": "400001D6"
+                },
+                {
+                    "name": "Uplifting Aromatic",
+                    "order": 18,
+                    "full_hex_id": "40000DAC"
+                },
+                {
+                    "name": "Roped Volcano Pot",
+                    "order": 19,
+                    "equipIndex": 6,
+                    "full_hex_id": "400001EA"
+                },
+                {
+                    "name": "Throwing Dagger",
+                    "order": 20,
+                    "equipIndex": 0,
+                    "full_hex_id": "400006A4"
+                },
+                {
+                    "name": "Crystal Dart",
+                    "order": 21,
+                    "full_hex_id": "400006CC"
+                },
+                {
+                    "name": "Dragon Communion Harpoon",
+                    "order": 22,
+                    "equipIndex": 1,
+                    "full_hex_id": "401E8B2E"
+                },
+                {
+                    "name": "Large Glintstone Scrap",
+                    "order": 23,
+                    "equipIndex": 7,
+                    "full_hex_id": "40000BEB"
+                },
+                {
+                    "name": "Gravity Stone Fan",
+                    "order": 24,
+                    "full_hex_id": "40000BF4"
+                },
+                {
+                    "name": "Fire Coil",
+                    "order": 25,
+                    "full_hex_id": "401E90EC"
+                },
+                {
+                    "name": "Drawstring Dragonbolt Grease",
+                    "order": 26,
+                    "equipIndex": 5,
+                    "full_hex_id": "401E8A66"
+                },
+                {
+                    "name": "Drawstring Blood Grease",
+                    "order": 27,
+                    "full_hex_id": "40000604"
+                },
+                {
+                    "name": "Drawstring Eternal Sleep Grease",
+                    "order": 28,
+                    "full_hex_id": "401E8A8E"
+                },
+                {
+                    "name": "Drawstring Messmerfire Grease",
+                    "order": 29,
+                    "full_hex_id": "401E8A5C"
+                },
+                {
+                    "name": "Drawstring Poison Grease",
+                    "order": 30,
+                    "full_hex_id": "40000618"
+                },
+                {
+                    "name": "Prattling Pate \"Lamentation\"",
+                    "order": 31,
+                    "full_hex_id": "401E8CE6"
+                },
+                {
+                    "name": "Hefty Rot Pot",
+                    "order": 32,
+                    "equipIndex": 13,
+                    "full_hex_id": "401E871E"
+                },
+                {
+                    "name": "Clarifying Boluses",
+                    "order": 33,
+                    "full_hex_id": "400003C0"
+                }
+            ],
+            "sorting": {
+                "direction": "asc",
+                "method": "acquisition"
+            }
+        },
+        "crystalTears": [
+            null,
+            null
+        ],
+        "flasks": {
+            "crimson": 10,
+            "cerulean": 4,
+            "total": 14,
+            "level": 12
+        }
+    },
+    "characterClass": "Heavy Knight",
+    "version": "3.14",
+    "author": {
+        "id": "c89b6f13-d121-4853-aa8e-ec0f49d45a8d",
+        "name": "Zer0"
+    },
+    "weaponUpgrade": 25,
+    "is2h": false,
+    "isPvE": false,
+    "views": {
+        "overview": "build-planner"
+    },
+    "conditions": {
+        "forEffects": [],
+        "crystalTears": false
+    },
+    "sets": {
+        "weapons": [
+            {
+                "name": "Default",
+                "active": true
+            }
+        ],
+        "talismans": [
+            {
+                "name": "Default",
+                "active": true
+            }
+        ],
+        "protectors": [
+            {
+                "name": "Default",
+                "active": true
+            }
+        ]
+    },
+    "tags": [
+        "Duels",
+        "Dexterity",
+        "DLC: SotE",
+        "DLC: Tarnished"
+    ],
+    "customEffects": [],
+    "computed": {
+        "stats": {
+            "str": 18,
+            "dex": 61
+        },
+        "maxHealth": 1900,
+        "maxFP": 72,
+        "maxStamina": 142,
+        "maxEquipLoad": 90.90021588,
+        "poise": {
+            "original": 93
+        },
+        "runes": {
+            "toNextLevel": 102838,
+            "total": 3978214
+        },
+        "absorption": {
+            "physical": 36.97716741120001,
+            "slash": 35.92950751840001,
+            "pierce": 34.1388595936,
+            "strike": 32.3138872208,
+            "magic": 24.807318579000004,
+            "fire": 24.70385908,
+            "lightning": 25.087337434000002,
+            "holy": 24.23569156480001
+        },
+        "defenses": {
+            "physical": 134,
+            "slash": 134,
+            "pierce": 134,
+            "strike": 134,
+            "lightning": 128,
+            "fire": 188,
+            "magic": 142,
+            "holy": 146
+        },
+        "resistances": {
+            "immunity": 357,
+            "robustness": 388,
+            "focus": 125,
+            "vitality": 259
+        }
+    },
+    "revision": 3
+}

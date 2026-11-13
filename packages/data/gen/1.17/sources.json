@@ -1,0 +1,23 @@
+{
+ "patch": "1.17",
+ "builtFrom": {
+  "tc-regulation.json": "tom-clark/v1.17/regulation-vanilla-v1.17.js (MIT)",
+  "correction-attack.json": "correction-attack-BvD1v8dy.js",
+  "reinforcements.json": "reinforcements-GFGYDjN6.js",
+  "poise-breakpoints.json": "poise-breakpoints-r6ljVx1g.js",
+  "calc-correct-graphs.json": "notifications-BNvikVlY.js (CalcCorrectGraph table)",
+  "classes.json": "notifications-BNvikVlY.js (starting classes)",
+  "stat-tables.json": "notifications-BNvikVlY.js (calculateEquipLoad / calculateMaxFP / calculateMaxStamina tables)",
+  "talismans.json": "notifications-BNvikVlY.js (talismans)",
+  "goods.json": "notifications-BNvikVlY.js (tools/goods incl. greases, crystal tears)",
+  "weapon-arts.json": "notifications-BNvikVlY.js (weapon arts / SwordArtsParam + planner effects)",
+  "planner-condition-effects.json": "notifications-BNvikVlY.js (condition effects; reference)",
+  "planner-rulesets.json": "rulesets-BMUmMfbT.js",
+  "armour.json": "EquipParamProtector.json (+ planner effects from notifications-BNvikVlY.js)",
+  "weapons.json": "armaments.json",
+  "speffects.json": "SpEffectParam.json",
+  "movesets.json": "attacks-CnHm4LBL.js",
+  "hits.json": "attacks-CnHm4LBL.js + AtkParam_Pc.json",
+  "animations.json": "animations.json"
+ }
+}

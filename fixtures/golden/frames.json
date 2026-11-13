@@ -1,0 +1,121 @@
+{
+ "description": "Frame data facts read from Emilia's data (2026-11-12). Data frame indices are 0-based; planner displays index+1 (A2).",
+ "cases": [
+  {
+   "id": "fr-sham-1h-r1",
+   "status": "data",
+   "animation": "a156_030000",
+   "attackParam": "100714000:218",
+   "expected": {
+    "dataStartup": 14,
+    "plannerDisplay": "15f",
+    "damageLevel": 1,
+    "poiseDamageFlat": 110,
+    "physAttribute": "Slash"
+   }
+  },
+  {
+   "id": "fr-sham-2h-r1",
+   "status": "data",
+   "animation": "a156_032000",
+   "attackParam": "100714200:224",
+   "expected": {
+    "activeFrames": [
+     13,
+     16
+    ],
+    "plannerDisplay": "14f",
+    "counterFramesSpEffect45": [
+     13,
+     26
+    ],
+    "speedGradient": {
+     "range": [
+      0,
+      13
+     ],
+     "startSpeed": 1.08,
+     "endSpeed": 1.08
+    },
+    "cancels": {
+     "RightAttack": [
+      17,
+      54
+     ],
+     "Dodge": [
+      22,
+      54
+     ]
+    }
+   }
+  },
+  {
+   "id": "fr-colossal-2h-r1",
+   "status": "data",
+   "note": "Colossal Sword class animation '2h R1 1'",
+   "expected": {
+    "hyperArmour": {
+     "id": 101,
+     "range": [
+      7,
+      25
+     ]
+    },
+    "activeFrames": [
+     17,
+     20
+    ]
+   }
+  },
+  {
+   "id": "fr-thundercloud",
+   "status": "data",
+   "note": "Thundercloud Form (Dragon King's Cragblade)",
+   "expected": {
+    "superArmour": [
+     9,
+     92
+    ],
+    "activeFrames": [
+     [
+      31,
+      36
+     ],
+     [
+      38,
+      43
+     ],
+     [
+      45,
+      51
+     ],
+     [
+      53,
+      60
+     ],
+     [
+      62,
+      68
+     ],
+     [
+      70,
+      76
+     ],
+     [
+      79,
+      85
+     ]
+    ]
+   }
+  },
+  {
+   "id": "fr-counter-effect",
+   "status": "data",
+   "spEffect": 45,
+   "name": "[HKS] Counter Frames",
+   "expected": {
+    "thrustDamageCutRate": 1.15
+   }
+  }
+ ]
+}

@@ -1,0 +1,227 @@
+{
+    "buildUrl": "",
+    "description": "",
+    "id": "356379702a407e",
+    "inventory": {
+        "slots": [
+            {
+                "name": "Shamshir",
+                "infusion": "Heavy",
+                "order": 0,
+                "weaponArt": "Spinning Slash",
+                "upgrade": null,
+                "equipIndex": 0,
+                "equipSet": [
+                    0
+                ],
+                "full_hex_id": "006B456D",
+                "weapon_hex_id": "006B44F0",
+                "affinity_hex_id": "006B4554",
+                "upgrade_hex_id": "0019",
+                "ash_of_war_hex_id": "8000283C"
+            }
+        ],
+        "sorting": {
+            "direction": "asc",
+            "method": "acquisition"
+        }
+    },
+    "talismans": {
+        "slots": [],
+        "sorting": {
+            "direction": "asc",
+            "method": "acquisition"
+        }
+    },
+    "name": "strenuous",
+    "stats": {
+        "rl": 125,
+        "arc": 9,
+        "dex": 15,
+        "fth": 8,
+        "int": 7,
+        "mnd": 8,
+        "str": 55,
+        "vig": 60,
+        "vit": 42
+    },
+    "spells": {
+        "slots": []
+    },
+    "protectors": {
+        "arms": {
+            "slots": [
+                {
+                    "name": "Steel Gauntlets",
+                    "order": 0,
+                    "equipIndex": 1,
+                    "equipSet": [
+                        1
+                    ],
+                    "full_hex_id": "1051F158"
+                }
+            ],
+            "sorting": {
+                "direction": "asc",
+                "method": "acquisition"
+            }
+        },
+        "body": {
+            "slots": [
+                {
+                    "name": "Verdigris Armor",
+                    "order": 0,
+                    "equipIndex": 1,
+                    "equipSet": [
+                        1
+                    ],
+                    "full_hex_id": "104C72B4"
+                }
+            ],
+            "sorting": {
+                "direction": "asc",
+                "method": "acquisition"
+            }
+        },
+        "head": {
+            "slots": [
+                {
+                    "name": "Divine Bird Helm",
+                    "order": 0,
+                    "equipIndex": 1,
+                    "equipSet": [
+                        1
+                    ],
+                    "full_hex_id": "10502788"
+                }
+            ],
+            "sorting": {
+                "direction": "asc",
+                "method": "acquisition"
+            }
+        },
+        "legs": {
+            "slots": [
+                {
+                    "name": "Verdigris Greaves",
+                    "order": 0,
+                    "equipIndex": 1,
+                    "equipSet": [
+                        1
+                    ],
+                    "full_hex_id": "104C737C"
+                }
+            ],
+            "sorting": {
+                "direction": "asc",
+                "method": "acquisition"
+            }
+        }
+    },
+    "items": {
+        "ammo": {},
+        "tools": {
+            "slots": [],
+            "sorting": {
+                "direction": "asc",
+                "method": "acquisition"
+            }
+        },
+        "crystalTears": [
+            null,
+            null
+        ],
+        "flasks": {
+            "crimson": 10,
+            "cerulean": 4,
+            "total": 14,
+            "level": 12
+        }
+    },
+    "characterClass": "Heavy Knight",
+    "version": "3.14",
+    "author": {
+        "id": "c89b6f13-d121-4853-aa8e-ec0f49d45a8d",
+        "name": "Zer0"
+    },
+    "weaponUpgrade": 25,
+    "is2h": false,
+    "isPvE": false,
+    "views": {
+        "overview": "build-planner"
+    },
+    "conditions": {
+        "forEffects": [],
+        "crystalTears": false
+    },
+    "sets": {
+        "weapons": [
+            {
+                "name": "Default",
+                "active": true
+            }
+        ],
+        "talismans": [
+            {
+                "name": "Default",
+                "active": true
+            }
+        ],
+        "protectors": [
+            {
+                "name": "Default",
+                "active": true
+            }
+        ]
+    },
+    "tags": [
+        "Strength",
+        "DLC: SotE",
+        "DLC: Tarnished"
+    ],
+    "customEffects": [],
+    "computed": {
+        "stats": {
+            "str": 58,
+            "dex": 19
+        },
+        "maxHealth": 1900,
+        "maxFP": 72,
+        "maxStamina": 145,
+        "maxEquipLoad": 93.69003209,
+        "poise": {
+            "original": 93
+        },
+        "runes": {
+            "toNextLevel": 102838,
+            "total": 3978214
+        },
+        "absorption": {
+            "physical": 36.97716741120001,
+            "slash": 35.92950751840001,
+            "pierce": 34.1388595936,
+            "strike": 32.3138872208,
+            "magic": 24.807318579000004,
+            "fire": 24.70385908,
+            "lightning": 25.087337434000002,
+            "holy": 24.23569156480001
+        },
+        "defenses": {
+            "physical": 156,
+            "slash": 156,
+            "pierce": 156,
+            "strike": 156,
+            "lightning": 128,
+            "fire": 188,
+            "magic": 142,
+            "holy": 146
+        },
+        "resistances": {
+            "immunity": 357,
+            "robustness": 389,
+            "focus": 125,
+            "vitality": 259
+        }
+    },
+    "revision": 2
+}

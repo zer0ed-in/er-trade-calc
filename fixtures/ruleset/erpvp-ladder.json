@@ -1,0 +1,187 @@
+{
+ "name": "ERPvP Main Ladder Rules",
+ "community": "ERPvP Discord",
+ "platform": "PC",
+ "sources": {
+  "screenshots": "Discord #lb-rules (SlugBot), posted 2024-11-29, edited; captured 2026-11-10",
+  "explainer": "https://docs.google.com/document/d/1WPquqFiC-7f4T0cHU_MumNl103pL-GS1jGnOX7Azaxk/mobilebasic",
+  "planner": "ER Build Planner rulesets file (rulesets-*.js), 'ER PvP Ladder (Seamless Co-op/Den Maps)' + '(Vanilla)', lastUpdate 2026-03-21 \u2014 use its structured format/item mapping as the base"
+ },
+ "duel": {
+  "runeLevel": 125,
+  "format": "Best of 9 (first to 5) default",
+  "defaultArena": "Stormveil tourney arena, opposite corners",
+  "start": "both players finish the bow gesture",
+  "rules": [
+   "No respec or character swap during a match",
+   "Follow Elden Ring ToS (no macros, no third-party tools)",
+   "No blacklisted glitches/exploits",
+   "Manual attack aiming must be disabled in the BMP mod",
+   "No hiding ping/connection quality",
+   "No falsifying results or smurfing",
+   "No advantage applied before the duel (pre-buffs)",
+   "Pre-loading a crossbow, bow or ash of war counts as a pre-buff",
+   "Switching builds is prohibited once in the same world as the opponent",
+   "Grease buffs must be gone before swapping to a setup that bans them",
+   "Equipping banned content counts as using it (equipping a banned AoW but not using it is an exception)",
+   "Accidental use counts as intended use unless the opponent permits",
+   "Requests to show your build after the match cannot be denied",
+   "Breaking a rule or message heals = round loss"
+  ]
+ },
+ "bans": {
+  "general": [
+   "Player buffs that stay regardless of equipped weapon (excludes crystal tears, talismans, equipment, armour)",
+   "Tick-based (passive) HP regen via armour/talismans/shields/ashes",
+   "HP healing: Flask of Crimson Tears, healing incantations (Urgent Heal, Heal, Great Heal, Erdtree Heal, Lord's Heal, Blessing's Boon, Blessing of the Erdtree, Bestial Vitality, Heal from Afar), healing consumables (Raw Meat Dumpling, Warming Stone, Frenzyflame Stone, Baldachin's Blessing, Radiant Baldachin's Blessing)",
+   "Rune Arc and PvP Great Runes: allowed in Better Multiplayer / Seamless; banned in vanilla",
+   "Spectral Steed Whistle and Spirit Ashes",
+   "Blue flasks limited to 2",
+   "Fan Daggers",
+   "Blocking with shields above 90% physical absorption",
+   "Consumables: Ironjar Aromatic, Sacred Bloody Flesh, all Livers (Fireproof/Lightningproof/Spellproof/Holyproof Dried & Pickled Liver, Opaline Pickled Liver), Ancient Dragon's Blessing, Boiled Crab, Boiled Prawn, Exalted Flesh"
+  ],
+  "greases": [
+   "Rot Grease, Drawstring Rot Grease (everywhere)",
+   "Sleep greases (Soporific, Drawstring Soporific, Eternal Sleep, Drawstring Eternal Sleep) on Ripple weapons (Ripple Blade, Ripple Crescent Halberd)",
+   "Poison greases on 2H Shamshir",
+   "All greases on the buff-restricted setups (buffRestrictions)",
+   "All other damage greases (incl. DLC and Drawstring) are ALLOWED"
+  ],
+  "crystalTears": [
+   "All stat-boosting tears (Strength-/Dexterity-/Intelligence-/Faith-knot)",
+   "All damage-boosting tears (Flame-/Magic-/Lightning-/Holy-Shrouding, Thorny, Spiked)",
+   "Deflecting Hardtear",
+   "Leaden Hardtear",
+   "Winged Crystal Tear",
+   "Windy Crystal Tear",
+   "Stonebarb Cracked Tear",
+   "Crimson Crystal Tear",
+   "Crimsonwhorl Bubbletear",
+   "Golden Vow (tear)"
+  ],
+  "weapons": [
+   "Thrusting Shields (class) \u2014 incl. Carian Thrusting Shield; Dueling Shield 2H",
+   "Power-stanced Backhand Blades (class, incl. Reverse-Bladed Sword)",
+   "2H Backhand Blade (weapon only)",
+   "Smithscript Cirque",
+   "Lightning-infused 2H Reverse-Bladed Sword",
+   "2H Cleanrot Knight's Sword",
+   "Pata: allowed ONLY in the off hand",
+   "Claws of Night",
+   "Smithscript Shield",
+   "Spread Crossbow",
+   "Smithscript Dagger",
+   "Milady",
+   "2H Stone Club/Club with any status application (status infusion or status grease)",
+   "Lightning-infused Raptor's Talons (2H)",
+   "Off-hand Rakshasa's Great Katana"
+  ],
+  "ashesOfWar": [
+   "Bloodhound's Step",
+   "Quickstep",
+   "Raptor of the Mists",
+   "All parries",
+   "Endure",
+   "Oath of Vengeance",
+   "Royal Knight's Resolve",
+   "Determination",
+   "Flaming Strike",
+   "Storm Stomp",
+   "Storm Assault",
+   "Stormcaller",
+   "Swift Slash",
+   "Blind Spot",
+   "Needle Piercer",
+   "Red Bear Hunt",
+   "Fast Sword Dance",
+   "Barbaric Roar",
+   "Shriek of Sorrow",
+   "Painful Strikes",
+   "Savage Claws",
+   "Chilling Mist applied on cold-infused weapons",
+   "Spinning Slash on Light Greatswords",
+   "Muleta",
+   "Ash-of-war damage-boosting talismans"
+  ],
+  "talismans": [
+   "All i-frame-affecting talismans (Crucible Feather, Fine Crucible Feather, Talisman of All Crucibles)",
+   "Red-Feathered Branchsword",
+   "Two-Handed Sword Talisman",
+   "Spear Talisman with Sword Lance",
+   "Ash-of-war damage talismans: Shard of Alexander, Warrior Jar Shard",
+   "Dagger Talisman",
+   "Blessed Dew Talisman"
+  ],
+  "spells": [
+   "Healing incantations (see general)",
+   "Placidusax's Ruin",
+   "Gravitational Missile",
+   "Night Maiden's Mist",
+   "Roar of Rugalea",
+   "Absorption-increasing incantations: Golden Vow, Flame, Grant Me Strength, Protection of the Erdtree",
+   "Dragonbolt Blessing",
+   "Mantle of Thorns"
+  ],
+  "equipment": [
+   "Light load (\u2264 30% equip load)",
+   "Briar armour (all pieces incl. Altered)",
+   "Royal Remains armour",
+   "Rakshasa armour"
+  ]
+ },
+ "buffRestrictions": {
+  "description": "All greases, spells and ashes of war that buff a weapon are banned on:",
+  "targets": [
+   "2H Thrusting Sword (class)",
+   "2H Stone Club/Club",
+   "2H Sword Lance",
+   "2H Raptor's Talons",
+   "Off-hand Daggers (class)",
+   "Off-hand Hatchets = the whole Axe class",
+   "Main-hand 1H Wakizashi",
+   "2H Great Spears (class) except Mohgwyn's Sacred Spear",
+   "Shields (all classes)",
+   "2H Star Fists",
+   "2H Twinblades (class)",
+   "2H Reverse-Bladed Sword",
+   "Idus Sword"
+  ]
+ },
+ "blacklistedGlitches": [
+  "Moveset/animation swaps",
+  "Buff transfers",
+  "Circumventing effect duration or tick rate",
+  "Void tech",
+  "Armour-swap poise reset",
+  "Block desync",
+  "Off-hand Drawstring Poison Grease",
+  "Bugged weapon states"
+ ],
+ "engineNotes": [
+  "Implement rules in the planner's structured form (banned / restricted-setup with main/off/is2H/infusions/except, stat rules) mapped to data ids; this file is the human-readable source of truth.",
+  "Unmapped names must be reported, never silently ignored.",
+  "Duel-start presets must not use banned talismans (e.g. Shard of Alexander)."
+ ],
+ "allowedExplicitly": [
+  "Crimson Bubbletear (one-off heal, not tick-based)",
+  "Godskin Swaddling Cloth (heals on hits, not tick-based)",
+  "All damage greases except those listed under bans.greases",
+  "Pata in the off hand"
+ ],
+ "rulings": {
+  "by": "Zer0",
+  "date": "2026-11-12",
+  "items": [
+   "Discord screenshots are the latest source; planner-only items (planner rulesets file, 2026-03-21) also apply",
+   "Planner's blanket 'All Damage Greases' ban is outdated \u2014 greases are banned only on listed weapons/setups",
+   "Crimson Bubbletear is allowed; the HP-recovery ban targets tick-based regen",
+   "Pata allowed in off hand only",
+   "'Off-hand Hatchets' = the whole Axe class",
+   "'2H Backhand Blade' bans the weapon Backhand Blade only, not the class",
+   "Power-stanced Backhand Blades is a class ban; it covers the Reverse-Bladed Sword (planner category Backhand Blade)",
+   "'Reverse Blades' = the weapon Reverse-Bladed Sword (id 64530000), matched by name: Lightning infusion banned when 2H, all weapon buffs banned when 2H, everything else legal (incl. 2H on other infusions)",
+   "2H Stone Club/Club: any status application is banned, whether from the infusion or a grease"
+  ]
+ }
+}

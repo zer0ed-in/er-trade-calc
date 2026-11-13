@@ -1,0 +1,239 @@
+{
+ "patch": "1.17",
+ "requests": 29,
+ "files": [
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/animations.json",
+   "file": "animations.json",
+   "bytes": 18916111,
+   "sha256": "02d6fe03f9530989db61b585197c009aa492d4c53685a2898b7fca89850111b6",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:36:40.868Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/attacks.json",
+   "file": "attacks.json",
+   "bytes": 12828676,
+   "sha256": "e05d77d060ba68da2718d302b03c58a9860ec90a6e7a0368c5433353955d2db6",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:36:42.750Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/armaments.json",
+   "file": "armaments.json",
+   "bytes": 7103566,
+   "sha256": "93a747177e5a9aa4df7e1c4b8e28f1c699cfd4a3915e84bd92e138d13c2a7542",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:36:44.344Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/EquipParamWeapon.json",
+   "file": "EquipParamWeapon.json",
+   "bytes": 16731646,
+   "sha256": "14badeeca93b91b46ef2adc688ffec30f7ace2f809b6e0d234e8cadfa1925fb5",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:36:46.259Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/AtkParam_Pc.json",
+   "file": "AtkParam_Pc.json",
+   "bytes": 36866872,
+   "sha256": "5c75fedbef00bfa0571fc5a6c702e0a4d8f00985e19ed568d83b5dea1c72101b",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:36:49.497Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/BehaviorParam_PC.json",
+   "file": "BehaviorParam_PC.json",
+   "bytes": 2712129,
+   "sha256": "b84402210d26ab21d9bdffff0e9eec1994561cfffdd2370b0341b55c82b90dbb",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:36:50.806Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/Bullet.json",
+   "file": "Bullet.json",
+   "bytes": 35070352,
+   "sha256": "233978503a87c742ed5788011f68e0eb9cbb13468909ec6ccd2d7ffa42b18403",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:36:53.960Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/EquipParamGoods.json",
+   "file": "EquipParamGoods.json",
+   "bytes": 3757450,
+   "sha256": "c1f6bcf27585cd9c189e9371238048d60cbbfa634d0be241cbb58b3c2da5ffcb",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:36:55.151Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/Magic.json",
+   "file": "Magic.json",
+   "bytes": 536814,
+   "sha256": "be6ce24bd15a4bde734ae0651b1deb2be65bf10c657a6823dc42ad09475910f9",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:36:56.265Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/SpEffectParam.json",
+   "file": "SpEffectParam.json",
+   "bytes": 5821910,
+   "sha256": "0481c04561cfe5e8282ec70bbe234a68daa31d83f7d1cb73606aa86da5ba4b5d",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:36:57.634Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/SwordArtsParam.json",
+   "file": "SwordArtsParam.json",
+   "bytes": 111592,
+   "sha256": "fdea854a9b9448e611f7869505ad4e136014bad4ec280c4d0febb9a60d225690",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:36:58.729Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/ToughnessParam.json",
+   "file": "ToughnessParam.json",
+   "bytes": 14870,
+   "sha256": "7b7a40e681afa16614c63eb4c2280f8ff5d92cea6afedf44aa7a527d55d0a925",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:36:59.824Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/FinalDamageRateParam.json",
+   "file": "FinalDamageRateParam.json",
+   "bytes": 50465,
+   "sha256": "4380f8196da0a3f88afa668c42b9a241b20e7723c9363c20d758ded973f51d49",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:00.915Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/EquipParamAccessory.json",
+   "file": "EquipParamAccessory.json",
+   "bytes": 85331,
+   "sha256": "afabf05805d96a6e13b9bd69db030aeedbbe12008f210cf874bf22d31ffa0fa6",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:02.015Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/EquipParamProtector.json",
+   "file": "EquipParamProtector.json",
+   "bytes": 1480546,
+   "sha256": "c1bf7f1816ffb8be665bcb1fa902511cb89b8117cf85876f12d877504ffcd193",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:03.205Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.17/EquipParamGem.json",
+   "file": "EquipParamGem.json",
+   "bytes": 565289,
+   "sha256": "c036a0b071d046f1446dbc6e6a862f60f9150efb90c1e2f3210954f9d0bbede0",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:04.314Z"
+  },
+  {
+   "url": "https://er-frame-data.nyasu.business/generated/1.12/SpEffectParam.names.json",
+   "file": "SpEffectParam.names.json",
+   "bytes": 118516,
+   "sha256": "67f0a1f1f1280dd6fd3729b62489651309a36554193ddbd4369e456bd0a37b1f",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:05.421Z",
+   "note": "from the 1.12 folder per docs/05"
+  },
+  {
+   "url": "https://er-build-planner.nyasu.business/assets/correction-attack-BvD1v8dy.js",
+   "file": "correction-attack-BvD1v8dy.js",
+   "bytes": 142726,
+   "sha256": "622a0502ee243ed2aa96854ec40e8dbd9124ba6e07b3f2d5de61a0b0f038e9fd",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:06.881Z"
+  },
+  {
+   "url": "https://er-build-planner.nyasu.business/assets/correction-graph-C8myFf4I.js",
+   "file": "correction-graph-C8myFf4I.js",
+   "bytes": 22405,
+   "sha256": "41e8d7f02a4f538f8c91b45fb7901e77f0df47007e8ffe2a58363e3620f1ae45",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:07.990Z"
+  },
+  {
+   "url": "https://er-build-planner.nyasu.business/assets/reinforcements-GFGYDjN6.js",
+   "file": "reinforcements-GFGYDjN6.js",
+   "bytes": 308124,
+   "sha256": "c633f83d04b2a75dcc8395f56fa433e8b3a2b3eaaa6bc672ee3b01418f95cd77",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:09.137Z"
+  },
+  {
+   "url": "https://er-build-planner.nyasu.business/assets/attacks-CnHm4LBL.js",
+   "file": "attacks-CnHm4LBL.js",
+   "bytes": 18527154,
+   "sha256": "9f7301897731ebda0a980d29c0831b8f9e919c0dfb1c3896859ee1b27df7b9e4",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:11.747Z"
+  },
+  {
+   "url": "https://er-build-planner.nyasu.business/assets/rulesets-BMUmMfbT.js",
+   "file": "rulesets-BMUmMfbT.js",
+   "bytes": 12078,
+   "sha256": "c767288ed0d12bf0e690852fb793d895a1d90e75d6923c833e52f462399bb3e8",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:12.851Z"
+  },
+  {
+   "url": "https://er-build-planner.nyasu.business/assets/poise-breakpoints-r6ljVx1g.js",
+   "file": "poise-breakpoints-r6ljVx1g.js",
+   "bytes": 43369,
+   "sha256": "102ded857b630bb8c0029bc725836bff6b6bfca67c053fe3582304d033e5ce50",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:13.956Z"
+  },
+  {
+   "url": "https://er-build-planner.nyasu.business/assets/damage-calculator-defender-presets-CzxEsWKV.js",
+   "file": "damage-calculator-defender-presets-CzxEsWKV.js",
+   "bytes": 33704,
+   "sha256": "0d3ea9d7ca272f047d5e2c40ec6d894e7ed70d68fed4a19e6c801907fc75fbbb",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:15.061Z"
+  },
+  {
+   "url": "https://er-build-planner.nyasu.business/assets/notifications-BNvikVlY.js",
+   "file": "notifications-BNvikVlY.js",
+   "bytes": 3841037,
+   "sha256": "34de36702048712e4608f6c488277024cc47163093ae29fe6efe3e29761bd242",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:16.659Z"
+  },
+  {
+   "url": "https://er-build-planner.nyasu.business/assets/router-kWqAVQQz.js",
+   "file": "router-kWqAVQQz.js",
+   "bytes": 1727316,
+   "sha256": "9fd8a0d9758a58359b05158ed9d84fbcf4f038d6b78bae9b503cb28fd94af7e2",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:18.152Z"
+  },
+  {
+   "url": "https://er-build-planner.nyasu.business/assets/presets-B44WZM-t.js",
+   "file": "presets-B44WZM-t.js",
+   "bytes": 5622,
+   "sha256": "b74adf28fafd4adca433d5f332cc6dd4e2e2ee117873385c4ead7e3ef440af0f",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:19.253Z"
+  },
+  {
+   "url": "https://er-build-planner.nyasu.business/assets/presets-dlc1-Ugfvtsbl.js",
+   "file": "presets-dlc1-Ugfvtsbl.js",
+   "bytes": 7524,
+   "sha256": "58a9bdd9e16c164a5ad0197401cb288dcb1f599ed32345c1f15c87af79a6fbcf",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:20.357Z"
+  },
+  {
+   "url": "https://er-build-planner.nyasu.business/assets/DuelSimulatorView-OLuS0SVx.js",
+   "file": "DuelSimulatorView-OLuS0SVx.js",
+   "bytes": 14538,
+   "sha256": "71388bde2ee7d442cf39af635d9a66df64c97adee566a03b82de885366e7fdb7",
+   "gzipped": false,
+   "copiedAt": "2026-11-12T22:37:21.459Z"
+  }
+ ]
+}

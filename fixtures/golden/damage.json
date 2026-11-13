@@ -1,0 +1,1587 @@
+{
+ "description": "Planner-verified damage. Must pass EXACTLY (integers).",
+ "builds": {
+  "dex-shamshir-125": {
+   "id": "dex-shamshir-125",
+   "class": "Heavy Knight",
+   "rl": 125,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Keen",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-125": {
+   "id": "str-shamshir-125",
+   "class": "Heavy Knight",
+   "rl": 125,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 59,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-123": {
+   "id": "str-shamshir-123",
+   "class": "Heavy Knight",
+   "rl": 123,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 57,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-121": {
+   "id": "str-shamshir-121",
+   "class": "Heavy Knight",
+   "rl": 121,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 55,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-119": {
+   "id": "str-shamshir-119",
+   "class": "Heavy Knight",
+   "rl": 119,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 53,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-117": {
+   "id": "str-shamshir-117",
+   "class": "Heavy Knight",
+   "rl": 117,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 51,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-115": {
+   "id": "str-shamshir-115",
+   "class": "Heavy Knight",
+   "rl": 115,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 49,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-113": {
+   "id": "str-shamshir-113",
+   "class": "Heavy Knight",
+   "rl": 113,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 47,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-111": {
+   "id": "str-shamshir-111",
+   "class": "Heavy Knight",
+   "rl": 111,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 45,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-109": {
+   "id": "str-shamshir-109",
+   "class": "Heavy Knight",
+   "rl": 109,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 43,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-107": {
+   "id": "str-shamshir-107",
+   "class": "Heavy Knight",
+   "rl": 107,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 41,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-105": {
+   "id": "str-shamshir-105",
+   "class": "Heavy Knight",
+   "rl": 105,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 39,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-103": {
+   "id": "str-shamshir-103",
+   "class": "Heavy Knight",
+   "rl": 103,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 37,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-101": {
+   "id": "str-shamshir-101",
+   "class": "Heavy Knight",
+   "rl": 101,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 35,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-99": {
+   "id": "str-shamshir-99",
+   "class": "Heavy Knight",
+   "rl": 99,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 33,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-97": {
+   "id": "str-shamshir-97",
+   "class": "Heavy Knight",
+   "rl": 97,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 31,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "str-shamshir-95": {
+   "id": "str-shamshir-95",
+   "class": "Heavy Knight",
+   "rl": 95,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 29,
+    "dex": 13,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Verdigris Helm",
+    "body": "Verdigris Armor",
+    "arms": "Verdigris Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "strenuous-125": {
+   "id": "strenuous-125",
+   "class": "Heavy Knight",
+   "rl": 125,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 42,
+    "str": 55,
+    "dex": 15,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Heavy",
+     "upgrade": 25,
+     "ashOfWar": "Spinning Slash"
+    }
+   ],
+   "armour": {
+    "head": "Divine Bird Helm",
+    "body": "Verdigris Armor",
+    "arms": "Steel Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "dextra-125": {
+   "id": "dextra-125",
+   "class": "Heavy Knight",
+   "rl": 125,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Keen",
+     "upgrade": 25,
+     "ashOfWar": "Spinning Slash"
+    }
+   ],
+   "armour": {
+    "head": "Divine Bird Helm",
+    "body": "Verdigris Armor",
+    "arms": "Steel Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  }
+ },
+ "cases": [
+  {
+   "id": "dmg-2h-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-125",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 286,
+    "plannerPhysicalColumn": 564,
+    "mv": 103
+   }
+  },
+  {
+   "id": "dmg-2h-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 243,
+    "plannerPhysicalColumn": 515,
+    "mv": 103
+   }
+  },
+  {
+   "id": "dmg-1h-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-125",
+   "defender": "dex-shamshir-125",
+   "attack": "1h R1 1",
+   "expected": {
+    "damage": 238,
+    "ar": 489,
+    "mv": 100
+   }
+  },
+  {
+   "id": "dmg-1h-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-125",
+   "attack": "1h R1 1",
+   "expected": {
+    "damage": 230,
+    "ar": 493,
+    "mv": 100
+   }
+  },
+  {
+   "id": "sweep-str125-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-125",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 286,
+    "plannerPhysicalColumn": 564
+   }
+  },
+  {
+   "id": "sweep-str123-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-123",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 284,
+    "plannerPhysicalColumn": 562
+   }
+  },
+  {
+   "id": "sweep-str121-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-121",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 282,
+    "plannerPhysicalColumn": 559
+   }
+  },
+  {
+   "id": "sweep-str119-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-119",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 279,
+    "plannerPhysicalColumn": 554
+   }
+  },
+  {
+   "id": "sweep-str117-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-117",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 274,
+    "plannerPhysicalColumn": 546
+   }
+  },
+  {
+   "id": "sweep-str115-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-115",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 270,
+    "plannerPhysicalColumn": 539
+   }
+  },
+  {
+   "id": "sweep-str113-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-113",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 265,
+    "plannerPhysicalColumn": 531
+   }
+  },
+  {
+   "id": "sweep-str111-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-111",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 260,
+    "plannerPhysicalColumn": 523
+   }
+  },
+  {
+   "id": "sweep-str109-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-109",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 255,
+    "plannerPhysicalColumn": 516
+   }
+  },
+  {
+   "id": "sweep-str107-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-107",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 250,
+    "plannerPhysicalColumn": 508
+   }
+  },
+  {
+   "id": "sweep-str105-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-105",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 246,
+    "plannerPhysicalColumn": 502
+   }
+  },
+  {
+   "id": "sweep-str103-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-103",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 242,
+    "plannerPhysicalColumn": 494
+   }
+  },
+  {
+   "id": "sweep-str101-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-101",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 236,
+    "plannerPhysicalColumn": 486
+   }
+  },
+  {
+   "id": "sweep-str99-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-99",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 231,
+    "plannerPhysicalColumn": 476
+   }
+  },
+  {
+   "id": "sweep-str97-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-97",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 225,
+    "plannerPhysicalColumn": 467
+   }
+  },
+  {
+   "id": "sweep-str95-to-dex125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "str-shamshir-95",
+   "defender": "dex-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 218,
+    "plannerPhysicalColumn": 456
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str125",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 243,
+    "defenderPhysicalDefence": 156
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str123",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-123",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 244,
+    "defenderPhysicalDefence": 153
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str121",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-121",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 245,
+    "defenderPhysicalDefence": 152
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str119",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-119",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 246,
+    "defenderPhysicalDefence": 150
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str117",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-117",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 247,
+    "defenderPhysicalDefence": 148
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str115",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-115",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 248,
+    "defenderPhysicalDefence": 146
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str113",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-113",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 249,
+    "defenderPhysicalDefence": 144
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str111",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-111",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 250,
+    "defenderPhysicalDefence": 142
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str109",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-109",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 250,
+    "defenderPhysicalDefence": 140
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str107",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-107",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 251,
+    "defenderPhysicalDefence": 138
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str105",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-105",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 252,
+    "defenderPhysicalDefence": 137
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str103",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-103",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 253,
+    "defenderPhysicalDefence": 135
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str101",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-101",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 253,
+    "defenderPhysicalDefence": 134
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str99",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-99",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 254,
+    "defenderPhysicalDefence": 132
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str97",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-97",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 255,
+    "defenderPhysicalDefence": 131
+   }
+  },
+  {
+   "id": "sweep-dex125-to-str95",
+   "status": "planner",
+   "verifiedOn": "2026-10-21",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, defender picked from saved build",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Defender armour: full Verdigris incl. Verdigris Gauntlets (not Steel). No talismans, buffs or tears.",
+   "attacker": "dex-shamshir-125",
+   "defender": "str-shamshir-95",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 256,
+    "defenderPhysicalDefence": 129
+   }
+  },
+  {
+   "id": "ref-1h-r1-1-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "strenuous-125",
+   "defender": "dextra-125",
+   "attack": "1h R1 1",
+   "expected": {
+    "damage": 241
+   }
+  },
+  {
+   "id": "ref-1h-r1-1-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "dextra-125",
+   "defender": "strenuous-125",
+   "attack": "1h R1 1",
+   "expected": {
+    "damage": 242
+   }
+  },
+  {
+   "id": "ref-1h-r1-2-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "strenuous-125",
+   "defender": "dextra-125",
+   "attack": "1h R1 2",
+   "expected": {
+    "damage": 244
+   }
+  },
+  {
+   "id": "ref-1h-r1-2-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "dextra-125",
+   "defender": "strenuous-125",
+   "attack": "1h R1 2",
+   "expected": {
+    "damage": 245
+   }
+  },
+  {
+   "id": "ref-2h-r1-1-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "strenuous-125",
+   "defender": "dextra-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 290
+   }
+  },
+  {
+   "id": "ref-2h-r1-1-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "dextra-125",
+   "defender": "strenuous-125",
+   "attack": "2h R1 1",
+   "expected": {
+    "damage": 256
+   }
+  },
+  {
+   "id": "ref-2h-r1-2-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "strenuous-125",
+   "defender": "dextra-125",
+   "attack": "2h R1 2",
+   "expected": {
+    "damage": 294
+   }
+  },
+  {
+   "id": "ref-2h-r1-2-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "dextra-125",
+   "defender": "strenuous-125",
+   "attack": "2h R1 2",
+   "expected": {
+    "damage": 259
+   }
+  },
+  {
+   "id": "ref-1h-r2-1-release-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "strenuous-125",
+   "defender": "dextra-125",
+   "attack": "1h R2 1 Release",
+   "expected": {
+    "damage": 320
+   }
+  },
+  {
+   "id": "ref-1h-r2-1-release-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "dextra-125",
+   "defender": "strenuous-125",
+   "attack": "1h R2 1 Release",
+   "expected": {
+    "damage": 322
+   }
+  },
+  {
+   "id": "ref-2h-r2-1-release-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "strenuous-125",
+   "defender": "dextra-125",
+   "attack": "2h R2 1 Release",
+   "expected": {
+    "damage": 388
+   }
+  },
+  {
+   "id": "ref-2h-r2-1-release-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "dextra-125",
+   "defender": "strenuous-125",
+   "attack": "2h R2 1 Release",
+   "expected": {
+    "damage": 344
+   }
+  },
+  {
+   "id": "ref-1h-running-r1-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "strenuous-125",
+   "defender": "dextra-125",
+   "attack": "1h Running R1",
+   "expected": {
+    "damage": 257
+   }
+  },
+  {
+   "id": "ref-1h-running-r1-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "dextra-125",
+   "defender": "strenuous-125",
+   "attack": "1h Running R1",
+   "expected": {
+    "damage": 258
+   }
+  },
+  {
+   "id": "ref-2h-running-r1-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "strenuous-125",
+   "defender": "dextra-125",
+   "attack": "2h Running R1",
+   "expected": {
+    "damage": 315
+   }
+  },
+  {
+   "id": "ref-2h-running-r1-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "dextra-125",
+   "defender": "strenuous-125",
+   "attack": "2h Running R1",
+   "expected": {
+    "damage": 278
+   }
+  },
+  {
+   "id": "ref-1h-rolling-r1-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "strenuous-125",
+   "defender": "dextra-125",
+   "attack": "1h Rolling R1",
+   "expected": {
+    "damage": 217
+   }
+  },
+  {
+   "id": "ref-1h-rolling-r1-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "dextra-125",
+   "defender": "strenuous-125",
+   "attack": "1h Rolling R1",
+   "expected": {
+    "damage": 218
+   }
+  },
+  {
+   "id": "ref-2h-rolling-r1-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "strenuous-125",
+   "defender": "dextra-125",
+   "attack": "2h Rolling R1",
+   "expected": {
+    "damage": 269
+   }
+  },
+  {
+   "id": "ref-2h-rolling-r1-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears.",
+   "attacker": "dextra-125",
+   "defender": "strenuous-125",
+   "attack": "2h Rolling R1",
+   "expected": {
+    "damage": 237
+   }
+  },
+  {
+   "id": "ref-1h-charged-r2-1-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears. Two hits: the planner shows floor(sum of unrounded hits) (router bundle: Math.floor(n.total.damage.total)); in-game each hit is floored on its own.",
+   "attacker": "strenuous-125",
+   "defender": "dextra-125",
+   "attack": "1h Charged R2 1",
+   "expected": {
+    "damage": 533
+   },
+   "plannerTotal": "floor-of-sum"
+  },
+  {
+   "id": "ref-1h-charged-r2-1-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears. Two hits: the planner shows floor(sum of unrounded hits) (router bundle: Math.floor(n.total.damage.total)); in-game each hit is floored on its own.",
+   "attacker": "dextra-125",
+   "defender": "strenuous-125",
+   "attack": "1h Charged R2 1",
+   "expected": {
+    "damage": 534
+   },
+   "plannerTotal": "floor-of-sum"
+  },
+  {
+   "id": "ref-2h-charged-r2-1-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears. Two hits: the planner shows floor(sum of unrounded hits) (router bundle: Math.floor(n.total.damage.total)); in-game each hit is floored on its own.",
+   "attacker": "strenuous-125",
+   "defender": "dextra-125",
+   "attack": "2h Charged R2 1",
+   "expected": {
+    "damage": 632
+   },
+   "plannerTotal": "floor-of-sum"
+  },
+  {
+   "id": "ref-2h-charged-r2-1-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears. Two hits: the planner shows floor(sum of unrounded hits) (router bundle: Math.floor(n.total.damage.total)); in-game each hit is floored on its own.",
+   "attacker": "dextra-125",
+   "defender": "strenuous-125",
+   "attack": "2h Charged R2 1",
+   "expected": {
+    "damage": 561
+   },
+   "plannerTotal": "floor-of-sum"
+  },
+  {
+   "id": "ref-spinning-slash-1-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears. 1H only: the planner wrongly applies the 2H bonus to ash hits, so no 2H skill cases.",
+   "attacker": "strenuous-125",
+   "defender": "dextra-125",
+   "attack": "Magma Shower - Spin (Spin Slash Curved Sword), Spinning Slash - Light Weapon Spin, Spinning Slash 1",
+   "expected": {
+    "damage": 191
+   },
+   "grip": "1h"
+  },
+  {
+   "id": "ref-spinning-slash-1-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears. 1H only: the planner wrongly applies the 2H bonus to ash hits, so no 2H skill cases.",
+   "attacker": "dextra-125",
+   "defender": "strenuous-125",
+   "attack": "Magma Shower - Spin (Spin Slash Curved Sword), Spinning Slash - Light Weapon Spin, Spinning Slash 1",
+   "expected": {
+    "damage": 191
+   },
+   "grip": "1h"
+  },
+  {
+   "id": "ref-spinning-slash-1-no-fp-str-to-dex",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears. 1H only: the planner wrongly applies the 2H bonus to ash hits, so no 2H skill cases.",
+   "attacker": "strenuous-125",
+   "defender": "dextra-125",
+   "attack": "Spinning Slash 1 - No FP",
+   "expected": {
+    "damage": 107
+   },
+   "grip": "1h"
+  },
+  {
+   "id": "ref-spinning-slash-1-no-fp-dex-to-str",
+   "status": "planner",
+   "verifiedOn": "2026-11-12",
+   "source": "Emilia's ER Build Planner damage calculator, PvP mode, base scenario (checked by the planning Claude session, relayed by Zer0)",
+   "scenario": "base",
+   "pvp": true,
+   "note": "Reference builds = Zer0's exports strenuous.json / dextra_erpvp_test.json (Divine Bird Helm, Verdigris Armor, Steel Gauntlets, Verdigris Greaves). Planner defences/absorptions checked equal to the exports' saved values. No talismans, buffs or tears. 1H only: the planner wrongly applies the 2H bonus to ash hits, so no 2H skill cases.",
+   "attacker": "dextra-125",
+   "defender": "strenuous-125",
+   "attack": "Spinning Slash 1 - No FP",
+   "expected": {
+    "damage": 109
+   },
+   "grip": "1h"
+  }
+ ]
+}

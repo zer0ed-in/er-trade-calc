@@ -1,0 +1,14 @@
+{
+  "name": "@ertc/cli",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@ertc/builds": "workspace:*",
+    "@ertc/data": "workspace:*",
+    "@ertc/engine": "workspace:*",
+    "commander": "15.1.0"
+  }
+}

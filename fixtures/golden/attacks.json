@@ -1,0 +1,173 @@
+{
+ "description": "Attack data rows (Emilia's attacks data, patch 1.17). Use to test attack decomposition and the A3 projectile path.",
+ "cases": [
+  {
+   "id": "atk-stormblade-1",
+   "status": "data",
+   "attack": "Storm Blade - Wind Slash 1",
+   "hits": [
+    {
+     "id": "300000407:5023",
+     "physicalMV": 65,
+     "poiseDamageFlat": 96.53,
+     "damageLevel": 2,
+     "physAttribute": "Slash",
+     "pvpFinalRate": 0.8,
+     "startup": 21
+    },
+    {
+     "id": "300000410:5017",
+     "physicalFlat": 150,
+     "physAttribute": "Standard",
+     "pvpFinalRate": 0.8,
+     "startup": 20,
+     "atkParam": {
+      "isAddBaseAtk": 1,
+      "overwriteAttackElementCorrectId": 51030,
+      "isDisableBothHandsAtkBonus": 1,
+      "finalDamageRateId": 10000
+     }
+    }
+   ]
+  },
+  {
+   "id": "atk-lightning-slash",
+   "status": "data",
+   "attack": "Lightning Slash - Sword Slash",
+   "hits": [
+    {
+     "id": "300000373:5130",
+     "lightningFlat": 30,
+     "startup": 18
+    },
+    {
+     "id": "300000370:5140",
+     "physicalMV": 170,
+     "poiseDamageFlat": 445.5,
+     "startup": 40,
+     "physAttribute": "Slash"
+    },
+    {
+     "id": "301600849:5111",
+     "lightningFlat": 60,
+     "startup": 49
+    }
+   ]
+  },
+  {
+   "id": "atk-beasts-roar",
+   "status": "data",
+   "attack": "Beast's Roar - Roar",
+   "hits": [
+    {
+     "id": "300000841:5373",
+     "physicalFlat": 110,
+     "poiseDamageFlat": 0,
+     "damageLevel": 5,
+     "physAttribute": "Strike",
+     "startup": 21
+    },
+    {
+     "id": "30000842:5374",
+     "physicalFlat": 80,
+     "poiseDamageFlat": 0,
+     "damageLevel": 5,
+     "physAttribute": "Strike",
+     "startup": 21
+    }
+   ]
+  },
+  {
+   "id": "atk-sacred-blade",
+   "status": "data",
+   "attack": "Sacred Blade - Slash",
+   "hits": [
+    {
+     "id": "300000166:4897",
+     "physicalMV": 65,
+     "poiseDamageFlat": 135,
+     "physAttribute": "Slash",
+     "startup": 34
+    },
+    {
+     "id": "300000160:4891",
+     "holyFlat": 180,
+     "physAttribute": "Standard",
+     "startup": 35
+    }
+   ]
+  },
+  {
+   "id": "buff-values",
+   "status": "wiki",
+   "note": "Cross-check only. Engine must read values from SpEffectParam.",
+   "values": {
+    "Sacred Blade buff holy": 90,
+    "Lightning Slash buff lightning": 85,
+    "Lightning Grease": 85,
+    "Drawstring Lightning Grease": 110,
+    "Dragonbolt Grease": 120,
+    "Drawstring Dragonbolt Grease": 135,
+    "Opaline Hardtear PvP negation": 0.1
+   }
+  },
+  {
+   "id": "skill-scaling-tables",
+   "status": "data",
+   "source": "planner correction-attack (copied once)",
+   "tables": {
+    "51010": {
+     "usedBy": "Ground Slam",
+     "scales": {
+      "str": 0.25
+     }
+    },
+    "51020": {
+     "usedBy": "Beast's Roar",
+     "scales": {
+      "dex": 0.25
+     }
+    },
+    "51030": {
+     "usedBy": "Storm Blade wind",
+     "scales": {
+      "str": 0.15,
+      "dex": 0.15
+     }
+    },
+    "51070": {
+     "usedBy": "Sacred Blade wave",
+     "scales": {
+      "fth": 0.25
+     }
+    },
+    "51060": {
+     "usedBy": "Lightning Slash bolt",
+     "scales": "read from data"
+    }
+   },
+   "note": "Same stats for all damage types of the hit."
+  },
+  {
+   "id": "aow-no-2h-flag",
+   "status": "data",
+   "note": "isDisableBothHandsAtkBonus = 1 on all of these AtkParam_Pc rows",
+   "rows": [
+    30000841,
+    30000842,
+    300000407,
+    300000410,
+    300000160,
+    300000166,
+    300000370,
+    300000373,
+    301600849,
+    300000290,
+    300000295,
+    300000790,
+    300000791,
+    300000795
+   ]
+  }
+ ]
+}
