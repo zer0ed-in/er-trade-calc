@@ -10,3 +10,5 @@ coverage/
 START_HERE.md
 reference/prototype/
 fixtures/golden/prototype.json
+
+Claude outputs/

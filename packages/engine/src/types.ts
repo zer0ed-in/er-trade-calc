@@ -107,6 +107,8 @@ export interface PlannerAttackEntry {
   type: string; // "Attack" | "WeaponSkill" | "Casting" | "Item"
   categories: string[];
   ha?: { damageMultiplier: number; poiseContribution: number; poiseDamageMultiplier: number; armourPoiseContribution: number };
+  /** Where the entry came from: the planner's per-weapon table (default) or FDE's animation `users` lists (ashes the planner lacks). */
+  source?: "fde-animation-users";
 }
 
 export interface HitRow {
@@ -169,6 +171,13 @@ export interface RawGameData {
   animations: Record<string, AnimationFrames>;
   speffects: Record<string, unknown>[];
   plannerRulesets: unknown;
+  /** Which ash fits which weapon and infusion (gen ash-compat.json, planner rule verified against EquipParamGem). */
+  ashCompat: AshCompat;
+}
+
+export interface AshCompat {
+  weapons: Record<string, { category: string; somber: boolean; ashes: Record<string, string[]> }>;
+  ashes: Record<string, { default_affinity: string; affinities: string[]; weapon_classes: string[]; usable_from_off_hand: boolean }>;
 }
 
 // ---- Results --------------------------------------------------------------------------------------
@@ -184,13 +193,27 @@ export interface ResultMeta {
   assumptionsUsed: AssumptionId[];
   /** Loud warnings to show at the top of any rendering (e.g. projectile damage uses unverified A3). */
   warnings: string[];
+  /** "Not supported right now: <what> — <why> — <what will fix it>" lines; empty when everything was computed. */
+  notSupported: string[];
   credit: string;
 }
 
 /** Engine errors are user-facing: plain English, naming the rule or missing data. */
+export const NOT_SUPPORTED = "Not supported right now";
+export const notSupportedLine = (what: string, why: string, fix: string) => `${NOT_SUPPORTED}: ${what} — ${why} — ${fix}`;
+
 export class EngineError extends Error {
   constructor(message: string, readonly code: string) {
     super(message);
     this.name = "EngineError";
+  }
+}
+
+/** Data we don't have (never guessed). Batches catch it, continue, and list it at the end. */
+export class NotSupportedError extends EngineError {
+  readonly line: string;
+  constructor(what: string, why: string, fix: string) {
+    super(notSupportedLine(what, why, fix), "not-supported");
+    this.line = notSupportedLine(what, why, fix);
   }
 }

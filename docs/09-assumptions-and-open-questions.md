@@ -21,6 +21,7 @@ Flipping an entry + `pnpm test` is the whole correction process.
 | A7 | Input delay | 0 frames per player, additive only | **confirmed** (design rule) | Zer0 |
 | A8 | 2H str bonus when the hit's AtkParam_Pc row is missing from the copy | row present → read `isDisableBothHandsAtkBonus`; row missing → normal moveset attacks get the bonus, skill/ash hits never do | **assumed** | The copied AtkParam_Pc is a subset (no row for most normal attacks, incl. Shamshir R1s). Planner applies 2H to every attack (no flag); in-game tests show ashes ignore 2H. Zer0, 2026-11-12 |
 | A9 | Lightning Slash weapon buff | +85 lightning AR, 40 s, applies to Lightning infusion | **assumed** (**wiki-sourced**, curated entry) | The copy has SpEffect rows 1675/1677 "[Weapon] Lightning Slash", but they only point to cycle effects 1676/1678, which aren't in the copy; the planner neither models it nor offers it as a buff. wiki.gg (value), wiki.gg/Fextralife (applies to Lightning infusion). Zer0 / planning session, 2026-11-12 |
+| A10 | Kick damage | fixed 1 physical, unscaled (in-game ~0–2; 1 avoids zero-division in ratios and infinite hits to kill) | **assumed** | No hit row for Kick in FDE or our AtkParam copy (animation a712_040000 only, no active frames). Its poise damage and timing are unknown, so stagger, trade and timing verdicts with Kick are "Not supported right now" (fix: regulation.bin); guard break needs blocking, not modelled. Zer0, 2026-11-13 |
 
 ## Open questions (none block phase 1)
 | # | Question | Who |

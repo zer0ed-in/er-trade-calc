@@ -20,6 +20,29 @@ export const INFUSIONS = ["Standard", "Heavy", "Keen", "Quality", "Fire", "Flame
 // Weapon-art buffs (Sacred Blade, Lightning Slash…) are not greases and are not limited by this.
 export const GREASE_INFUSIONS: readonly string[] = ["Standard", "Heavy", "Keen"];
 
+// Shared extra hit rows (AtkParam 500 and 500000000–500000008). They ride along with a real hit on normal attacks of ~30 weapons
+// (Lance, Treespear, Great Club…), carry placeholder MVs and no AtkParam row in the copy. The planner drops them
+// (router-*.js filters 500/500000003); we drop exactly these ids. Zero-stamina rows in general are real hits and stay.
+export const SHARED_EXTRA_HIT_ROW_IDS: ReadonlySet<number> = new Set([500, 500000000, 500000001, 500000002, 500000003, 500000004, 500000005, 500000006, 500000007, 500000008]);
+const isSharedExtraHit = (hitId: string) => SHARED_EXTRA_HIT_ROW_IDS.has(Number(hitId.split(":")[0]));
+// Mounted attacks are out of scope (Zer0, 2026-11-13): removed from every move list.
+const isMounted = (attackName: string) => /^Mounted\b/.test(attackName);
+
+/** Move lists as the engine uses them: no mounted attacks, no shared extra hit rows, no attack left without hits. */
+function cleanMovesets(movesets: Record<string, PlannerAttackEntry[]>): Map<string, PlannerAttackEntry[]> {
+  const out = new Map<string, PlannerAttackEntry[]>();
+  for (const [weapon, attacks] of Object.entries(movesets)) {
+    out.set(
+      weapon,
+      attacks
+        .filter((a) => !isMounted(a.name))
+        .map((a) => ({ ...a, hitIds: a.hitIds.filter((id) => !isSharedExtraHit(id)) }))
+        .filter((a) => a.hitIds.length > 0),
+    );
+  }
+  return out;
+}
+
 export interface GameData {
   raw: RawGameData;
   patch: string;
@@ -57,7 +80,7 @@ export function indexGameData(raw: RawGameData): GameData {
     goods: byName(raw.goods),
     weaponArts: byName(raw.weaponArts),
     classes: byName(raw.classes),
-    movesets: new Map(Object.entries(raw.movesets)),
+    movesets: cleanMovesets(raw.movesets),
     hits: new Map(Object.entries(raw.hits)),
     animations: new Map(Object.entries(raw.animations)),
     graphs: new Map(Object.entries(raw.calcCorrectGraphs).map(([k, v]) => [Number(k), v])),

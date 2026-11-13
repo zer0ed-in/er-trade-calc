@@ -67,3 +67,19 @@ describe("2H Stone Club/Club: any status application", () => {
     expect(violated({ rightHand: [slot("Club", "Blood")] }, "1h R1 1", strStats)).toEqual([]);
   });
 });
+
+describe("Fast Sword Dance = Sword Dance on the light-weapon tier", () => {
+  const rule = "Fast Sword Dance";
+  // Build-level check (no attack): Great Katana's Sword Dance has no animation in the copy, but legality doesn't need one.
+  const buildViolations = (weapon: string, infusion = "Keen") => {
+    const build: Build = { class: "Heavy Knight", stats: dexStats, armour, talismans: [], buffs: [], rightHand: [{ ...slot(weapon, infusion), ashOfWar: "Sword Dance" }], leftHand: [] };
+    return checkLegality(rules, { data, fighter: prepareFighter(data, build, { scenario: "duel-start" }) }).violations.map((v) => v.rule);
+  };
+  it("Sword Dance on Shamshir (Curved Sword) is banned under the rule's name", () => {
+    expect(buildViolations("Shamshir")).toContain(rule);
+  });
+  it("Sword Dance on Knight's Greatsword or Great Katana is legal", () => {
+    expect(buildViolations("Knight's Greatsword")).not.toContain(rule);
+    expect(buildViolations("Great Katana")).not.toContain(rule);
+  });
+});

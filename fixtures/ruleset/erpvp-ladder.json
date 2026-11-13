@@ -181,7 +181,8 @@
    "'2H Backhand Blade' bans the weapon Backhand Blade only, not the class",
    "Power-stanced Backhand Blades is a class ban; it covers the Reverse-Bladed Sword (planner category Backhand Blade)",
    "'Reverse Blades' = the weapon Reverse-Bladed Sword (id 64530000), matched by name: Lightning infusion banned when 2H, all weapon buffs banned when 2H, everything else legal (incl. 2H on other infusions)",
-   "2H Stone Club/Club: any status application is banned, whether from the infusion or a grease"
+   "2H Stone Club/Club: any status application is banned, whether from the infusion or a grease",
+   "'Fast Sword Dance' = the ash Sword Dance on the light-weapon tier (Dagger, Throwing Blade, Straight Sword, Light Greatsword, Curved Sword, Katana, Axe, Backhand Blade); Great Katana is in the great-weapon tier and stays legal (2026-11-13)"
   ]
  }
 }

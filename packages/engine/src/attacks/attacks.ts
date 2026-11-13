@@ -1,7 +1,7 @@
 // Attack → ordered list of hits. Attack names are the planner's (e.g. "2h R1 1", "Storm Blade - Wind Slash 1").
 import { ASSUMPTIONS, type AssumptionId } from "../assumptions.ts";
 import { requireFrom, type GameData } from "../game-data.ts";
-import { DAMAGE_TYPES, EngineError, type Build, type HitRow, type PerType, type PhysAttribute, type PlannerAttackEntry, type WeaponSlot } from "../types.ts";
+import { DAMAGE_TYPES, EngineError, NotSupportedError, type Build, type HitRow, type PerType, type PhysAttribute, type PlannerAttackEntry, type WeaponSlot } from "../types.ts";
 
 export type Hand = "right" | "left";
 
@@ -34,11 +34,15 @@ export interface HitDef {
   /** Data frame index of the hit (0-based; planner shows +1, A2). */
   startup: number;
   /** Whether the 2H strength bonus is disabled for this hit, and why. */
-  disable2H: { value: boolean; source: "AtkParam" | "A8" };
+  disable2H: { value: boolean; source: "AtkParam" | "A8" | "A10" };
   /** Skill scaling table (overwriteAttackElementCorrectId) when the hit carries its own flat damage. */
   skillTable: number | null;
   /** Hit's flat damage can't be scaled because its AtkParam row is missing from the copy. */
   flatUnknownReason?: string;
+  /** Damage fixed by an assumption instead of computed (Kick, A10). */
+  fixedDamage?: { physical: number; assumption: AssumptionId };
+  /** Set when the hit's poise damage and active frames aren't in the data (Kick): stagger/trade/timing can't be judged. */
+  poiseAndTimingUnknown?: string;
 }
 
 export interface ResolvedAttack {
@@ -72,14 +76,41 @@ export function slotSkillName(data: GameData, slot: WeaponSlot): string | undefi
   return data.raw.weaponArts.find((a) => a.id === meta.defaultSkillId)?.name;
 }
 
-/** Attacks this slot can perform from this hand. */
-export function attacksForSlot(data: GameData, slot: WeaponSlot, hand: Hand): PlannerAttackEntry[] {
+// Kick has no hit row anywhere in the copy (FDE or AtkParam); only its animation a712_040000. One synthetic hit, A10.
+export const KICK = "Kick";
+export const KICK_HIT_ID = "A10:kick";
+const KICK_ENTRY: PlannerAttackEntry = { name: KICK, filename: "a712_040000", hitIds: [KICK_HIT_ID], type: "WeaponSkill", categories: [KICK] };
+export const KICK_NOT_SUPPORTED: [string, string, string] = ["Kick stagger / trade / timing", "Kick poise damage and active frames unknown (no hit row in FDE or our AtkParam copy)", "regulation.bin"];
+
+/** Whether the game lets this weapon carry this ash (ash-compat; the weapon's own default skill always counts). */
+function gameAllowsAsh(data: GameData, weapon: string, ash: string): boolean {
+  return !!data.raw.ashCompat.weapons[weapon]?.ashes[ash];
+}
+
+/**
+ * Why this slot's skill can't be computed, or null if it can. A skill the game allows but our copy has no attack data for
+ * is "not supported" (never borrowed from another weapon class); one the game doesn't allow is an illegal-ash error.
+ */
+export function skillSupport(data: GameData, slot: WeaponSlot): NotSupportedError | null {
+  const skill = slotSkillName(data, slot);
+  if (!skill || skill === KICK) return null;
+  const moveset = requireFrom(data.movesets, slot.weapon, "weapon moveset");
+  if (moveset.some((a) => a.type === "WeaponSkill" && a.categories[0] === skill)) return null;
+  if (slot.ashOfWar && !gameAllowsAsh(data, slot.weapon, slot.ashOfWar)) {
+    throw new EngineError(`${slot.ashOfWar} can't be used on ${slot.weapon} (the game doesn't allow this ash on this weapon).`, "illegal-ash");
+  }
+  return new NotSupportedError(`${skill} on ${slot.weapon}`, "no attack data for this skill on this weapon in our copy (planner table or FDE animations)", "animation data for this weapon's ash section (NOTES.md §3)");
+}
+
+/** Attacks this slot can perform from this hand. With `strict` (default), an unsupported skill throws NotSupportedError. */
+export function attacksForSlot(data: GameData, slot: WeaponSlot, hand: Hand, strict = true): PlannerAttackEntry[] {
   const moveset = requireFrom(data.movesets, slot.weapon, "weapon moveset");
   const skill = slotSkillName(data, slot);
-  if (slot.ashOfWar && !moveset.some((a) => a.type === "WeaponSkill" && a.categories[0] === slot.ashOfWar)) {
-    throw new EngineError(`${slot.ashOfWar} can't be used on ${slot.weapon} (no such skill in the weapon's attack data).`, "illegal-ash");
-  }
-  return moveset.filter((a) => {
+  if (slot.ashOfWar === KICK && !gameAllowsAsh(data, slot.weapon, KICK)) throw new EngineError(`Kick can't be used on ${slot.weapon} (the game doesn't allow this ash on this weapon).`, "illegal-ash");
+  const unsupported = skillSupport(data, slot);
+  if (unsupported && strict) throw unsupported;
+  const kick = skill === KICK && !moveset.some((a) => a.categories[0] === KICK) && hand === "right" ? [KICK_ENTRY] : [];
+  return [...moveset, ...kick].filter((a) => {
     if (a.type === "WeaponSkill") return hand === "right" && a.categories[0] === skill; // skills are used from the right-hand weapon
     const offhand = /^(Offhand|Paired)\b/.test(a.name);
     return hand === "left" ? offhand || /^2h /.test(a.name) : !offhand;
@@ -92,6 +123,8 @@ export interface AttackListing {
   weapon: string;
   skill?: string;
   attacks: { name: string; type: string; hits: number }[];
+  /** Skill attacks we can't list (no data); the normal moveset is still listed. */
+  notSupported?: string;
 }
 
 export function listAttacks(data: GameData, build: Build): AttackListing[] {
@@ -101,9 +134,12 @@ export function listAttacks(data: GameData, build: Build): AttackListing[] {
     slots.forEach((slot, i) => {
       if (!slot) return;
       const skill = slotSkillName(data, slot);
+      // Only an explicitly mounted ash is flagged here; a default skill without data (e.g. Quickstep) is flagged when asked for.
+      const unsupported = hand === "right" && slot.ashOfWar ? skillSupport(data, slot) : null;
       out.push({
         hand, slot: i, weapon: slot.weapon, ...(skill && { skill }),
-        attacks: attacksForSlot(data, slot, hand).map((a) => ({ name: a.name, type: a.type, hits: a.hitIds.length })),
+        attacks: attacksForSlot(data, slot, hand, false).map((a) => ({ name: a.name, type: a.type, hits: a.hitIds.length })),
+        ...(unsupported && { notSupported: unsupported.line }),
       });
     });
   }
@@ -116,7 +152,24 @@ function toPhysAttribute(s: string): PhysAttribute {
   throw new EngineError(`Unexpected physical attribute "${s}" in hit data.`, "missing-data");
 }
 
+function kickHit(index: number): { hit: HitDef; assumptions: AssumptionId[] } {
+  const a10 = ASSUMPTIONS.A10.choice;
+  const zero = { physical: 0, magic: 0, fire: 0, lightning: 0, holy: 0 };
+  const row = { physAttribute: "Strike", poiseDamageFlat: 0, damageLevel: 0, startup: 0, statusMV: 0 } as unknown as HitRow;
+  return {
+    hit: {
+      index, id: KICK_HIT_ID, kind: "flat", row, mv: zero, flat: { ...zero, physical: a10.fixedPhysicalDamage }, finalRate: { physical: 1, magic: 1, fire: 1, lightning: 1, holy: 1 },
+      physAttribute: "strike", poiseDamage: 0, damageLevel: 0, startup: 0, disable2H: { value: true, source: "A10" }, skillTable: null,
+      fixedDamage: { physical: a10.fixedPhysicalDamage, assumption: "A10" },
+      poiseAndTimingUnknown: notSupportedLineFor(KICK_NOT_SUPPORTED),
+    },
+    assumptions: ["A10"],
+  };
+}
+const notSupportedLineFor = ([what, why, fix]: [string, string, string]) => new NotSupportedError(what, why, fix).line;
+
 function hitDef(data: GameData, id: string, index: number, isSkill: boolean): { hit: HitDef; assumptions: AssumptionId[] } {
+  if (id === KICK_HIT_ID) return kickHit(index);
   const row = requireFrom(data.hits, id, "hit row");
   const mv = perType(row, "DamageMV");
   const flat = perType(row, "DamageFlat");
@@ -174,8 +227,13 @@ export function resolveAttack(data: GameData, build: Build, choice: AttackChoice
     const slotIndex = choice.slot ?? 0;
     const slot = slots[slotIndex];
     if (!slot) return undefined;
-    const entry = attacksForSlot(data, slot, hand).find((a) => a.name === choice.attack);
-    if (!entry) return undefined;
+    // Normal attacks stay available when the slot's skill has no data; asking for the skill itself reports it as not supported.
+    const entry = attacksForSlot(data, slot, hand, false).find((a) => a.name === choice.attack);
+    if (!entry) {
+      const unsupported = hand === "right" ? skillSupport(data, slot) : null;
+      if (unsupported && choice.attack.startsWith(slotSkillName(data, slot)!)) throw unsupported;
+      return undefined;
+    }
     const isSkill = entry.type === "WeaponSkill";
     const assumptions = new Set<AssumptionId>();
     const allHits = entry.hitIds.map((id, i) => {

@@ -14,7 +14,7 @@ export interface Assumption<TChoice> {
   tests: string[];
 }
 
-export type AssumptionId = "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "A9";
+export type AssumptionId = "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8" | "A9" | "A10";
 
 export type CounterHitModel = "pierce-negation-minus-points" | "pierce-damage-multiplier";
 
@@ -130,6 +130,17 @@ export const ASSUMPTIONS = {
     reason: "Wiki-sourced, curated entry: the copy has SpEffect rows 1675/1677 \"[Weapon] Lightning Slash\", but they only point to cycle effects 1676/1678, which are not in the copy; the planner has no effect for it.",
     source: "wiki.gg (Zer0, 2026-11-12)",
     tests: ["packages/engine/test/hit.test.ts"],
+  },
+  A10: {
+    id: "A10",
+    question: "Kick damage (no hit row for Kick in FDE or our AtkParam copy; animation a712_040000 exists)",
+    choice: { fixedPhysicalDamage: 1, scaled: false },
+    alternative: { fixedPhysicalDamage: 0, scaled: false },
+    status: "assumed",
+    reason:
+      "In-game Kick does ~0–2 damage; its value is stagger and guard break. Fixed at 1 (not 0) so ratios and hits to kill stay finite. Its poise damage is unknown and its active frames aren't in FDE, so stagger, trade and timing verdicts with Kick are not supported; guard break needs blocking, which isn't modelled.",
+    source: "Zer0, 2026-11-13",
+    tests: ["packages/engine/test/kick.test.ts"],
   },
 } as const satisfies Record<AssumptionId, Assumption<unknown>>;
 

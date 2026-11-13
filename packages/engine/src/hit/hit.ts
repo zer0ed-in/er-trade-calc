@@ -122,6 +122,17 @@ export function computeHit(data: GameData, attacker: Fighter, attack: ResolvedAt
   // Weapon AR for this hit: the 2H bonus applies only if the attack is two-handed and the hit doesn't disable it.
   const ar = weaponAr(data, attack.slot, attacker.stats, { twoHanded: attack.twoHanded, disableTwoHandBonus: hit.disable2H.value });
 
+  // Fixed-damage hit (Kick, A10): a set number, unscaled — no AR, defence or negation applies to it.
+  if (hit.fixedDamage) {
+    assumptions.add(hit.fixedDamage.assumption);
+    return {
+      hit, damage: hit.fixedDamage.physical, types: [], twoHandBonusApplied: false, effectiveStr: ar.effectiveStr, buffApplied: false,
+      status: {}, attackerEffects: [], defenderEffects: [], ignoredEffects: [],
+      warnings: [`${attack.name}: damage fixed at ${hit.fixedDamage.physical} physical, unscaled (${hit.fixedDamage.assumption})`],
+      assumptions: [...assumptions].filter((a) => a !== "A3").sort(),
+    };
+  }
+
   // Buffs: right-hand weapon only (docs/03 rule 9; Q7), weapon must be buffable (data), added before MV.
   const meta = data.weaponMeta.get(attack.slot.weapon);
   let buffApplied = false;

@@ -11,12 +11,13 @@
   "talismans.json": "notifications-BNvikVlY.js (talismans)",
   "goods.json": "notifications-BNvikVlY.js (tools/goods incl. greases, crystal tears)",
   "weapon-arts.json": "notifications-BNvikVlY.js (weapon arts / SwordArtsParam + planner effects)",
+  "ash-compat.json": "notifications-BNvikVlY.js (ash table) + armaments.json + SwordArtsParam.json",
   "planner-condition-effects.json": "notifications-BNvikVlY.js (condition effects; reference)",
   "planner-rulesets.json": "rulesets-BMUmMfbT.js",
   "armour.json": "EquipParamProtector.json (+ planner effects from notifications-BNvikVlY.js)",
   "weapons.json": "armaments.json",
   "speffects.json": "SpEffectParam.json",
-  "movesets.json": "attacks-CnHm4LBL.js",
+  "movesets.json": "attacks-CnHm4LBL.js + animations.json (FDE users, for ash pairs the planner lacks)",
   "hits.json": "attacks-CnHm4LBL.js + AtkParam_Pc.json",
   "animations.json": "animations.json"
  }

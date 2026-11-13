@@ -1,10 +1,10 @@
 // Trade resolution (docs/04): who lands first, does it stagger the other before their hit, counter hits, HA/SA.
 import { ASSUMPTIONS, type AssumptionId } from "../assumptions.ts";
-import { resolveAttack, type AttackChoice, type ResolvedAttack } from "../attacks/attacks.ts";
+import { KICK_NOT_SUPPORTED, resolveAttack, type AttackChoice, type ResolvedAttack } from "../attacks/attacks.ts";
 import { resultMeta } from "../explain/explain.ts";
 import type { GameData } from "../game-data.ts";
 import type { HitSituation } from "../hit/hit.ts";
-import { EngineError, type ResultMeta } from "../types.ts";
+import { EngineError, NotSupportedError, type ResultMeta } from "../types.ts";
 import { computeAttack, type AttackResult } from "../duel/attack-result.ts";
 import type { Fighter } from "../duel/fighter.ts";
 import { hitsToKill, type HitsToKill } from "../duel/htk.ts";
@@ -119,6 +119,8 @@ export function computeTrade(data: GameData, a: Fighter, b: Fighter, choiceA: At
   const atkA = resolveAttack(data, a.build, choiceA);
   const atkB = resolveAttack(data, b.build, choiceB);
   if (!atkA.hits.length || !atkB.hits.length) throw new EngineError("Each attack needs at least one landed hit.", "invalid-hits");
+  // A verdict needs both sides' timing and poise damage; Kick has neither in the data (A10).
+  if ([...atkA.hits, ...atkB.hits].some((h) => h.poiseAndTimingUnknown)) throw new NotSupportedError(...KICK_NOT_SUPPORTED);
   const offset = validateFrames("offset", opts.offset);
   const delayA = validateFrames("input delay A", opts.inputDelayA);
   const delayB = validateFrames("input delay B", opts.inputDelayB);

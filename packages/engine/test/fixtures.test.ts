@@ -32,8 +32,8 @@ describe("fixtures load and validate", () => {
 });
 
 describe("assumptions file", () => {
-  it("has A1–A9 with ids matching keys", () => {
-    expect(Object.keys(ASSUMPTIONS)).toEqual(["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9"]);
+  it("has A1–A10 with ids matching keys", () => {
+    expect(Object.keys(ASSUMPTIONS)).toEqual(["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10"]);
     for (const [key, a] of Object.entries(ASSUMPTIONS)) expect(a.id).toBe(key);
   });
 });

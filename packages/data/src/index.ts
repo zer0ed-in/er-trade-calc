@@ -38,6 +38,7 @@ export function loadRawGameData(patch = DEFAULT_PATCH): RawGameData {
     animations: read("animations.json"),
     speffects: read("speffects.json"),
     plannerRulesets: read("planner-rulesets.json"),
+    ashCompat: read("ash-compat.json"),
   };
 }
 

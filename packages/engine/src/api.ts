@@ -64,7 +64,8 @@ function gate(ctx: Context, sides: { side: "A" | "B"; fighter: Fighter; attack?:
 
 // ---- attacks ------------------------------------------------------------------------------------
 export function apiAttacks(ctx: Context, build: Build): { attacks: AttackListing[]; meta: ResultMeta } {
-  return { attacks: listAttacks(ctx.data, build), meta: resultMeta(ctx.data.patch, []) };
+  const attacks = listAttacks(ctx.data, build);
+  return { attacks, meta: resultMeta(ctx.data.patch, [], attacks.flatMap((l) => (l.notSupported ? [l.notSupported] : []))) };
 }
 
 // ---- hit ------------------------------------------------------------------------------------------
@@ -136,10 +137,10 @@ export function apiAssumptions() {
 // ---- text rendering (CLI tables; MCP returns JSON + this text) -----------------------------------
 const flagLine = (g: LegalityGate) => (g.ignoredViolations?.length ? [`⚠ ignore-rules: NOT LADDER-LEGAL — ${g.ignoredViolations.join("; ")}`] : []);
 const attackLine = (r: AttackResult | { unavailable: string }) =>
-  "unavailable" in r ? r.unavailable : `${r.attacker} → ${r.defender}: ${r.attack.name} = ${r.total ?? "unknown"} damage (${r.hits.map((h) => h.damage ?? "?").join(" + ")}), poise damage ${r.poiseDamage}`;
+  "unavailable" in r ? r.unavailable : `${r.attacker} → ${r.defender}: ${r.attack.name} = ${r.total ?? "unknown"} damage (${r.hits.map((h) => h.damage ?? "?").join(" + ")}), poise damage ${r.poiseDamage ?? "not supported"}`;
 
 export function renderHit(r: HitResponse, breakdown = false): string {
-  const lines = [...r.meta.warnings, ...flagLine(r.legality), attackLine(r.aToB), attackLine(r.bToA)];
+  const lines = [...r.meta.warnings, ...r.meta.notSupported, ...flagLine(r.legality), attackLine(r.aToB), attackLine(r.bToA)];
   for (const side of [r.aToB, r.bToA]) if (!("unavailable" in side)) for (const h of side.hits) for (const w of [...h.warnings, ...(h.unknownReason ? [h.unknownReason] : [])]) lines.push(`  note: ${w}`);
   if (breakdown) for (const side of [r.aToB, r.bToA]) if (!("unavailable" in side)) lines.push("", ...explainAttack(side));
   return [...lines, "", ...footer(r.meta)].join("\n");
@@ -158,7 +159,7 @@ export function renderTrade(r: TradeResponse, breakdown = false): string {
       ...(s.poiseToTankFollowUps.length ? [`   poise to tank follow-ups: ${s.poiseToTankFollowUps.map((f) => `hit ${f.hit} ≥ ${f.poiseNeeded}`).join(", ")}`] : []),
     ];
   };
-  const lines = [...r.meta.warnings, ...flagLine(r.legality), head, ...side("A", r.a), ...side("B", r.b), "", ...r.caveats.map((c) => `caveat: ${c}`)];
+  const lines = [...r.meta.warnings, ...r.meta.notSupported, ...flagLine(r.legality), head, ...side("A", r.a), ...side("B", r.b), "", ...r.caveats.map((c) => `caveat: ${c}`)];
   if (breakdown) for (const s of [r.a.damage, r.b.damage]) if (s) lines.push("", ...explainAttack(s));
   return [...lines, "", ...footer(r.meta)].join("\n");
 }
@@ -171,7 +172,7 @@ export function renderSweep(r: SweepResult & { legality: LegalityGate }): string
   ].map(String));
   const widths = head.map((h, i) => Math.max(h.length, ...rows.map((row) => row[i]!.length)));
   const fmt = (cells: string[]) => cells.map((c, i) => c.padEnd(widths[i]!)).join("  ").trimEnd();
-  return [...r.meta.warnings, ...flagLine(r.legality), fmt(head), ...rows.map(fmt), "", ...footer(r.meta)].join("\n");
+  return [...r.meta.warnings, ...r.meta.notSupported, ...flagLine(r.legality), fmt(head), ...rows.map(fmt), "", ...footer(r.meta)].join("\n");
 }
 
 export function renderLegal(r: ReturnType<typeof apiLegal>): string {
@@ -191,7 +192,7 @@ export function renderAttacks(r: ReturnType<typeof apiAttacks>): string {
     lines.push(`${l.hand} hand slot ${l.slot + 1}: ${l.weapon}${l.skill ? ` (skill: ${l.skill})` : ""}`);
     for (const a of l.attacks) lines.push(`  ${a.name}${a.hits > 1 ? `  [${a.hits} hits]` : ""}${a.type === "WeaponSkill" ? "  (skill)" : ""}`);
   }
-  return [...lines, "", ...footer(r.meta)].join("\n");
+  return [...r.meta.notSupported, ...lines, "", ...footer(r.meta)].join("\n");
 }
 
 export function renderAssumptions(): string {

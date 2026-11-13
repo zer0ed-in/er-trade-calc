@@ -317,6 +317,10 @@ $$
 The game's own "Counter Frames" effect lists pierce damage ×1.15; which model is right in PvP isn't settled yet, so this is an assumption
 (the other model is one switch away).
 
+The data settles who it applies to: SpEffect #45 "[HKS] Counter Frames" is part of every attack's animation, not tied to any talisman,
+and its only value is pierce ×1.15 — so it's pierce hits only, the physical part only, any infusion, somber weapons included, with the
+Spear Talisman stacking on top. The engine already does this; only the size (−15 points vs ×1.15) and the talisman stacking stay A4.
+
 ---
 
 ## 14. Rune level ✅
@@ -349,6 +353,7 @@ For Heavy Knight, that's simply **RL = (sum of all eight stats) − 79**.
 | A4 | Counter hits: −15 points of pierce negation (planner) vs pierce ×1.15 (game effect); Spear Talisman stacking | Pierce counter hits only |
 | A8 | Two-handing bonus for attacks whose data row is missing from our copy: normal attacks yes, ashes no | Most normal 2H attacks |
 | A9 | Lightning Slash buff = +85 lightning, 40 s (wiki value) | Lightning Slash builds |
+| A10 | Kick = 1 physical damage, unscaled; its poise damage and timing aren't in our data, so trades with Kick aren't judged | Kick on any weapon |
 
 Confirmed since the first draft: frame numbers already include animation speed changes; the planner's "+1" on startup is a counting setting;
 defence parts are rounded down separately (section 5); the ladder poise maximum of 133 (section 11).

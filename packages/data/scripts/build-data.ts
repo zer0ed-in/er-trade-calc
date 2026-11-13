@@ -5,6 +5,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gunzipSync } from "node:zlib";
+import { buildAshCompat, extractPlannerAshes } from "./lib/ash-compat.ts";
 import { evalDefaultExportModule, extractAssignedLiteral, extractLiteralContaining, identFromUsage } from "./lib/js-literal.ts";
 
 const PATCH = process.env.GAME_PATCH ?? "1.17";
@@ -95,17 +96,25 @@ const plannerProtectors = fromBundle('"Verdigris Helm":{full_hex_id') as Record<
 
 type PlannerArt = Record<string, unknown> & { "Row ID": number; "Row Name": string; types?: string[]; effects?: PlannerEffect[] };
 const plannerArts = fromBundle('"Sacred Blade":{"Row ID":201') as Record<string, PlannerArt>;
-write(
-  "weapon-arts.json",
-  Object.values(plannerArts).map((a) => ({
+const weaponArts = Object.values(plannerArts).map((a) => ({
     id: a["Row ID"],
     name: a["Row Name"],
     types: a.types ?? [],
     effects: a.effects ?? [],
     fpCost: { L1: a.useMagicPoint_L1, L2: a.useMagicPoint_L2, R1: a.useMagicPoint_R1, R2: a.useMagicPoint_R2 },
-  })),
-  `${bundle.file} (weapon arts / SwordArtsParam + planner effects)`,
-);
+  }));
+write("weapon-arts.json", weaponArts, `${bundle.file} (weapon arts / SwordArtsParam + planner effects)`);
+
+let ashCompatText = "";
+// Ash-of-war compatibility (planner rule Nc/Pc). Pretty-printed and byte-stable: people read and diff this file.
+{
+  const armaments = readRaw("armaments.json");
+  const swordArts = readRaw("SwordArtsParam.json");
+  ashCompatText = buildAshCompat(JSON.parse(armaments.text), extractPlannerAshes(bundle.text), JSON.parse(swordArts.text), weaponArts as never, PATCH);
+  writeFileSync(join(OUT, "ash-compat.json"), ashCompatText);
+  sources["ash-compat.json"] = `${bundle.file} (ash table) + ${armaments.file} + ${swordArts.file}`;
+  console.log(`  ash-compat.json  ← ${sources["ash-compat.json"]}`);
+}
 
 // Counter-hit / environment pseudo-effects as the planner models them — reference only (see docs/09 Q10).
 write("planner-condition-effects.json", fromBundle("counterhit:{effects:[{attribute:`Pierce Absorption`"), `${bundle.file} (condition effects; reference)`);
@@ -206,7 +215,44 @@ const params = <T>(name: string) => {
       });
     if (list.length) movesetsOut[weaponName] = list;
   }
-  write("movesets.json", movesetsOut, plannerAttacksRaw.file);
+
+  // Second source for ash attacks: FDE's animations list each animation's weapon users and hit rows. Used only for a
+  // (weapon, ash) pair the game allows (ash-compat) but the planner table lacks, and only animations that name the weapon
+  // as a user — never another class's animation (DLC weapons have their own sections). Pairs with no hit rows stay missing.
+  {
+    type FdeAnimation = { name: string; filename: string; labels: string[]; categories: string[]; users: { name: string; type: string }[]; attacks: string[] | null };
+    const fde = params<Record<string, FdeAnimation>>("animations.json").rows;
+    const byWeaponAndAsh = new Map<string, FdeAnimation[]>();
+    for (const anim of Object.values(fde)) {
+      if (!anim.labels.includes("WeaponSkill") || !anim.attacks?.length) continue;
+      for (const user of anim.users) {
+        if (user.type !== "Weapon") continue;
+        for (const ash of anim.categories) {
+          const key = `${user.name}\u0000${ash}`;
+          byWeaponAndAsh.set(key, [...(byWeaponAndAsh.get(key) ?? []), anim]);
+        }
+      }
+    }
+    const compat = JSON.parse(ashCompatText) as { weapons: Record<string, { ashes: Record<string, string[]> }> };
+    let added = 0;
+    for (const [weaponName, entry] of Object.entries(compat.weapons)) {
+      const existing = movesetsOut[weaponName] ?? [];
+      const plannerAshes = new Set(existing.filter((a) => a.type === "WeaponSkill").map((a) => a.categories[0]));
+      for (const ash of Object.keys(entry.ashes)) {
+        if (plannerAshes.has(ash)) continue;
+        const anims = (byWeaponAndAsh.get(`${weaponName}\u0000${ash}`) ?? []).filter((a) => a.attacks!.every((id) => id in hitRows));
+        for (const anim of anims) {
+          anim.attacks!.forEach((id) => usedHitIds.add(id));
+          usedFiles.add(anim.filename);
+          existing.push({ name: anim.name, filename: anim.filename, hitIds: anim.attacks!, type: "WeaponSkill", categories: [ash], source: "fde-animation-users" } as never);
+          added++;
+        }
+      }
+      if (existing.length) movesetsOut[weaponName] = existing;
+    }
+    console.log(`  note: ${added} ash attack entries added from FDE animation users (pairs missing from the planner table)`);
+  }
+  write("movesets.json", movesetsOut, `${plannerAttacksRaw.file} + animations.json (FDE users, for ash pairs the planner lacks)`);
 
   const rowsOut: Record<string, unknown> = {};
   const missingAtkParam: number[] = [];

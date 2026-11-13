@@ -24,8 +24,11 @@ export interface AttackResult {
   hits: HitDamage[];
   /** Σ hit damage; null if any landed hit's damage is unknown. */
   total: number | null;
-  poiseDamage: number;
+  /** null when a landed hit's poise damage isn't in the data (Kick); see notSupported. */
+  poiseDamage: number | null;
   status: StatusSummary[];
+  /** "Not supported right now: …" lines for parts of this result we can't compute. */
+  notSupported: string[];
   assumptionsUsed: AssumptionId[];
 }
 
@@ -62,8 +65,9 @@ export function computeAttack(data: GameData, attacker: Fighter, attack: Resolve
     },
     hits,
     total,
-    poiseDamage: attack.hits.reduce((a, h) => a + h.poiseDamage, 0),
+    poiseDamage: attack.hits.some((h) => h.poiseAndTimingUnknown) ? null : attack.hits.reduce((a, h) => a + h.poiseDamage, 0),
     status,
+    notSupported: [...new Set(attack.hits.flatMap((h) => (h.poiseAndTimingUnknown ? [h.poiseAndTimingUnknown] : [])))],
     assumptionsUsed: [...assumptions].sort(),
   };
 }
@@ -97,5 +101,6 @@ export function computeHitBothWays(data: GameData, a: Fighter, b: Fighter, choic
   const aToB = run(a, b, choiceA);
   const bToA = run(b, a, choiceB);
   const used = [...("assumptionsUsed" in aToB ? aToB.assumptionsUsed : []), ...("assumptionsUsed" in bToA ? bToA.assumptionsUsed : [])];
-  return { aToB, bToA, meta: resultMeta(data.patch, used) };
+  const notSupported = [...new Set([...("notSupported" in aToB ? aToB.notSupported : []), ...("notSupported" in bToA ? bToA.notSupported : [])])];
+  return { aToB, bToA, meta: resultMeta(data.patch, used, notSupported) };
 }

@@ -10,9 +10,9 @@ const pct = (x: number) => `${(100 * x).toFixed(3)}%`;
 /** Shown whenever a result uses A3, until the friend test confirms the projectile formula (Zer0, 2026-11-12). */
 export const A3_WARNING = "⚠ Projectile damage uses an unverified formula (A3)";
 
-export function resultMeta(patch: string, used: Iterable<AssumptionId>): ResultMeta {
+export function resultMeta(patch: string, used: Iterable<AssumptionId>, notSupported: string[] = []): ResultMeta {
   const assumptionsUsed = unconfirmedAssumptions(used);
-  return { patch, assumptionsUsed, warnings: assumptionsUsed.includes("A3") ? [A3_WARNING] : [], credit: CREDIT_LINE };
+  return { patch, assumptionsUsed, warnings: assumptionsUsed.includes("A3") ? [A3_WARNING] : [], notSupported, credit: CREDIT_LINE };
 }
 
 /** Plain-text breakdown of one hit: AR per type → flat adds → MV → multipliers → defence & ratio → curve → negation → final rate → total. */
