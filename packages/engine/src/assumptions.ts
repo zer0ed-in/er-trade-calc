@@ -112,12 +112,12 @@ export const ASSUMPTIONS = {
   },
   A8: {
     id: "A8",
-    question: "2H str bonus for a hit whose AtkParam_Pc row is missing from the copy",
+    question: "2H str bonus for a hit that resolves to no AtkParam_Pc row",
     choice: { missingRowNormalAttack2H: true, missingRowSkillHit2H: false },
     alternative: { missingRowNormalAttack2H: false, missingRowSkillHit2H: false },
     status: "assumed",
     reason:
-      "Copied AtkParam_Pc is a subset. Row present → read isDisableBothHandsAtkBonus. Missing → normal attacks get 2H, skill/ash hits never (in-game tests: ashes ignore 2H).",
+      "Hits resolve through BehaviorParam_PC/Bullet to AtkParam_Pc; only Taker's Flames (300314902) has no row. Row present → read isDisableBothHandsAtkBonus. No row → normal attacks get 2H, skill/ash hits never (in-game tests: ashes ignore 2H).",
     source: "Zer0, 2026-11-12",
     tests: ["packages/engine/test/damage.test.ts", "packages/engine/test/attacks.test.ts"],
   },

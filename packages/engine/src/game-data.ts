@@ -20,8 +20,9 @@ export const INFUSIONS = ["Standard", "Heavy", "Keen", "Quality", "Fire", "Flame
 // Weapon-art buffs (Sacred Blade, Lightning Slash…) are not greases and are not limited by this.
 export const GREASE_INFUSIONS: readonly string[] = ["Standard", "Heavy", "Keen"];
 
-// Shared extra hit rows (AtkParam 500 and 500000000–500000008). They ride along with a real hit on normal attacks of ~30 weapons
-// (Lance, Treespear, Great Club…), carry placeholder MVs and no AtkParam row in the copy. The planner drops them
+// Shared extra hit rows (behaviors 500 and 500000000–500000008). They ride along with a real hit on normal attacks of ~30 weapons
+// (Lance, Treespear, Great Club…). 500000000–500000008 resolve to AtkParam 1703001–1703009: MV 200–460, no stamina cost,
+// opposeTarget 1; their purpose is unknown, so they stay excluded. Behavior 500 resolves to AtkParam 300 (MV 100). The planner drops them
 // (router-*.js filters 500/500000003); we drop exactly these ids. Zero-stamina rows in general are real hits and stay.
 export const SHARED_EXTRA_HIT_ROW_IDS: ReadonlySet<number> = new Set([500, 500000000, 500000001, 500000002, 500000003, 500000004, 500000005, 500000006, 500000007, 500000008]);
 const isSharedExtraHit = (hitId: string) => SHARED_EXTRA_HIT_ROW_IDS.has(Number(hitId.split(":")[0]));

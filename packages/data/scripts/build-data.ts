@@ -6,6 +6,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gunzipSync } from "node:zlib";
 import { buildAshCompat, extractPlannerAshes } from "./lib/ash-compat.ts";
+import { hitResolver } from "./lib/hit-resolution.ts";
 import { evalDefaultExportModule, extractAssignedLiteral, extractLiteralContaining, identFromUsage } from "./lib/js-literal.ts";
 
 const PATCH = process.env.GAME_PATCH ?? "1.17";
@@ -200,7 +201,10 @@ const params = <T>(name: string) => {
   type PlannerAttack = { filename: string; attacks: string[]; type: string; categories: string[]; ha?: Record<string, number | boolean> };
 
   const atkParam = params<Record<string, number | string>[]>("AtkParam_Pc.json");
-  const atkFlags = new Map(atkParam.rows.map((r) => [r["Row ID"] as number, r]));
+  const behaviorParam = params<Record<string, number | string>[]>("BehaviorParam_PC.json");
+  const bulletParam = params<Record<string, number | string>[]>("Bullet.json");
+  // Planner hit ids are behavior ids (child projectiles: AtkParam ids); resolve each to the AtkParam row the game uses.
+  const resolver = hitResolver(atkParam.rows, behaviorParam.rows, bulletParam.rows);
 
   const usedHitIds = new Set<string>();
   const usedFiles = new Set<string>();
@@ -255,29 +259,39 @@ const params = <T>(name: string) => {
   write("movesets.json", movesetsOut, `${plannerAttacksRaw.file} + animations.json (FDE users, for ash pairs the planner lacks)`);
 
   const rowsOut: Record<string, unknown> = {};
-  const missingAtkParam: number[] = [];
+  const unresolved: string[] = [];
+  const resolvedVia: Record<string, number> = {};
   for (const hitId of usedHitIds) {
     const row = hitRows[hitId];
     if (!row) throw new Error(`Planner attack row missing for ${hitId}`);
-    const atkParamId = Number(hitId.split(":")[0]);
-    const flags = atkFlags.get(atkParamId);
-    if (!flags) missingAtkParam.push(atkParamId);
+    const resolved = resolver.resolve(Number(hitId.split(":")[0]));
+    if ("unresolved" in resolved) unresolved.push(`${hitId}: ${resolved.unresolved}`);
+    else resolvedVia[resolved.via] = (resolvedVia[resolved.via] ?? 0) + 1;
+    const flags = "unresolved" in resolved ? null : resolved.row;
     rowsOut[hitId] = {
       ...row,
-      atkParam: flags
+      atkParam: flags && !("unresolved" in resolved) // (second check narrows the type)
         ? {
-            id: atkParamId,
+            id: resolved.atkParamId,
+            via: resolved.via,
+            ...(resolved.bulletId !== undefined && { bulletId: resolved.bulletId }),
             isAddBaseAtk: flags.isAddBaseAtk,
             overwriteAttackElementCorrectId: flags.overwriteAttackElementCorrectId,
             isDisableBothHandsAtkBonus: flags.isDisableBothHandsAtkBonus,
             finalDamageRateId: flags.finalDamageRateId,
             atkAttribute: flags.atkAttribute,
+            atkSuperArmor: flags.atkSuperArmor,
+            atkSuperArmorCorrection: flags.atkSuperArmorCorrection,
+            atkStam: flags.atkStam,
+            dmgLevel: flags.dmgLevel,
+            dmgLevel_vsPlayer: flags.dmgLevel_vsPlayer,
           }
         : null,
     };
   }
-  write("hits.json", rowsOut, `${plannerAttacksRaw.file} + ${atkParam.file}`);
-  if (missingAtkParam.length) console.warn(`  note: ${missingAtkParam.length} hit rows have no AtkParam_Pc row (atkParam: null)`);
+  write("hits.json", rowsOut, `${plannerAttacksRaw.file} + ${atkParam.file} (via ${behaviorParam.file}, ${bulletParam.file})`);
+  console.log(`  note: hit rows resolved via ${JSON.stringify(resolvedVia)}`);
+  if (unresolved.length) console.warn(`  note: ${unresolved.length} hit rows have no AtkParam_Pc row (atkParam: null):\n    ${unresolved.join("\n    ")}`);
 
   const anims = params<Record<string, { name: string; labels?: string[]; events?: Record<string, unknown> }>>("animations.json");
   const animOut: Record<string, unknown> = {};

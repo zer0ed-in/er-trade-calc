@@ -18,7 +18,7 @@
   "weapons.json": "armaments.json",
   "speffects.json": "SpEffectParam.json",
   "movesets.json": "attacks-CnHm4LBL.js + animations.json (FDE users, for ash pairs the planner lacks)",
-  "hits.json": "attacks-CnHm4LBL.js + AtkParam_Pc.json",
+  "hits.json": "attacks-CnHm4LBL.js + AtkParam_Pc.json (via BehaviorParam_PC.json, Bullet.json)",
   "animations.json": "animations.json"
  }
 }

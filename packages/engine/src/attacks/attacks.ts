@@ -37,7 +37,7 @@ export interface HitDef {
   disable2H: { value: boolean; source: "AtkParam" | "A8" | "A10" };
   /** Skill scaling table (overwriteAttackElementCorrectId) when the hit carries its own flat damage. */
   skillTable: number | null;
-  /** Hit's flat damage can't be scaled because its AtkParam row is missing from the copy. */
+  /** Hit's flat damage can't be scaled because it resolves to no AtkParam row. */
   flatUnknownReason?: string;
   /** Damage fixed by an assumption instead of computed (Kick, A10). */
   fixedDamage?: { physical: number; assumption: AssumptionId };
@@ -194,7 +194,7 @@ function hitDef(data: GameData, id: string, index: number, isSkill: boolean): { 
     disable2H,
     skillTable: hasFlat && overwrite !== null && overwrite >= 0 ? overwrite : null,
   };
-  if (hasFlat && !row.atkParam) hit.flatUnknownReason = `hit ${id} has its own flat damage but no AtkParam row in the copy, so its scaling table is unknown`;
+  if (hasFlat && !row.atkParam) hit.flatUnknownReason = `hit ${id} has its own flat damage but resolves to no AtkParam row, so its scaling table is unknown`;
   if (hasFlat) assumptions.push("A3");
   return { hit, assumptions };
 }

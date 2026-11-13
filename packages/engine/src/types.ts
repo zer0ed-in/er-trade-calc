@@ -124,13 +124,27 @@ export interface HitRow {
   physAttribute: string;
   startup: number;
   bloodBuildup: number; frostBuildup: number; poisonBuidup: number; scarletRotBuidup: number; sleepBuildup: number; madnessBuildup: number; curseBuildup: number;
+  /**
+   * The AtkParam_Pc row the game uses for this hit: hit id → BehaviorParam_PC (refType 0 → AtkParam, 1 → Bullet → AtkParam),
+   * or the id itself when it is an AtkParam id (child projectiles). null = no row in the copy.
+   */
   atkParam: null | {
     id: number;
+    via: "behavior" | "bullet" | "atk";
+    bulletId?: number;
     isAddBaseAtk: number;
     overwriteAttackElementCorrectId: number;
     isDisableBothHandsAtkBonus: number;
     finalDamageRateId: number;
     atkAttribute: number;
+    /** Flat poise damage (raw). */
+    atkSuperArmor: number;
+    /** Poise damage MV (raw). */
+    atkSuperArmorCorrection: number;
+    atkStam: number;
+    dmgLevel: number;
+    /** Damage level against players (raw; not used by the engine yet, see docs/09). */
+    dmgLevel_vsPlayer: number;
   };
 }
 

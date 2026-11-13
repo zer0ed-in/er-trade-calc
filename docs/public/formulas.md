@@ -60,8 +60,10 @@ $$
 So 54 str two-handed counts as 81, already past the 80 soft cap — which is why extra str after ~54 adds little damage when two-handing.
 
 **Not every attack gets it.** The game data has a per-attack switch that turns the bonus off. Every ash of war has it switched off,
-and so do a few normal attacks (e.g. Starscourge Greatsword 2H R1). We read the switch for each hit. Our copy of the data is missing
-that row for most normal attacks; for those we assume the bonus applies to normal attacks and never to ashes ⚠️ (assumption A8).
+and so do a few normal attacks (e.g. Starscourge Greatsword 2H R1). We read the switch for each hit, from the attack row the game
+actually uses: an attack's hit points to a behavior row, which points either straight to an attack row or to a projectile that names one.
+Only one hit has no attack row this way (Blasphemous Blade's Taker's Flames); for it we assume the bonus applies to normal attacks and
+never to ashes ⚠️ (assumption A8).
 
 **Requirements.** If you don't meet a weapon's stat requirement, the game cuts that weapon's AR by 40% and drops the scaling. The calculator
 does the same and warns you.
@@ -108,8 +110,9 @@ Which stats count is decided by the skill itself, not your infusion:
 
 The stat list is confirmed from the game data; the exact formula above is still an assumption.
 
-Some skill hits can't be calculated yet: our copy of the data lacks their scaling row (e.g. Ice Spear's projectile, the first
-Beast's Roar hit). The calculator says **unknown** for those hits instead of guessing.
+Each skill hit's fixed damage and scaling table come from the attack row found the same way (behavior → attack row, or behavior →
+projectile → attack row). Example: Ice Spear's projectile is 230 magic with the dex + int table. A hit that still has no row would be shown
+as **unknown**, never guessed.
 
 **Lightning Slash** adds +85 lightning for 40 s. This value isn't in our data copy; it comes from the wiki ⚠️ (assumption A9).
 Buffs and greases add to the weapon's own hits (the ones with a motion value), not to a skill's separate projectile.
@@ -351,7 +354,7 @@ For Heavy Knight, that's simply **RL = (sum of all eight stats) − 79**.
 |---|---|---|
 | A3 | Exact skill projectile damage formula (section 3) — which stats count is confirmed | Storm Blade wind, Beast's Roar, Sacred Blade wave |
 | A4 | Counter hits: −15 points of pierce negation (planner) vs pierce ×1.15 (game effect); Spear Talisman stacking | Pierce counter hits only |
-| A8 | Two-handing bonus for attacks whose data row is missing from our copy: normal attacks yes, ashes no | Most normal 2H attacks |
+| A8 | Two-handing bonus for a hit with no attack row: normal attacks yes, ashes no | Taker's Flames only |
 | A9 | Lightning Slash buff = +85 lightning, 40 s (wiki value) | Lightning Slash builds |
 | A10 | Kick = 1 physical damage, unscaled; its poise damage and timing aren't in our data, so trades with Kick aren't judged | Kick on any weapon |
 
