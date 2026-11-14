@@ -186,6 +186,8 @@ export type CorrectionAttackRow = {
 export interface ReinforcementLevel {
   level: number;
   damage: Record<DamageType | "stamina", number>;
+  /** Skill (flat) attack rate: ReinforceParamWeapon f32 at row offset 0x7C (regulation.bin; 1.0 at +0, 4.0 at max). */
+  skillRate: number;
   scaling: Record<"strength" | "dexterity" | "intelligence" | "faith" | "arcane", number>;
 }
 

@@ -66,6 +66,44 @@ writeFileSync(join(OUT, "toughness-recover.json"), JSON.stringify({
 }, null, 1) + "\n");
 written["toughness-recover.json"] = "GameSystemCommonParam.baseToughnessRecoverTime, PlayerCommonParam.toughnessRecoverCorrection";
 
+// Skill (flat) attack rate per upgrade level: ReinforceParamWeapon's last f32 (row offset 0x7C; 1.0 at +0, 4.0 at max).
+// No local paramdef for this table, so the row is read by offset. The layout is pinned by cross-checking every row the planner
+// uses against Emilia's copy: offsets 0x00–0x0C/0x58 = damage rates, 0x1C–0x28/0x60 = scaling rates. Any mismatch fails.
+// In-game fit (Zer0, 2026-11-14): skill flat damage = flat × this rate × (1 + scaling); see docs/09 A3.
+{
+  const buf = params.get("ReinforceParamWeapon");
+  if (!buf) throw new Error("regulation.bin has no ReinforceParamWeapon");
+  const ROW_SIZE = 128, SKILL_RATE_OFFSET = 0x7c;
+  const count = buf.readUInt16LE(0x0a);
+  const byId = new Map<number, Buffer>();
+  for (let i = 0; i < count; i++) {
+    const h = 0x40 + i * 24;
+    const dataOffset = Number(buf.readBigInt64LE(h + 8));
+    byId.set(buf.readInt32LE(h), buf.subarray(dataOffset, dataOffset + ROW_SIZE));
+  }
+  const planner = JSON.parse(readFileSync(join(REPO, "packages/data/gen/1.17/reinforcements.json"), "utf8")) as Record<string, { level: number; damage: Record<string, number>; scaling: Record<string, number> }[]>;
+  const checked: [number, string, string][] = [
+    [0x00, "damage", "physical"], [0x04, "damage", "magic"], [0x08, "damage", "fire"], [0x0c, "damage", "lightning"], [0x58, "damage", "holy"],
+    [0x1c, "scaling", "strength"], [0x20, "scaling", "dexterity"], [0x24, "scaling", "intelligence"], [0x28, "scaling", "faith"], [0x60, "scaling", "arcane"],
+  ];
+  const skillRate: Record<string, number[]> = {};
+  let rowsChecked = 0;
+  for (const [typeId, levels] of Object.entries(planner)) {
+    skillRate[typeId] = levels.map((lv) => {
+      const row = byId.get(Number(typeId) + lv.level);
+      if (!row) throw new Error(`ReinforceParamWeapon has no row ${Number(typeId) + lv.level}`);
+      for (const [offset, group, key] of checked) {
+        const game = row.readFloatLE(offset), copy = (lv as unknown as Record<string, Record<string, number>>)[group]![key]!;
+        if (Math.fround(copy) !== game) throw new Error(`ReinforceParamWeapon ${Number(typeId) + lv.level} @0x${offset.toString(16)}: ${game}, planner ${group}.${key} ${copy} — layout assumption broken`);
+      }
+      rowsChecked++;
+      return +row.readFloatLE(SKILL_RATE_OFFSET).toFixed(6);
+    });
+  }
+  writeFileSync(join(OUT, "reinforce-skill-rate.json"), JSON.stringify(skillRate) + "\n");
+  written["reinforce-skill-rate.json"] = `ReinforceParamWeapon f32 at row offset 0x7C, by reinforce type and level (${rowsChecked} rows; layout checked against the planner's damage/scaling rates)`;
+}
+
 const defsSource = (() => { try { return readFileSync(join(DEFS, "../SOURCE.txt"), "utf8").trim(); } catch { return "unknown"; } })();
 writeFileSync(join(OUT, "manifest.json"), JSON.stringify({
   patch: PATCH, regulationVersion: REGULATION_VERSION, sha256,

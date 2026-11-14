@@ -11,7 +11,7 @@ Status tags used below: **[V]** verified against Emilia's planner · **[D]** rea
 ### Input 1 — power per damage type (physical, magic, fire, lightning, holy)
 From one of three sources, chosen by the hit's own data:
 - **Weapon-based** (most attacks): attacker effective stats → weapon + infusion + upgrade → AR per type. Plus flat buffs (grease, AoW buff) added to one type. **[V]**
-- **Projectile / skill flat damage**: the hit carries its own flat value per type. Scaling rule is **[A3]**.
+- **Projectile / skill flat damage**: the hit carries its own flat value per type. Scaling rule is **[A3, in-game]**: flat × skill rate (ReinforceParamWeapon +0x7C, 4.0 at max) × (1 + Σ k × curve).
 - **Spell-scaled** (incantations/sorceries, phase 1 only if trivial): planner formula `flat × (1 + Σ spellBuff stat corrections)` **[D, planner code `spellAR`]**.
 
 ### Input 2 — the hit's definition (from attack data) **[D]**
@@ -63,7 +63,7 @@ damage = floor( Σ_t d_t )
    Because of rule 1, a lone flat element is cut hard by its own defence; stacked on an existing element it barely is.
 10. **AoW buffs can apply to elementally infused weapons** (e.g. Sacred Blade on Sacred, Lightning Slash on Lightning) **[W, Fextralife]**; greases cannot buff elemental infusions **[W]** — confirm "can be buffed" from weapon data (planner shows "Can be buffed").
 11a. **Ashes of war ignore two-handing.** Every AoW hit checked has `isDisableBothHandsAtkBonus = 1` (Storm Blade blade + wind, Beast's Roar, Ground Slam, Stamp, Lightning Slash, Sacred Blade) **[D]**, and Zer0's tests show identical damage 1H vs 2H for every ash and infusion **[in-game]**. Read the flag per hit; never assume.
-11b. **Skill hit scaling tables.** A skill hit's `overwriteAttackElementCorrectId` picks which stats scale it, with fixed override rates: 51010 str 0.25 · 51020 dex 0.25 (Beast's Roar) · 51030 str 0.15 + dex 0.15 (Storm Blade wind) · 51070 faith 0.25 (Sacred Blade wave) **[D, planner correction-attack]**. Exact damage formula **[A3]**.
+11b. **Skill hit scaling tables.** A skill hit's `overwriteAttackElementCorrectId` picks which stats scale it, with fixed override rates: 51010 str 0.25 · 51020 dex 0.25 (Beast's Roar) · 51030 str 0.15 + dex 0.15 (Storm Blade wind) · 51070 faith 0.25 (Sacred Blade wave) **[D, planner correction-attack]**. Damage formula **[A3, in-game 2026-11-14]**: k = override × reinforcement scaling rate; a hit with no table (−1), or a flagged stat with no override, uses the weapon's own scaling (AR rule).
 11. **Multi-hit and partial attacks**: an attack's hits are listed in data (e.g. Storm Blade: blade hit MV 65 Slash + wind hit flat 150 physical Standard). Users choose which hits landed (all / first / any subset). Totals are the plain sum of hits (in-game: Ice Spear 402 + 844 = 1246) **[D + in-game]**.
 12. **Status buildup** (bleed etc.) per hit from attack data × weapon status; proc damage from effect data (`changeHpRate` % max HP + `changeHpPoint`). Phase 1: compute buildup and proc damage; show hits-to-proc. **[D for locations]**
 13. **Hits to kill**: apply hits in order with duel state updating conditions between hits (e.g. full-HP effects turn off after the first hit taken). **Not** HP ÷ one number.

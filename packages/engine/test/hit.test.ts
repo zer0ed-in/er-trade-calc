@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { A3_WARNING, apiHit, computeHit, explainHit, prepareFighter, renderHit, resolveAttack, type Build, type ScenarioName, type Stats } from "@ertc/engine";
+import { A3_WARNING, ASSUMPTIONS, apiHit, computeHit, explainHit, prepareFighter, renderHit, resolveAttack, type Build, type ScenarioName, type Stats } from "@ertc/engine";
 import { loadLadderRuleset } from "@ertc/data";
 import { data } from "./data.ts";
 
@@ -67,13 +67,15 @@ describe("breakdown", () => {
   });
 });
 
-describe("A3 warning (loud until the friend test confirms the projectile formula)", () => {
+describe("A3 warning: shown only while A3 is unconfirmed (confirmed in-game 2026-11-14)", () => {
   const ctx = { data, ruleset: loadLadderRuleset() };
   const sb = build(hk({ str: 30, dex: 42 }), "Keen", { rightHand: [{ weapon: "Shamshir", infusion: "Keen", upgrade: 25, ashOfWar: "Storm Blade" }] });
-  it("a projectile hit shows ⚠ A3 at the top of the text and in meta.warnings", () => {
+  it("a projectile hit no longer carries the warning or lists A3, now that A3 is confirmed", () => {
+    expect(ASSUMPTIONS.A3.status).toBe("confirmed");
     const r = apiHit(ctx, sb, dex, { choiceA: { attack: "Storm Blade - Wind Slash 1", hits: "wind" }, choiceB: { attack: "1h R1 1" } });
-    expect(r.meta.warnings).toEqual([A3_WARNING]);
-    expect(renderHit(r).split("\n")[0]).toBe(A3_WARNING);
+    expect(r.meta.warnings).toEqual([]);
+    expect(r.meta.assumptionsUsed).not.toContain("A3");
+    expect(renderHit(r)).not.toContain(A3_WARNING);
   });
   it("normal attacks and weapon swings carry no warning", () => {
     for (const choiceA of [{ attack: "2h R1 1" }, { attack: "Storm Blade - Wind Slash 1", hits: "blade" }]) {

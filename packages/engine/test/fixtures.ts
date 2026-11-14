@@ -243,6 +243,32 @@ export const RulesetFixtureSchema = z.object({
   rulings: z.object({ by: z.string(), date: z.string(), items: z.array(z.string()) }),
 });
 
+export const InGameFixtureSchema = z.object({
+  description: z.string(),
+  builds: z.record(z.string(), NeutralBuildSchema),
+  cases: z.array(
+    z.object({
+      id: z.string(),
+      status: z.enum(["in-game", "open"]),
+      testedOn: z.string(),
+      test: z.number().int().optional(),
+      attacker: z.string(),
+      defender: z.string(),
+      weapon: z.object({ weapon: z.string(), infusion: z.string(), upgrade: z.number().int(), ashOfWar: z.string().optional() }),
+      attack: z.string(),
+      hits: z.string(),
+      grip: z.enum(["1h", "2h"]).optional(),
+      buffs: z.array(z.string()).optional(),
+      /** In-game damage per landed hit, in hit order. */
+      expected: z.array(z.number().int()),
+      /** For status "open": what the engine gives now (documents the gap; not a target). */
+      engineNow: z.array(z.number().int()).optional(),
+      note: z.string().optional(),
+    }),
+  ),
+  evidence: z.record(z.string(), z.unknown()),
+});
+
 export function loadFixture<T extends z.ZodTypeAny>(relativePath: string, schema: T): z.infer<T> {
   const raw: unknown = JSON.parse(readFileSync(REPO_ROOT + relativePath, "utf8"));
   return schema.parse(raw);
@@ -256,4 +282,5 @@ export const goldenMisc = () => loadFixture("fixtures/golden/misc.json", MiscFix
 export const goldenFrames = () => loadFixture("fixtures/golden/frames.json", FramesFixtureSchema);
 export const goldenAttacks = () => loadFixture("fixtures/golden/attacks.json", AttacksFixtureSchema);
 export const goldenEvidencePve = () => loadFixture("fixtures/golden/evidence-pve.json", EvidencePveFixtureSchema);
+export const goldenInGame = () => loadFixture("fixtures/golden/in-game.json", InGameFixtureSchema);
 export const ladderRuleset = () => loadFixture("fixtures/ruleset/erpvp-ladder.json", RulesetFixtureSchema);

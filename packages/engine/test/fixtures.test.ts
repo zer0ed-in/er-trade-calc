@@ -12,6 +12,7 @@ describe("fixtures load and validate", () => {
     ["frames", fx.goldenFrames],
     ["attacks", fx.goldenAttacks],
     ["evidence-pve", fx.goldenEvidencePve],
+    ["in-game", fx.goldenInGame],
     ["ruleset", fx.ladderRuleset],
   ] as const)("%s", (_name, load) => {
     expect(() => load()).not.toThrow();

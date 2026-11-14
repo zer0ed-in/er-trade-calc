@@ -51,8 +51,9 @@ export interface TypeBreakdown {
 
 export interface SkillScalingDetail {
   table: number | null;
-  upgradeRate: number;
-  scaling: { stat: string; override: number; correctRate: number; curve: number }[];
+  /** Skill attack rate for the weapon's upgrade level (ReinforceParamWeapon +0x7C; 4.0 at max). */
+  skillRate: number;
+  scaling: { stat: string; coefficient: number; from: "table override" | "weapon"; curve: number }[];
   note: string;
 }
 
@@ -76,11 +77,17 @@ export interface HitDamage {
 }
 
 const STAT_FOR_REINFORCE = { strength: "str", dexterity: "dex", intelligence: "int", faith: "fth", arcane: "arc" } as const;
+const TC_ATTRIBUTE = { str: "str", dex: "dex", int: "int", fth: "fai", arc: "arc" } as const;
+type ReinforceStat = keyof typeof STAT_FOR_REINFORCE;
+const REINFORCE_STAT = Object.fromEntries(Object.entries(STAT_FOR_REINFORCE).map(([k, v]) => [v, k])) as Record<string, ReinforceStat>;
 
 /**
- * A3 (assumed): flat × U × (1 + Σ override × correctRate(upgrade) × curve(stat)).
- * U = the weapon's upgrade damage rate for the type; correctRate = reinforcement scaling for the stat; curve = weapon's
- * CalcCorrectGraph for that damage type at the attacker's stat (no 2H bonus). Stats/rates come from the hit's own table.
+ * A3 (confirmed in-game, Zer0 2026-11-14): flat × R × (1 + Σ coefficient × curve(stat)).
+ * R = ReinforceParamWeapon skill rate at the weapon's level (+0x7C; 4.0 at +25 / somber +10), the same for every infusion.
+ * Coefficients: the hit's overwrite table (overwriteAttackElementCorrectId) gives override × reinforcement scaling rate;
+ * a stat the table flags without an override, and every stat when the hit has no table (-1), uses the weapon's own
+ * upgraded scaling for the stats its AttackElementCorrect flags — the same rule as weapon AR (Tom Clark).
+ * curve = the weapon's CalcCorrectGraph for the damage type at the attacker's stat (no 2H bonus).
  */
 function skillFlat(data: GameData, attacker: Fighter, attack: ResolvedAttack, hit: HitDef): { perType: PerType; detail: SkillScalingDetail } {
   const { weapon } = resolveArWeapon(data, attack.slot);
@@ -89,29 +96,41 @@ function skillFlat(data: GameData, attacker: Fighter, attack: ResolvedAttack, hi
   const reinforcement = reinforceId === undefined ? undefined : data.raw.reinforcements[String(reinforceId)]?.[attack.slot.upgrade];
   if (!reinforcement) throw new EngineError(`No reinforcement data for ${weapon.name} +${attack.slot.upgrade}`, "missing-data");
   const table = hit.skillTable === null ? undefined : data.raw.correctionAttack[String(hit.skillTable)];
+  const weaponScaling = weapon.attributeScaling[attack.slot.upgrade] ?? {};
   const perType = {} as PerType;
-  const detail: SkillScalingDetail = { table: hit.skillTable, upgradeRate: 0, scaling: [], note: "" };
+  const detail: SkillScalingDetail = { table: hit.skillTable, skillRate: reinforcement.skillRate, scaling: [], note: "" };
   for (const t of DAMAGE_TYPES) {
     const flat = hit.flat[t];
     if (!flat) { perType[t] = 0; continue; }
-    const U = reinforcement.damage[t];
-    let sum = 0;
+    const typeIndex = DAMAGE_TYPES.indexOf(t) as 0 | 1 | 2 | 3 | 4;
+    const graph = weapon.calcCorrectGraphs[typeIndex];
+    // stat → [coefficient, where it came from]
+    const coefficients: [keyof typeof TC_ATTRIBUTE, number, "table override" | "weapon"][] = [];
     if (table) {
-      for (const [stat, override] of Object.entries(table.override[t] ?? {})) {
-        if (!table.correction[t]?.[stat]) continue;
-        const reinforceStat = stat as keyof typeof STAT_FOR_REINFORCE;
-        const correctRate = reinforcement.scaling[reinforceStat];
-        const graph = weapon.calcCorrectGraphs[DAMAGE_TYPES.indexOf(t) as 0 | 1 | 2 | 3 | 4];
-        const statValue = attacker.stats[STAT_FOR_REINFORCE[reinforceStat]];
-        const curve = graph[statValue] ?? 0;
-        sum += override * correctRate * curve;
-        if (!detail.scaling.some((s) => s.stat === STAT_FOR_REINFORCE[reinforceStat])) detail.scaling.push({ stat: STAT_FOR_REINFORCE[reinforceStat], override, correctRate, curve });
+      for (const [stat, flagged] of Object.entries(table.correction[t] ?? {})) {
+        if (!flagged) continue;
+        const short = STAT_FOR_REINFORCE[stat as ReinforceStat];
+        const override = table.override[t]?.[stat];
+        coefficients.push(override !== undefined
+          ? [short, override * reinforcement.scaling[stat as ReinforceStat], "table override"]
+          : [short, weaponScaling[TC_ATTRIBUTE[short]] ?? 0, "weapon"]);
+      }
+    } else {
+      for (const [attr, correct] of Object.entries(weapon.attackElementCorrect[typeIndex] ?? {})) {
+        if (!correct) continue;
+        const short = (Object.keys(TC_ATTRIBUTE) as (keyof typeof TC_ATTRIBUTE)[]).find((k) => TC_ATTRIBUTE[k] === attr)!;
+        coefficients.push([short, correct === true ? (weaponScaling[attr as never] ?? 0) : correct * reinforcement.scaling[REINFORCE_STAT[short]!], "weapon"]);
       }
     }
-    detail.upgradeRate = U;
-    perType[t] = flat * U * (1 + sum);
+    let sum = 0;
+    for (const [stat, coefficient, from] of coefficients) {
+      const curve = graph[attacker.stats[stat]] ?? 0;
+      sum += coefficient * curve;
+      if (!detail.scaling.some((s) => s.stat === stat)) detail.scaling.push({ stat, coefficient, from, curve });
+    }
+    perType[t] = flat * reinforcement.skillRate * (1 + sum);
   }
-  detail.note = table ? `scaled by table ${hit.skillTable} (A3)` : "no scaling table on this hit; flat × upgrade rate only (A3)";
+  detail.note = table ? `scaled by table ${hit.skillTable} (A3)` : "no overwrite table on this hit; weapon's own scaling (A3)";
   return { perType, detail };
 }
 

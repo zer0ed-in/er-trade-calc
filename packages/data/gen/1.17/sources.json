@@ -3,8 +3,8 @@
  "builtFrom": {
   "tc-regulation.json": "tom-clark/v1.17/regulation-vanilla-v1.17.js (MIT)",
   "correction-attack.json": "correction-attack-BvD1v8dy.js",
-  "reinforcements.json": "reinforcements-GFGYDjN6.js",
   "poise-breakpoints.json": "poise-breakpoints-r6ljVx1g.js",
+  "reinforcements.json": "reinforcements-GFGYDjN6.js + gen/regulation/1.17.3/reinforce-skill-rate.json (skillRate, regulation.bin 1.17.3)",
   "calc-correct-graphs.json": "notifications-BNvikVlY.js (CalcCorrectGraph table)",
   "classes.json": "notifications-BNvikVlY.js (starting classes)",
   "stat-tables.json": "notifications-BNvikVlY.js (calculateEquipLoad / calculateMaxFP / calculateMaxStamina tables)",

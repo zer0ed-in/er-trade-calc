@@ -7,7 +7,7 @@ import type { ResultMeta } from "../types.ts";
 const n = (x: number, d = 2) => (Number.isInteger(x) ? String(x) : x.toFixed(d));
 const pct = (x: number) => `${(100 * x).toFixed(3)}%`;
 
-/** Shown whenever a result uses A3, until the friend test confirms the projectile formula (Zer0, 2026-11-12). */
+/** Shown whenever a result uses A3 while it is unconfirmed (A3 confirmed in-game 2026-11-14, so it no longer shows). */
 export const A3_WARNING = "⚠ Projectile damage uses an unverified formula (A3)";
 
 export function resultMeta(patch: string, used: Iterable<AssumptionId>, notSupported: string[] = []): ResultMeta {
@@ -21,8 +21,8 @@ export function explainHit(h: HitDamage, label: string): string[] {
   out.push(`${label} — hit ${h.hit.index} (${h.hit.kind}, ${h.hit.physAttribute}, id ${h.hit.id})`);
   out.push(`  2H str bonus: ${h.twoHandBonusApplied ? `yes (str counts as ${h.effectiveStr})` : "no"} — ${h.hit.disable2H.source === "AtkParam" ? "AtkParam flag" : "unknown (no AtkParam row)"}${h.hit.disable2H.value ? ", disabled for this hit" : ""}`);
   if (h.skill) {
-    out.push(`  Skill flat damage: ${h.skill.note}; upgrade rate ×${n(h.skill.upgradeRate, 3)}`);
-    for (const s of h.skill.scaling) out.push(`    ${s.stat}: override ${s.override} × correct rate ${n(s.correctRate, 3)} × curve ${n(s.curve, 4)}`);
+    out.push(`  Skill flat damage: ${h.skill.note}; skill rate ×${n(h.skill.skillRate, 3)}`);
+    for (const s of h.skill.scaling) out.push(`    ${s.stat}: coefficient ${n(s.coefficient, 4)} (${s.from}) × curve ${n(s.curve, 4)}`);
   }
   for (const t of h.types) {
     out.push(`  ${t.type}:`);

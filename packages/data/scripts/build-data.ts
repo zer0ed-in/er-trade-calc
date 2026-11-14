@@ -49,11 +49,25 @@ write("tc-regulation.json", JSON.parse(readFileSync(TOM_CLARK_RAW, "utf8")), `to
 // ---- Planner data-only chunks ---------------------------------------------------------------------
 for (const [prefix, out] of [
   ["correction-attack", "correction-attack.json"],
-  ["reinforcements", "reinforcements.json"],
   ["poise-breakpoints", "poise-breakpoints.json"],
 ] as const) {
   const raw = readRaw(prefix);
   write(out, evalDefaultExportModule(raw.text), raw.file);
+}
+// Reinforcements: the planner's damage/scaling rates, plus the skill (flat) attack rate per level, which only regulation.bin has.
+{
+  const raw = readRaw("reinforcements");
+  const f = "gen/regulation/1.17.3/reinforce-skill-rate.json";
+  const skillRate = JSON.parse(readFileSync(join(DATA_ROOT, f), "utf8")) as Record<string, number[]>;
+  const table = evalDefaultExportModule(raw.text) as Record<string, { level: number }[]>;
+  for (const [typeId, levels] of Object.entries(table)) {
+    for (const lv of levels) {
+      const rate = skillRate[typeId]?.[lv.level];
+      if (rate === undefined) throw new Error(`${f}: no skill rate for reinforce type ${typeId} level ${lv.level}`);
+      Object.assign(lv, { skillRate: rate });
+    }
+  }
+  write("reinforcements.json", table, `${raw.file} + ${f} (skillRate, regulation.bin 1.17.3)`);
 }
 
 // ---- Planner main bundle: literals located by stable data keys / usage patterns --------------------

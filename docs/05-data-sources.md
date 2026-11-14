@@ -65,6 +65,10 @@ only the tables we use to `packages/data/gen/regulation/1.17.3/`, with a manifes
   all equal 1.17.3 on every same-named field, except Bullet row 20003309 (Piquebone Arrow): `atkId_Bullet` 0 in her 1.17 copy, 1 in 1.17.3.
 - New from the game file: full SpEffectParam (11,354 rows; gzipped) and the poise recovery values
   (GameSystemCommonParam.baseToughnessRecoverTime, PlayerCommonParam.toughnessRecoverCorrection).
+- Skill attack rate (`reinforce-skill-rate.json`, A3): ReinforceParamWeapon's last f32 (row offset 0x7C) per reinforce type and level,
+  1.0 at +0 and 4.0 at +25 / somber +10. There is no local paramdef for ReinforceParamWeapon, so the rows are read by offset; the script
+  fails unless the 10 damage/scaling columns at their offsets equal the planner's reinforcement copy on all 929 rows. `pnpm data:build`
+  merges it into `gen/1.17/reinforcements.json` as `skillRate`. The field's name isn't checked against a paramdef.
 
 ### F. Not used
 - **Enemy data** — not needed. The calculator is PvP only: two player builds.
