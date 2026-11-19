@@ -66,6 +66,15 @@ writeFileSync(join(OUT, "toughness-recover.json"), JSON.stringify({
 }, null, 1) + "\n");
 written["toughness-recover.json"] = "GameSystemCommonParam.baseToughnessRecoverTime, PlayerCommonParam.toughnessRecoverCorrection";
 
+// Status buildup drain on players, points per second (PlayerCommonParam.resistRecoverPoint_*_Player).
+writeFileSync(join(OUT, "status-recover.json"), JSON.stringify({
+  poison: playerCommon.resistRecoverPoint_Poision_Player, scarlet_rot: playerCommon.resistRecoverPoint_Desease_Player,
+  bleed: playerCommon.resistRecoverPoint_Blood_Player, frostbite: playerCommon.resistRecoverPoint_Freeze_Player,
+  sleep: playerCommon.resistRecoverPoint_Sleep_Player, madness: playerCommon.resistRecoverPoint_Madness_Player,
+  deathblight: playerCommon.resistRecoverPoint_Curse_Player,
+}, null, 1) + "\n");
+written["status-recover.json"] = "PlayerCommonParam.resistRecoverPoint_{Poision,Desease,Blood,Freeze,Sleep,Madness,Curse}_Player (points per second)";
+
 // Skill (flat) attack rate per upgrade level: ReinforceParamWeapon's last f32 (row offset 0x7C; 1.0 at +0, 4.0 at max).
 // No local paramdef for this table, so the row is read by offset. The layout is pinned by cross-checking every row the planner
 // uses against Emilia's copy: offsets 0x00–0x0C/0x58 = damage rates, 0x1C–0x28/0x60 = scaling rates. Any mismatch fails.

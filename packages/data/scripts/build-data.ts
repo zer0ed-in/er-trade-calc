@@ -8,6 +8,8 @@ import { gunzipSync } from "node:zlib";
 import { buildAshCompat, extractPlannerAshes } from "./lib/ash-compat.ts";
 import { hitResolver } from "./lib/hit-resolution.ts";
 
+// Affinity order of EquipParamWeapon infused rows (id + 100 × index).
+const INFUSION_NAMES = ["Standard", "Heavy", "Keen", "Quality", "Fire", "Flame Art", "Lightning", "Sacred", "Magic", "Cold", "Poison", "Blood", "Occult"];
 const KICK_BEHAVIOR_IDS = [300000085, 300000086];
 const KICK_ANIMATION = "a712_040000";
 import { evalDefaultExportModule, extractAssignedLiteral, extractLiteralContaining, identFromUsage } from "./lib/js-literal.ts";
@@ -106,8 +108,81 @@ const pickEffects = (rec: Record<string, { id: number; name: string; weight?: nu
     id, name, ...(weight !== undefined && { weight }), ...(category && { category }), effects: effects ?? [], ...(conflicts && { conflicts }), ...(requirements !== undefined && { requirements }),
   }));
 
-write("talismans.json", pickEffects(fromBundle('"Ritual Sword Talisman":{full_hex_id') as never), `${bundle.file} (talismans)`);
-write("goods.json", pickEffects(fromBundle('"Opaline Hardtear":{full_hex_id') as never), `${bundle.file} (tools/goods incl. greases, crystal tears)`);
+// ---- Attack categories an effect is limited to (game data) ---------------------------------------
+// A conditional effect such as Axe Talisman's lists the attack categories it boosts in its SpEffect row
+// (magicSubCategoryChange1–3); a hit qualifies when its AtkParam row's subCategory1–4 holds one of them. The planner's
+// condition names ("Charge Attack", "Roar Attack", "Unknown #129"…) are its labels for those category numbers, so each
+// labelled effect gets the numbers from its own item's SpEffect rows. Items with several category rows (Omen armour,
+// Messmer's Helm) are matched label → row by elimination; a label that can't be matched gets `categories: null` (not modelled).
+const spEffectRows = new Map((JSON.parse(gunzipSync(readFileSync(join(DATA_ROOT, "gen/regulation/1.17.3/SpEffectParam.json.gz"))).toString("utf8")) as Record<string, number>[]).map((r) => [r["Row ID"]!, r]));
+const SPEFFECT_LINKS = ["replaceSpEffectId", "cycleOccurrenceSpEffectId", "atkOccurrenceSpEffectId"] as const;
+/** Category-bearing SpEffect rows reachable from an item's effect ids. */
+function categoryRows(rootIds: number[]): number[][] {
+  const out: number[][] = [];
+  const seen = new Set<number>();
+  const stack = [...rootIds];
+  while (stack.length) {
+    const id = stack.pop()!;
+    const row = spEffectRows.get(id);
+    if (id <= 0 || seen.has(id) || !row) continue;
+    seen.add(id);
+    const cats = [row.magicSubCategoryChange1, row.magicSubCategoryChange2, row.magicSubCategoryChange3].filter((c): c is number => !!c);
+    if (cats.length) out.push(cats);
+    for (const k of SPEFFECT_LINKS) stack.push(row[k]!);
+  }
+  return out;
+}
+type EffectItem = { id: number; name: string; effects: (PlannerEffect & { conditions?: string[]; categories?: number[] | null })[] };
+const itemParam = (file: string) => new Map((JSON.parse(readRaw(file).text) as Record<string, number>[]).map((r) => [r["Row ID"]!, r]));
+const accessoryRows = itemParam("EquipParamAccessory.json"), goodsRows = itemParam("EquipParamGoods.json"), protectorRows = itemParam("EquipParamProtector.json");
+const itemSpEffects = {
+  talisman: (id: number) => [accessoryRows.get(id)?.refId ?? -1],
+  goods: (id: number) => [goodsRows.get(id)?.refId_default ?? -1],
+  armour: (id: number) => { const r = protectorRows.get(id); return r ? [r.residentSpEffectId!, r.residentSpEffectId2!, r.residentSpEffectId3!] : []; },
+};
+/** Adds `categories` to every effect whose conditions are attack-category labels. Throws on anything inconsistent. */
+function addEffectCategories(groups: { kind: keyof typeof itemSpEffects; items: EffectItem[] }[]): void {
+  // Effect objects can be shared between items in the planner bundle; copy them so each item gets its own categories.
+  for (const g of groups) for (const it of g.items) it.effects = it.effects.map((e) => ({ ...e }));
+  const rowsOf = new Map<EffectItem, number[][]>();
+  for (const g of groups) for (const it of g.items) rowsOf.set(it, categoryRows(itemSpEffects[g.kind](it.id)));
+  // Label → categories: intersection over single-row items carrying the label (else over all items carrying it).
+  const single = new Map<string, Set<number>>(), any = new Map<string, Set<number>>();
+  const meet = (m: Map<string, Set<number>>, label: string, cats: number[]) => m.set(label, m.has(label) ? new Set([...m.get(label)!].filter((c) => cats.includes(c))) : new Set(cats));
+  for (const [it, rows] of rowsOf) {
+    if (!rows.length) continue;
+    for (const e of it.effects) for (const label of e.conditions ?? []) {
+      meet(any, label, rows.flat());
+      if (rows.length === 1) meet(single, label, rows[0]!);
+    }
+  }
+  const labelCats = (label: string) => [...(single.get(label) ?? any.get(label) ?? [])];
+  for (const [it, rows] of rowsOf) {
+    if (!rows.length) continue;
+    // Several rows: match each label to its row. A label whose categories point to exactly one row owns it; owned rows are
+    // removed from the other labels' candidates, repeatedly. Labels still ambiguous stay unmatched.
+    const labelsHere = [...new Set(it.effects.flatMap((e) => e.conditions ?? []).filter((l) => labelCats(l).length))];
+    const candidates = new Map(labelsHere.map((l) => [l, rows.filter((r) => r.some((c) => labelCats(l).includes(c)))]));
+    const owner = new Map<string, number[]>();
+    for (let changed = true; changed; ) {
+      changed = false;
+      for (const [label, cands] of candidates) {
+        if (owner.has(label)) continue;
+        const free = cands.filter((r) => ![...owner.values()].includes(r));
+        if (free.length === 1) { owner.set(label, free[0]!); changed = true; }
+      }
+    }
+    for (const e of it.effects) {
+      const labels = (e.conditions ?? []).filter((l) => labelCats(l).length);
+      if (!labels.length) continue;
+      if (rows.length === 1) { e.categories = rows[0]!; continue; }
+      e.categories = labels.every((l) => owner.has(l)) ? [...new Set(labels.map((l) => owner.get(l)!))].flat() : null;
+    }
+  }
+}
+
+const talismanItems = pickEffects(fromBundle('"Ritual Sword Talisman":{full_hex_id') as never) as unknown as EffectItem[];
+const goodsItems = pickEffects(fromBundle('"Opaline Hardtear":{full_hex_id') as never) as unknown as EffectItem[];
 
 type PlannerProtector = { id: number; name: string; category: string; weight: number; absorptions: Record<string, number>; resistances: { immunity: number; robustness: number; focus: number; vitality: number; poise: number }; effects?: PlannerEffect[] };
 const plannerProtectors = fromBundle('"Verdigris Helm":{full_hex_id') as Record<string, PlannerProtector>;
@@ -178,7 +253,10 @@ const params = <T>(name: string) => {
         return pr ? { immunity: pr.immunity, robustness: pr.robustness, focus: pr.focus, vitality: pr.vitality } : null;
       })(),
     }));
-  write("armour.json", armour, `${file} (+ planner effects from ${bundle.file})`);
+  addEffectCategories([{ kind: "talisman", items: talismanItems }, { kind: "goods", items: goodsItems }, { kind: "armour", items: armour as unknown as EffectItem[] }]);
+  write("talismans.json", talismanItems, `${bundle.file} (talismans; effect categories from SpEffectParam via EquipParamAccessory.refId)`);
+  write("goods.json", goodsItems, `${bundle.file} (tools/goods incl. greases, crystal tears; effect categories from SpEffectParam via EquipParamGoods.refId_default)`);
+  write("armour.json", armour, `${file} (+ planner effects from ${bundle.file}; effect categories from SpEffectParam via residentSpEffectId1–3)`);
 }
 
 {
@@ -196,8 +274,13 @@ const params = <T>(name: string) => {
         id: w.id, name: w.name, category: w.category, weight: w.weight, isBuffable: w.is_buffable, allowAshOfWar: w.allow_ash_of_war,
         attackAttributes: w.attack_attributes, requirements: w.requirements, defaultSkillId: w.default_skill_id,
         somber: /somber/i.test(w.upgrade_material),
+        // Infusions whose weapon row allows greases (EquipParamWeapon.isEnhance, "can be enhanced with resin etc."; infused row = id + 100 × affinity).
+        greaseInfusions: INFUSION_NAMES.filter((_, affinity) => weaponRow.get(w.id + affinity * 100)?.isEnhance === 1),
         // saWeaponDamage: raw poise damage base (× the hit's atkSuperArmorCorrection/100). toughnessCorrectRate: weapon toughness for HA.
         saWeaponDamage: row.saWeaponDamage as number, toughnessCorrectRate: row.toughnessCorrectRate as number,
+        // The weapon's own physical damage types (EquipParamWeapon atkAttribute / atkAttribute2; 0 slash, 1 strike, 2 pierce, 3 standard).
+        // Hits whose AtkParam atkAttribute is 253 / 252 take the first / second.
+        atkAttribute: row.atkAttribute as number, atkAttribute2: row.atkAttribute2 as number,
       };
     }),
     `${file} + ${equipWeapon.file}`,
@@ -222,6 +305,12 @@ const params = <T>(name: string) => {
 {
   const f = "gen/regulation/1.17.3/toughness-recover.json";
   write("poise-recovery.json", JSON.parse(readFileSync(join(DATA_ROOT, f), "utf8")), `${f} (regulation.bin 1.17.3)`);
+}
+
+// Status buildup drain on players (points per second): only in regulation.bin (PlayerCommonParam).
+{
+  const f = "gen/regulation/1.17.3/status-recover.json";
+  write("status-drain.json", JSON.parse(readFileSync(join(DATA_ROOT, f), "utf8")), `${f} (regulation.bin 1.17.3)`);
 }
 
 // SpEffects actually used by the engine (counter frames #45). Kept as full rows.
@@ -331,6 +420,7 @@ const params = <T>(name: string) => {
             atkStam: flags.atkStam,
             dmgLevel: flags.dmgLevel,
             dmgLevel_vsPlayer: flags.dmgLevel_vsPlayer,
+            subCategories: [flags.subCategory1, flags.subCategory2, flags.subCategory3, flags.subCategory4].filter((c) => !!c),
           }
         : null,
     };
@@ -365,6 +455,7 @@ const params = <T>(name: string) => {
           id: resolved.atkParamId, via: resolved.via, isAddBaseAtk: a.isAddBaseAtk, overwriteAttackElementCorrectId: a.overwriteAttackElementCorrectId,
           isDisableBothHandsAtkBonus: a.isDisableBothHandsAtkBonus, finalDamageRateId: a.finalDamageRateId, atkAttribute: a.atkAttribute,
           atkSuperArmor: a.atkSuperArmor, atkSuperArmorCorrection: a.atkSuperArmorCorrection, atkStam: a.atkStam, dmgLevel: a.dmgLevel, dmgLevel_vsPlayer: a.dmgLevel_vsPlayer,
+          subCategories: [a.subCategory1, a.subCategory2, a.subCategory3, a.subCategory4].filter((c) => !!c),
         },
       };
     }

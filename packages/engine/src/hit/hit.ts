@@ -8,7 +8,7 @@ import { resolveArWeapon } from "../ar/weapon-ar.ts";
 import type { HitDef, ResolvedAttack } from "../attacks/attacks.ts";
 import { attackerModifiers, counterHitEffects, defenderModifiers, type HitContext, type IgnoredEffect } from "../effects/effects.ts";
 import type { Fighter } from "../duel/fighter.ts";
-import { GREASE_INFUSIONS, type GameData } from "../game-data.ts";
+import { type GameData } from "../game-data.ts";
 import { DAMAGE_TYPES, EngineError, NotSupportedError, type DamageType, type NegationType, type PerType } from "../types.ts";
 
 /** Planner `adjustForDefense` factor (docs/03 rule 2): share of attack kept after defence, by ratio r = A/D. */
@@ -156,9 +156,7 @@ export function computeHit(data: GameData, attacker: Fighter, attack: ResolvedAt
   const ctx: HitContext = {
     attackerHpFraction: situation.attackerHpFraction,
     defenderHpFraction: situation.defenderHpFraction,
-    twoHanded: attack.twoHanded,
-    isSkill: attack.isSkill,
-    attackName: attack.name,
+    hitCategories: hit.row.atkParam?.subCategories ?? null,
     counterHit: situation.counterHit,
     physAttribute: hit.physAttribute,
   };
@@ -168,8 +166,8 @@ export function computeHit(data: GameData, attacker: Fighter, attack: ResolvedAt
     else if (meta && !meta.isBuffable) throw new EngineError(`${attack.slot.weapon} can't be buffed (weapon data), so ${[...new Set(attacker.buffs.map((b) => b.source))].join(", ")} can't apply.`, "illegal-buff");
     else {
       const greases = [...new Set(attacker.buffs.map((b) => b.source))].filter((name) => data.goods.get(name)?.category === "Grease");
-      if (greases.length && !GREASE_INFUSIONS.includes(attack.slot.infusion)) {
-        throw new EngineError(`Greases only go on Standard, Heavy or Keen weapons; ${attack.slot.weapon} is ${attack.slot.infusion}, so ${greases.join(", ")} can't apply.`, "illegal-buff");
+      if (greases.length && meta && !meta.greaseInfusions.includes(attack.slot.infusion)) {
+        throw new EngineError(`${attack.slot.infusion} ${attack.slot.weapon} can't take greases (game data: EquipParamWeapon.isEnhance), so ${greases.join(", ")} can't apply.`, "illegal-buff");
       }
       buffApplied = true;
     }

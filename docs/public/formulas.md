@@ -75,8 +75,9 @@ does the same and warns you.
 
 Greases and buffs like Sacred Blade or Lightning Slash **add a fixed amount** to one damage type.
 
-Greases only go on **Standard, Heavy or Keen** weapons (checked in-game); the calculator refuses a grease on any other infusion.
+Greases only go where the game's weapon data allows them (each infused weapon has a "can be enhanced with resin" flag). For normal weapons that is **Standard, Heavy, Keen and Quality**; the calculator refuses a grease anywhere else.
 Weapon-art buffs like Sacred Blade aren't greases and aren't limited this way.
+A weapon holds **one** such buff at a time: greases, Sacred Blade, Flaming Strike and Lightning Slash share one effect category in the game data, so a new one replaces the old. The calculator refuses two at once.
 
 $$
 AR'_t = AR_t + \underbrace{F_t}_{\text{flat buff}}
@@ -370,7 +371,7 @@ For Heavy Knight, that's simply **RL = (sum of all eight stats) − 79**.
   reaches your resistance (robustness for bleed and frost), which comes from your level, a stat, your armour, and resistance effects on
   your gear at their own value (Divine Bird Helm: Focus −45. The planner doubles this to −90; in-game the helm lowers Focus by 43,
   because its +3 str / +4 dex raise your level-based focus by about 2).
-  Proc damage (planner formulas): bleed 15% max HP + 100, frostbite 10% max HP + 30, madness 15% max HP + 100. Buildup decay isn't modelled.
+  Proc damage (planner formulas): bleed 15% max HP + 100, frostbite 10% max HP + 30, madness 15% max HP + 100. Between repeated attacks, buildup drains at the game's rate for players (per second: bleed 7, frostbite 5, sleep 5, poison 4, scarlet rot 4, madness 4, deathblight 3) over a time you give, because recovery frames aren't in our data. Drain within one attack and any resistance change after a proc aren't modelled.
 
 ---
 

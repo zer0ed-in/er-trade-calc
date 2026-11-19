@@ -1,5 +1,8 @@
 // Effects from talismans, tears, armour, buffs and conditions → numeric modifiers.
 // Source of values: the planner's curated effect tables (in the one-time copy; docs/09 Q9), except A9 (Lightning Slash, wiki).
+// Attack-category conditions ("Charge Attack", "Roar Attack", "Two-Handed"…) are decided by game data, as the game does: the effect's
+// item SpEffect lists categories (magicSubCategoryChange1–3, `categories` in the data) and the hit's AtkParam_Pc row has its own
+// (subCategory1–4); the effect applies when they share one. Never by attack name.
 // Planner conventions ported: PvP uses value_pvp when present (`value_pvp || value`); multiplicative "…Absorption" v → damage ×(2 − v).
 import { ASSUMPTIONS, type AssumptionId } from "../assumptions.ts";
 import { requireFrom, type GameData } from "../game-data.ts";
@@ -20,9 +23,8 @@ export interface HitContext {
   /** Attacker's / defender's current HP as a fraction of max (1 = full). */
   attackerHpFraction: number;
   defenderHpFraction: number;
-  twoHanded: boolean;
-  isSkill: boolean;
-  attackName: string;
+  /** The hit's attack categories (AtkParam_Pc subCategory1–4); null when the hit has no AtkParam row. */
+  hitCategories: number[] | null;
   /** Defender is inside their own counter-hit window (#45) when this hit lands. */
   counterHit: boolean;
   physAttribute: string;
@@ -81,28 +83,29 @@ const NEGATION_TYPES = Object.keys(ABSORPTION_ATTRS) as NegationType[];
 
 export const pvpValue = (e: PlannerEffect) => e.value_pvp || e.value;
 
-/** Evaluate one planner condition. `undefined` = not modelled → effect ignored and reported. */
+/** Evaluate one non-category planner condition. `undefined` = not modelled → effect ignored and reported. */
 function conditionHolds(cond: string, ctx: HitContext, side: "attacker" | "defender"): boolean | undefined {
   const hp = side === "attacker" ? ctx.attackerHpFraction : ctx.defenderHpFraction;
-  const name = ctx.attackName;
   const hpBelow = cond.match(/^HP below (\d+)%$/);
   if (hpBelow) return hp < Number(hpBelow[1]) / 100;
   switch (cond) {
     case "HP above 100%": return hp >= 1;
-    case "Two-Handed": return ctx.twoHanded;
-    case "Skill Attack": return ctx.isSkill;
+    // Spear Talisman: its SpEffect (320600) has no category list; it is gated by stateInfo 197 and raises physical attack only. Modelled with the counter-hit window (A4).
     case "Enhance Thrusting Counter Attacks": return ctx.counterHit && ctx.physAttribute === "pierce";
-    case "Jump Attack": return /Jumping/.test(name);
-    case "Running Attack": return /Running/.test(name);
-    case "Guard Counter Attack": return /Guard Counter/.test(name);
-    case "Charge Attack":
-    case "Charged Attack": return /Charged/.test(name) && !/Feint/.test(name);
-    case "Rolling or Backstep": return /Rolling|Backstep/.test(name);
-    case "Roar Attack": return /Barbaric Roar|War Cry/.test(name) && /R2/.test(name);
-    case "Horseback Attack": return /Mounted/.test(name);
     default: return undefined;
   }
 }
+
+/** Category condition: the hit's categories meet the effect's. `undefined` = can't be decided (reason given). */
+function categoryHolds(effect: PlannerEffect, ctx: HitContext): boolean | string {
+  if (effect.categories === null) return "its attack categories can't be matched to its game effect rows";
+  if (ctx.hitCategories === null) return "the hit has no AtkParam row, so its attack categories are unknown";
+  return effect.categories!.some((c) => ctx.hitCategories!.includes(c));
+}
+
+/** A condition label that names one of the effect's categories (every label except the non-category ones handled above). */
+const NON_CATEGORY = /^(HP (below \d+%|above 100%)|Enhance Thrusting Counter Attacks)$/;
+const isCategoryLabel = (label: string) => !NON_CATEGORY.test(label);
 
 function evaluate(effects: SourcedEffect[], ctx: HitContext, side: "attacker" | "defender", relevant: (attr: string) => boolean) {
   const active: SourcedEffect[] = [];
@@ -110,7 +113,14 @@ function evaluate(effects: SourcedEffect[], ctx: HitContext, side: "attacker" | 
   for (const se of effects) {
     if (!relevant(se.effect.attribute)) continue;
     let ok = true;
+    // Category labels are the planner's names for the effect's categories: one category check replaces them all.
+    if (se.effect.categories !== undefined) {
+      const r = categoryHolds(se.effect, ctx);
+      if (typeof r === "string") { ignored.push({ source: se.source, attribute: se.effect.attribute, reason: r }); continue; }
+      if (!r) continue;
+    }
     for (const c of se.effect.conditions ?? []) {
+      if (se.effect.categories !== undefined && isCategoryLabel(c)) continue;
       const r = conditionHolds(c, ctx, side);
       if (r === undefined) {
         ignored.push({ source: se.source, attribute: se.effect.attribute, reason: `condition "${c}" is not modelled` });
@@ -234,6 +244,19 @@ export function buffEffects(data: GameData, name: string): SourcedEffect[] {
   throw new EngineError(`Unknown buff or grease: "${name}".`, "unknown-name");
 }
 
+/**
+ * Weapon enchants: greases and the weapon-art / spell buffs that add a flat element or buildup to the weapon. In the game
+ * they all share SpEffect category 162 (all 31 greases; Sacred Blade 821, Flaming Strike 1776, Lightning Slash 1676), so a
+ * new one replaces the old: a weapon holds one at a time. Multiplicative self-buffs (Determination, War Cry) are other categories.
+ */
+export function isWeaponEnchant(data: GameData, name: string): boolean {
+  if (name === "Lightning Slash") return true;
+  if (data.goods.get(name)?.category === "Grease") return true;
+  const art = data.weaponArts.get(name);
+  const fx = art?.effects.filter((e) => e.attribute.endsWith("Attack Power") || e.attribute.endsWith("Buildup")) ?? [];
+  return fx.length > 0 && fx.every((e) => e.model === "additive");
+}
+
 /** All effect sources active for a build under a scenario (talismans/tears per scenario rules, armour always). */
 export function buildEffects(data: GameData, build: Build, opts: ScenarioOptions): { attackerSide: SourcedEffect[]; defenderSide: SourcedEffect[]; buffs: SourcedEffect[] } {
   const useEquipment = opts.scenario !== "base"; // docs/03: base = armour only, no talismans/buffs/tears
@@ -251,6 +274,10 @@ export function buildEffects(data: GameData, build: Build, opts: ScenarioOptions
   for (const slot of ["head", "body", "arms", "legs"] as const) {
     const n = build.armour[slot];
     if (n) for (const effect of requireFrom(data.armour, n, "armour").effects) all.push({ source: n, kind: "armour", effect, cite: "planner protector table" });
+  }
+  const enchants = [...new Set(buffNames.filter((b) => isWeaponEnchant(data, b)))];
+  if (enchants.length > 1) {
+    throw new EngineError(`A weapon holds one weapon buff at a time (game data: they share SpEffect category 162, so the newer replaces the older); got ${enchants.join(", ")}.`, "illegal-buff");
   }
   const buffs = buffNames.flatMap((b) => buffEffects(data, b));
   return { attackerSide: all, defenderSide: all, buffs };

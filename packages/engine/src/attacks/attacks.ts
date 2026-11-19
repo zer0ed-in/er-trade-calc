@@ -166,6 +166,25 @@ export function listAttacks(data: GameData, build: Build): AttackListing[] {
   return out;
 }
 
+const ATK_ATTRIBUTE: Record<number, PhysAttribute> = { 0: "slash", 1: "strike", 2: "pierce", 3: "standard" };
+
+/**
+ * Physical damage type from game data: the hit's AtkParam atkAttribute (0–3), or for 253 / 252 the weapon's own
+ * atkAttribute / atkAttribute2 (EquipParamWeapon). The planner's per-row value is only used when the hit has no AtkParam row:
+ * it was computed for one weapon, so on shared ash rows it can be another weapon's type.
+ */
+function physAttributeOf(data: GameData, row: HitRow, weaponName: string): PhysAttribute {
+  const code = row.atkParam?.atkAttribute;
+  if (code === undefined) return toPhysAttribute(row.physAttribute);
+  if (code in ATK_ATTRIBUTE) return ATK_ATTRIBUTE[code]!;
+  const meta = data.weaponMeta.get(weaponName);
+  if ((code === 253 || code === 252) && meta) {
+    const own = ATK_ATTRIBUTE[code === 253 ? meta.atkAttribute : meta.atkAttribute2];
+    if (own) return own;
+  }
+  throw new EngineError(`Hit ${row.atkParam!.id}: physical damage type code ${code} on ${weaponName} isn't known.`, "missing-data");
+}
+
 function toPhysAttribute(s: string): PhysAttribute {
   const v = s.toLowerCase();
   if (v === "slash" || v === "strike" || v === "pierce" || v === "standard") return v;
@@ -212,7 +231,7 @@ function hitDef(data: GameData, id: string, index: number, weaponName: string): 
     index, id, row, mv, flat,
     kind: hasMv && hasFlat ? "mixed" : hasFlat ? "flat" : "weapon",
     finalRate: Object.fromEntries(DAMAGE_TYPES.map((t) => [t, row[ROW_RATES[t]] as number])) as PerType,
-    physAttribute: toPhysAttribute(row.physAttribute),
+    physAttribute: physAttributeOf(data, row, weaponName),
     poiseDamage: poise.value,
     poise: poise.detail,
     damageLevel: level,

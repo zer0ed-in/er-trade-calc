@@ -137,3 +137,20 @@ describe("ladder legality", () => {
     expect(checkLegality(rules, { data, fighter: low }).runeLevel).toEqual({ required: 125, actual: 115, ok: false });
   });
 });
+
+describe("status buildup drains between attacks at the game's player rate (PlayerCommonParam)", () => {
+  it("data: player drain rates per second from regulation.bin", () => {
+    expect(data.raw.statusDrain).toEqual({ poison: 4, scarlet_rot: 4, bleed: 7, frostbite: 5, sleep: 5, madness: 4, deathblight: 3 });
+  });
+  it("a long gap between attacks drains bleed, so procs come later or not at all; no gap = no drain", () => {
+    const blood = { ...dex, stats: { ...dex.stats, arc: 45 }, rightHand: [{ weapon: "Uchigatana", infusion: "Blood", upgrade: 25 }] };
+    const a = prepareFighter(data, blood, base);
+    const atk = resolveAttack(data, blood, { attack: "1h R1 1" });
+    const procs = (secondsBetweenAttacks?: number) =>
+      hitsToKill(data, a, atk, B, { statusProcs: true, secondsBetweenAttacks }).steps.filter((s) => s.event?.includes("bleed proc")).length;
+    expect(procs(0)).toBeGreaterThan(0);
+    expect(procs(undefined)).toBe(procs(0));
+    expect(procs(30)).toBe(0); // 30 s × 7/s drains more than any one hit builds
+    expect(procs(1)).toBeLessThanOrEqual(procs(0));
+  });
+});

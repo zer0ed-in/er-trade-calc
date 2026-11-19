@@ -22,7 +22,8 @@ damage level (stagger), status buildup per type, PvP final damage rate per type,
 - Attacker side: talisman/effect attack multipliers (e.g. Ritual Sword at full HP), counter-hit bonus (effect #45: defender takes ×1.15 pierce damage during counter frames) **[D]**, applicability details **[A4]**, PvP final rate per attack **[D]**.
 - Defender side: armour negation for the hit's physical attribute, plus other negations (Ritual Shield at full HP, Opaline Hardtear PvP value).
 - **All talisman/tear/effect values come from the effect data (SpEffect), not from wiki numbers.** Wiki numbers are only cross-checks.
-- Conditions are evaluated against duel state (HP %, "is skill", "is counter-hit window", etc.).
+- Conditions are evaluated against duel state (HP %, counter-hit window, etc.).
+- **Attack-type conditions are game data, never attack names.** A conditional effect (Axe Talisman, Roar Medallion, Two-Handed Sword Talisman, Claw Talisman…) lists attack categories in its SpEffect row (`magicSubCategoryChange1–3`); each hit's AtkParam_Pc row has its own (`subCategory1–4`). The effect applies when they share one. Examples: Retaliatory Crossed-Tree (121) boosts crouch attacks; Axe Talisman (100) skips charged feints; Two-Handed Sword Talisman (120) never boosts dual-blade weapons' attacks.
 
 ### Input 4 — the defender
 Defence per type (RL + stat), negation per type, HP, poise.
