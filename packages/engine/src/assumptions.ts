@@ -20,9 +20,10 @@ export type AssumptionId = "A1" | "A2" | "A3" | "A4" | "A5" | "A6" | "A7" | "A8"
 export type CounterHitModel = "pierce-negation-minus-points" | "pierce-damage-multiplier";
 
 export type SkillScalingFormula =
-  // flat × baseAtkRate(upgrade) × (1 + Σ overrideRate × correctRate(upgrade) × curve(stat))
-  | "flat-x-upgrade-x-override-table"
-  | "unknown";
+  // flat × skillRate(upgrade) × (1 + Σ coefficient × curve(stat)); coefficient = table override × correctRate(upgrade), else the weapon's own scaling
+  | "flat-x-skill-rate-x-override-or-weapon-scaling"
+  // pre-2026-11-14 model: flat × damage rate(upgrade) × (1 + Σ override × correctRate × curve) — under-predicted 1.1–7× in-game
+  | "flat-x-upgrade-x-override-table";
 
 export const ASSUMPTIONS = {
   A1: {
@@ -49,15 +50,15 @@ export const ASSUMPTIONS = {
     id: "A3",
     question: "How does skill/projectile flat damage scale?",
     choice: {
-      formula: "flat-x-upgrade-x-override-table" as SkillScalingFormula,
+      formula: "flat-x-skill-rate-x-override-or-weapon-scaling" as SkillScalingFormula,
       twoHandBonus: false,
     },
-    alternative: { formula: "unknown" as SkillScalingFormula, twoHandBonus: false },
-    status: "assumed",
+    alternative: { formula: "flat-x-upgrade-x-override-table" as SkillScalingFormula, twoHandBonus: false },
+    status: "confirmed",
     reason:
-      "Param-based Steam guide + data. Which stat drives each projectile matches the override tables (PvE evidence); exact numbers unverified. `isAddBaseAtk` meaning not pinned down (Q8).",
-    source: "fixtures/golden/evidence-pve.json",
-    tests: ["packages/engine/test/attacks.test.ts"],
+      "In-game (Zer0 and a test partner, PS5, 2026-11-14): flat × ReinforceParamWeapon skill rate (+0x7C, 4.0 at +25 and somber +10, every infusion) × (1 + Σ coefficient × curve). Coefficient = the hit's overwrite-table override × reinforcement scaling rate; with no table (-1) the weapon's own scaling. Reproduces 20 of 24 recorded flat-damage numbers exactly (Storm Blade, Ice Spear, Sacred Blade, Glintblade Phalanx, Beast's Roar, Lightning Slash stomp, Loretta's Slash, Ground Slam, Eruption, Kick). Open: Beast's Roar dex hit 1 is 1 high; Glintblade on a dex build is 1–2 high per blade; the Lightning Slash bolt uses the planner's child row 301600849 (60) where the game hits with AtkParam 300000371 (120, via Bullet 2090 → 2092), which with this formula gives the in-game 381 (docs/09 Q16). A table stat flagged without an override uses the weapon's scaling by the AR rule; not checked in-game.",
+    source: "fixtures/golden/in-game.json; reports of the 2026-11-14 test (regulation.bin 1.17.3 for the rate)",
+    tests: ["packages/engine/test/in-game.test.ts", "packages/engine/test/attacks.test.ts"],
   },
   A4: {
     id: "A4",
@@ -159,10 +160,10 @@ export const ASSUMPTIONS = {
     question: "Hyper-armour minimum poise when ToughnessParam.isNonEffectiveCorrectionForMin is 0",
     choice: { minScaledByWeaponToughness: true },
     alternative: { minScaledByWeaponToughness: false },
-    status: "assumed",
+    status: "confirmed",
     reason:
-      "The paramdef says the flag stops the toughness correction multiplier from applying to minToughness; it doesn't say which multiplier. We read it as the weapon-toughness factor (toughnessCorrectRate × correctionRate), the same one the window's weapon part uses. Rows with the flag set (e.g. Storm Stomp, Kick) use minToughness × 10 unscaled and don't depend on this.",
-    source: "paramdef description (Smithbox ToughnessParam), 2026-11-13",
+      "The HA minimum is a floor, not added on top (in-game, Zer0 2026-11-14: Kick staggers a 133-poise target; Beast's Roar staggers the test partner mid-Kick). Kick's row has the flag set, so that test checks floor vs additive; the scaling read for flag-0 rows (minToughness × toughnessCorrectRate × correctionRate) comes from the paramdef description and Zer0 marked A13 confirmed on this evidence.",
+    source: "in-game, Zer0 2026-11-14; paramdef description (Smithbox ToughnessParam), 2026-11-13",
     tests: ["packages/engine/test/poise.test.ts"],
   },
 } as const satisfies Record<AssumptionId, Assumption<unknown>>;

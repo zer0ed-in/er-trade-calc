@@ -40,7 +40,11 @@ function bubbletear(defender: Fighter): { threshold: number; heal: number } | nu
  * The attacker repeats `attack` into `defender` from the defender's starting HP. The attacker's own HP stays at its
  * starting fraction (the defender isn't hitting back in this count), so e.g. Ritual Sword stays on if the attacker starts at full HP.
  */
-export function hitsToKill(data: GameData, attacker: Fighter, attack: ResolvedAttack, defender: Fighter, opts: { counterHit?: boolean; statusProcs?: boolean } = {}): HitsToKill {
+/**
+ * `secondsBetweenAttacks`: time from one repetition's last hit to the next one's first, for status drain. Our frame data has
+ * no recovery frames, so this is the caller's input; without it no drain is applied between repetitions (noted).
+ */
+export function hitsToKill(data: GameData, attacker: Fighter, attack: ResolvedAttack, defender: Fighter, opts: { counterHit?: boolean; statusProcs?: boolean; secondsBetweenAttacks?: number } = {}): HitsToKill {
   const startHp = Math.trunc(defender.maxHp * defender.startHpFraction);
   let hp = startHp;
   const steps: HtkStep[] = [];
@@ -49,11 +53,20 @@ export function hitsToKill(data: GameData, attacker: Fighter, attack: ResolvedAt
   const tear = bubbletear(defender);
   let tearUsed = false;
   let hitCount = 0;
-  // Optional status procs: buildup adds up per hit; a proc deals its direct damage once the defender's
-  // resistance is reached, then buildup restarts. No decay and no post-proc resistance change are modelled (noted).
+  // Optional status procs: buildup adds up per hit; a proc deals its direct damage once the defender's resistance is
+  // reached, then buildup restarts. Between repetitions buildup drains at the game's player rate (data.raw.statusDrain,
+  // points/s) for `secondsBetweenAttacks`. Not modelled (noted): drain between hits of one attack (frames → seconds isn't
+  // in our data) and any change to resistance after a proc.
   const buildup: Record<string, number> = {};
   const res = opts.statusProcs ? resistances(data, defender.stats, defender.armour, defender.effects) : null;
   for (let n = 1; n <= MAX_ATTACKS; n++) {
+    if (res && n > 1 && opts.secondsBetweenAttacks) {
+      for (const status of Object.keys(buildup)) {
+        const rate = data.raw.statusDrain[status];
+        if (rate === undefined) throw new Error(`no status drain rate for ${status}`);
+        buildup[status] = Math.max(0, buildup[status]! - rate * opts.secondsBetweenAttacks);
+      }
+    }
     for (const h of attack.hits) {
       const r = computeHit(data, attacker, attack, h, defender, {
         attackerHpFraction: attacker.startHpFraction,
@@ -82,7 +95,11 @@ export function hitsToKill(data: GameData, attacker: Fighter, attack: ResolvedAt
           step.damage += proc.damage;
           step.hpAfter = hp;
           step.event = [step.event, `${status} proc ${proc.damage}`].filter(Boolean).join("; ");
-          if (!notes.some((x) => x.startsWith("status procs"))) notes.push("status procs: buildup has no decay and no post-proc resistance change (not modelled)");
+          if (!notes.some((x) => x.startsWith("status procs"))) {
+            notes.push(opts.secondsBetweenAttacks
+              ? `status procs: buildup drains between attacks at the game's player rate over ${opts.secondsBetweenAttacks} s; not within one attack, and no resistance change after a proc`
+              : "status procs: no drain applied (time between attacks not given; recovery frames aren't in our data) and no resistance change after a proc");
+          }
         }
       }
       if (hp <= 0) {

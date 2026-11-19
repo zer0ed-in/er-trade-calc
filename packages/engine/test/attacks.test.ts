@@ -136,3 +136,25 @@ describe("status buildup", () => {
     expect(bleed.procDamage).toBe(Math.trunc(1900 * 0.15) + 100);
   });
 });
+
+describe("physical damage type comes from game data (AtkParam atkAttribute; 253/252 → the weapon's own types)", () => {
+  it("ash hits that use the weapon's type take this weapon's, not the planner row's (computed for another weapon)", () => {
+    const weapon = "Celebrant's Sickle"; // EquipParamWeapon atkAttribute 0 (slash)
+    expect(data.weaponMeta.get(weapon)!.atkAttribute).toBe(0);
+    let checked = 0, plannerDiffered = 0;
+    for (const e of data.movesets.get(weapon)!.filter((a) => a.type === "WeaponSkill")) {
+      let atk;
+      try {
+        atk = resolveAttack(data, mk({ vig: 60, mnd: 20, end: 40, str: 30, dex: 30, int: 30, fth: 30, arc: 30 }, { weapon, infusion: "Standard", upgrade: 25, ashOfWar: e.categories[0] }), { attack: e.name });
+      } catch { continue; } // ambiguous names / illegal pairs are covered elsewhere
+      for (const h of atk.hits) {
+        if (h.row.atkParam?.atkAttribute !== 253) continue;
+        expect(h.physAttribute, `${e.name} ${h.id}`).toBe("slash");
+        checked++;
+        if (h.row.physAttribute.toLowerCase() !== "slash") plannerDiffered++;
+      }
+    }
+    expect(checked).toBeGreaterThan(10);
+    expect(plannerDiffered).toBeGreaterThan(0);
+  });
+});

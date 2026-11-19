@@ -16,9 +16,6 @@ import {
 // Infusion name → affinity id in Tom Clark's data (0 Standard … 12 Occult; unique/somber weapons are -1).
 export const INFUSIONS = ["Standard", "Heavy", "Keen", "Quality", "Fire", "Flame Art", "Lightning", "Sacred", "Magic", "Cold", "Poison", "Blood", "Occult"] as const;
 
-// Greases only go on Standard, Heavy or Keen weapons (Zer0, in-game, 2026-11-12; docs/09 Q12). Not in the data copy.
-// Weapon-art buffs (Sacred Blade, Lightning Slash…) are not greases and are not limited by this.
-export const GREASE_INFUSIONS: readonly string[] = ["Standard", "Heavy", "Keen"];
 
 // Shared extra hit rows (behaviors 500 and 500000000–500000008). They ride along with a real hit on normal attacks of ~30 weapons
 // (Lance, Treespear, Great Club…). 500000000–500000008 resolve to AtkParam 1703001–1703009: MV 200–460, no stamina cost,

@@ -1,0 +1,892 @@
+{
+ "description": "In-game damage (patch 1.17, PS5, Zer0 and a test partner, 2026-11-14). Builds = Zer0's test-str/dex/faith/int planner exports in neutral form (same armour, no talismans, buffs or tears unless stated). Each hit done twice with identical readings. status in-game = engine must match exactly; status open = engine differs (engineNow), documented in docs/09.",
+ "builds": {
+  "test-str": {
+   "id": "test-str",
+   "class": "Heavy Knight",
+   "rl": 125,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 57,
+    "dex": 15,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Standard",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Divine Bird Helm",
+    "body": "Verdigris Armor",
+    "arms": "Steel Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "test-dex": {
+   "id": "test-dex",
+   "class": "Heavy Knight",
+   "rl": 125,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 15,
+    "dex": 57,
+    "int": 7,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Standard",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Divine Bird Helm",
+    "body": "Verdigris Armor",
+    "arms": "Steel Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "test-faith": {
+   "id": "test-faith",
+   "class": "Heavy Knight",
+   "rl": 125,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 15,
+    "dex": 15,
+    "int": 7,
+    "fth": 50,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Standard",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Divine Bird Helm",
+    "body": "Verdigris Armor",
+    "arms": "Steel Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  },
+  "test-int": {
+   "id": "test-int",
+   "class": "Heavy Knight",
+   "rl": 125,
+   "stats": {
+    "vig": 60,
+    "mnd": 8,
+    "end": 40,
+    "str": 15,
+    "dex": 15,
+    "int": 49,
+    "fth": 8,
+    "arc": 9
+   },
+   "rightHand": [
+    {
+     "weapon": "Shamshir",
+     "infusion": "Standard",
+     "upgrade": 25
+    }
+   ],
+   "armour": {
+    "head": "Divine Bird Helm",
+    "body": "Verdigris Armor",
+    "arms": "Steel Gauntlets",
+    "legs": "Verdigris Greaves"
+   },
+   "talismans": [],
+   "buffs": []
+  }
+ },
+ "cases": [
+  {
+   "id": "ig-str-dex-heavy-shamshir-1h-r1",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-str",
+   "defender": "test-dex",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Heavy",
+    "upgrade": 25
+   },
+   "attack": "1h R1 1",
+   "hits": "all",
+   "expected": [
+    244
+   ]
+  },
+  {
+   "id": "ig-str-dex-heavy-shamshir-2h-r1",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-str",
+   "defender": "test-dex",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Heavy",
+    "upgrade": 25
+   },
+   "attack": "2h R1 1",
+   "hits": "all",
+   "expected": [
+    292
+   ]
+  },
+  {
+   "id": "ig-str-dex-heavy-shamshir-backstab-2h",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-str",
+   "defender": "test-dex",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Heavy",
+    "upgrade": 25
+   },
+   "attack": "Backstab",
+   "hits": "all",
+   "expected": [
+    669
+   ],
+   "grip": "2h",
+   "note": "Done two-handed: no 2H bonus in-game (AtkParam flag); the planner applies it"
+  },
+  {
+   "id": "ig-str-dex-heavy-shamshir-riposte-2h",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-str",
+   "defender": "test-dex",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Heavy",
+    "upgrade": 25
+   },
+   "attack": "Riposte",
+   "hits": "all",
+   "expected": [
+    1004
+   ],
+   "grip": "2h",
+   "note": "Done two-handed: no 2H bonus in-game (AtkParam flag); the planner applies it"
+  },
+  {
+   "id": "ig-dex-str-keen-shamshir-1h-r1",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-dex",
+   "defender": "test-str",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Keen",
+    "upgrade": 25
+   },
+   "attack": "1h R1 1",
+   "hits": "all",
+   "expected": [
+    241
+   ]
+  },
+  {
+   "id": "ig-str-dex-heavy-lance-2h-r1",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-str",
+   "defender": "test-dex",
+   "weapon": {
+    "weapon": "Lance",
+    "infusion": "Heavy",
+    "upgrade": 25
+   },
+   "attack": "2h R1 1",
+   "hits": "all",
+   "expected": [
+    372
+   ],
+   "note": "One number in-game: the extra Lance hit row in the planner is not a real hit"
+  },
+  {
+   "id": "ig-dex-str-keen-estoc-1h-r1",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-dex",
+   "defender": "test-str",
+   "weapon": {
+    "weapon": "Estoc",
+    "infusion": "Keen",
+    "upgrade": 25
+   },
+   "attack": "1h R1 1",
+   "hits": "all",
+   "expected": [
+    224
+   ]
+  },
+  {
+   "id": "ig-str-faith-heavy-shamshir-1h-r1",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-str",
+   "defender": "test-faith",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Heavy",
+    "upgrade": 25
+   },
+   "attack": "1h R1 1",
+   "hits": "all",
+   "expected": [
+    244
+   ]
+  },
+  {
+   "id": "ig-faith-str-sacred-shamshir-1h-r1",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-faith",
+   "defender": "test-str",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Sacred",
+    "upgrade": 25
+   },
+   "attack": "1h R1 1",
+   "hits": "all",
+   "expected": [
+    283
+   ]
+  },
+  {
+   "id": "ig-faith-int-sacred-shamshir-1h-r1",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-faith",
+   "defender": "test-int",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Sacred",
+    "upgrade": 25
+   },
+   "attack": "1h R1 1",
+   "hits": "all",
+   "expected": [
+    292
+   ]
+  },
+  {
+   "id": "ig-int-faith-magic-shamshir-1h-r1",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-int",
+   "defender": "test-faith",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Magic",
+    "upgrade": 25
+   },
+   "attack": "1h R1 1",
+   "hits": "all",
+   "expected": [
+    286
+   ]
+  },
+  {
+   "id": "ig-int-dex-magic-shamshir-1h-r1",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-int",
+   "defender": "test-dex",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Magic",
+    "upgrade": 25
+   },
+   "attack": "1h R1 1",
+   "hits": "all",
+   "expected": [
+    286
+   ]
+  },
+  {
+   "id": "ig-dex-int-keen-shamshir-1h-r1",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-dex",
+   "defender": "test-int",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Keen",
+    "upgrade": 25
+   },
+   "attack": "1h R1 1",
+   "hits": "all",
+   "expected": [
+    252
+   ]
+  },
+  {
+   "id": "ig-dex-int-keen-shamshir-1h-r1-lightning-slash",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-dex",
+   "defender": "test-int",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Keen",
+    "upgrade": 25,
+    "ashOfWar": "Lightning Slash"
+   },
+   "attack": "1h R1 1",
+   "hits": "all",
+   "expected": [
+    266
+   ],
+   "buffs": [
+    "Lightning Slash"
+   ],
+   "note": "Lightning Slash buff active: +85 lightning (A9)"
+  },
+  {
+   "id": "ig-a3-storm-blade-str-dex",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-str",
+   "defender": "test-dex",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Heavy",
+    "upgrade": 25,
+    "ashOfWar": "Storm Blade"
+   },
+   "attack": "Storm Blade - Wind Slash 1",
+   "hits": "flat",
+   "expected": [
+    346
+   ],
+   "test": 4,
+   "note": "Wind only"
+  },
+  {
+   "id": "ig-a3-storm-blade-dex-str",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-dex",
+   "defender": "test-str",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Keen",
+    "upgrade": 25,
+    "ashOfWar": "Storm Blade"
+   },
+   "attack": "Storm Blade - Wind Slash 1",
+   "hits": "flat",
+   "expected": [
+    354
+   ],
+   "test": 5,
+   "note": "Wind only"
+  },
+  {
+   "id": "ig-a3-storm-blade-int-faith",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-int",
+   "defender": "test-faith",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Magic",
+    "upgrade": 25,
+    "ashOfWar": "Storm Blade"
+   },
+   "attack": "Storm Blade - Wind Slash 1",
+   "hits": "flat",
+   "expected": [
+    278
+   ],
+   "test": 29,
+   "note": "Wind only"
+  },
+  {
+   "id": "ig-a3-ice-spear-faith-int",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-faith",
+   "defender": "test-int",
+   "weapon": {
+    "weapon": "Banished Knight's Halberd",
+    "infusion": "Cold",
+    "upgrade": 25,
+    "ashOfWar": "Ice Spear"
+   },
+   "attack": "Ice Throw",
+   "hits": "flat",
+   "expected": [
+    549
+   ],
+   "test": 31,
+   "note": "Projectile only"
+  },
+  {
+   "id": "ig-a3-ice-spear-int-dex",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-int",
+   "defender": "test-dex",
+   "weapon": {
+    "weapon": "Banished Knight's Halberd",
+    "infusion": "Cold",
+    "upgrade": 25,
+    "ashOfWar": "Ice Spear"
+   },
+   "attack": "Ice Throw",
+   "hits": "flat",
+   "expected": [
+    669
+   ],
+   "test": 36,
+   "note": "Projectile only"
+  },
+  {
+   "id": "ig-a3-ice-spear-dex-int",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-dex",
+   "defender": "test-int",
+   "weapon": {
+    "weapon": "Banished Knight's Halberd",
+    "infusion": "Cold",
+    "upgrade": 25,
+    "ashOfWar": "Ice Spear"
+   },
+   "attack": "Ice Throw",
+   "hits": "flat",
+   "expected": [
+    626
+   ],
+   "test": 37,
+   "note": "Projectile only"
+  },
+  {
+   "id": "ig-a3-sacred-blade-faith-str",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-faith",
+   "defender": "test-str",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Sacred",
+    "upgrade": 25,
+    "ashOfWar": "Sacred Blade"
+   },
+   "attack": "Unblockable Blade - Slash (Sacred Blade), Mists of Slumber - Mist Throw (Sacred Blade), Poisonous Mist - Mist Spray (Sacred Blade), Chilling Mist - Mist Spray (Sacred Blade), Sacred Blade - Slash",
+   "hits": "flat",
+   "expected": [
+    570
+   ],
+   "test": 23,
+   "note": "Wave only"
+  },
+  {
+   "id": "ig-a3-sacred-blade-dex-int",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-dex",
+   "defender": "test-int",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Keen",
+    "upgrade": 25,
+    "ashOfWar": "Sacred Blade"
+   },
+   "attack": "Unblockable Blade - Slash (Sacred Blade), Mists of Slumber - Mist Throw (Sacred Blade), Poisonous Mist - Mist Spray (Sacred Blade), Chilling Mist - Mist Spray (Sacred Blade), Sacred Blade - Slash",
+   "hits": "flat",
+   "expected": [
+    383
+   ],
+   "test": 43,
+   "note": "Wave only"
+  },
+  {
+   "id": "ig-a3-glintblade-int-dex",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-int",
+   "defender": "test-dex",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Magic",
+    "upgrade": 25,
+    "ashOfWar": "Glintblade Phalanx"
+   },
+   "attack": "Glintstone Phalanx - Cast",
+   "hits": "1",
+   "expected": [
+    121
+   ],
+   "test": 34,
+   "note": "121 per blade"
+  },
+  {
+   "id": "ig-a3-kick-str-dex",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-str",
+   "defender": "test-dex",
+   "weapon": {
+    "weapon": "Estoc",
+    "infusion": "Heavy",
+    "upgrade": 25,
+    "ashOfWar": "Kick"
+   },
+   "attack": "Kick",
+   "hits": "1",
+   "expected": [
+    21
+   ],
+   "test": 8,
+   "note": "One number in-game: one Kick hit lands (both rows compute 21)"
+  },
+  {
+   "id": "ig-a3-beasts-roar-dex-str-far",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-dex",
+   "defender": "test-str",
+   "weapon": {
+    "weapon": "Wakizashi",
+    "infusion": "Keen",
+    "upgrade": 25,
+    "ashOfWar": "Beast's Roar"
+   },
+   "attack": "Beast's Roar - Roar",
+   "hits": "2",
+   "expected": [
+    196
+   ],
+   "test": 6,
+   "note": "Far only: the outer shockwave"
+  },
+  {
+   "id": "ig-a3-beasts-roar-str-dex",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-str",
+   "defender": "test-dex",
+   "weapon": {
+    "weapon": "Wakizashi",
+    "infusion": "Heavy",
+    "upgrade": 25,
+    "ashOfWar": "Beast's Roar"
+   },
+   "attack": "Beast's Roar - Roar",
+   "hits": "1",
+   "expected": [
+    179
+   ],
+   "test": 7,
+   "note": "Point blank: one number (the two hitboxes share a hit list, only the inner one lands)"
+  },
+  {
+   "id": "ig-a3-beasts-roar-str-dex-far",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-str",
+   "defender": "test-dex",
+   "weapon": {
+    "weapon": "Wakizashi",
+    "infusion": "Heavy",
+    "upgrade": 25,
+    "ashOfWar": "Beast's Roar"
+   },
+   "attack": "Beast's Roar - Roar",
+   "hits": "2",
+   "expected": [
+    121
+   ],
+   "test": 7,
+   "note": "Far only: the outer shockwave"
+  },
+  {
+   "id": "ig-a3-lightning-slash-stomp-dex-int",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-dex",
+   "defender": "test-int",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Keen",
+    "upgrade": 25,
+    "ashOfWar": "Lightning Slash"
+   },
+   "attack": "Lightning Slash - Sword Slash",
+   "hits": "1",
+   "expected": [
+    94
+   ],
+   "test": 38,
+   "note": "Point-blank stomp; its row has no scaling table, so the weapon's own scaling applies"
+  },
+  {
+   "id": "ig-a3-lorettas-slash-int-faith",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-int",
+   "defender": "test-faith",
+   "weapon": {
+    "weapon": "Banished Knight's Halberd",
+    "infusion": "Magic",
+    "upgrade": 25,
+    "ashOfWar": "Loretta's Slash"
+   },
+   "attack": "Loretta's Slash - Leaping Slash (Loretta's Slash), Loretta's Slash - Heavy Leaping Slash, Loretta's Slash - Ash of War",
+   "hits": "all",
+   "expected": [
+    186,
+    553
+   ],
+   "test": 30,
+   "note": "Running total 186 → 739; the magic flat parts have no table, so the weapon's own scaling applies"
+  },
+  {
+   "id": "ig-a3-ground-slam-str-faith",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-str",
+   "defender": "test-faith",
+   "weapon": {
+    "weapon": "Knight's Greatsword",
+    "infusion": "Heavy",
+    "upgrade": 25,
+    "ashOfWar": "Ground Slam"
+   },
+   "attack": "Ground Slam - Landing, Ground Slam [2] - Landing",
+   "hits": "1",
+   "expected": [
+    784
+   ],
+   "test": 25,
+   "note": "One number in-game: the slam (hit 1)"
+  },
+  {
+   "id": "ig-a3-eruption-str-faith",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-str",
+   "defender": "test-faith",
+   "weapon": {
+    "weapon": "Knight's Greatsword",
+    "infusion": "Fire",
+    "upgrade": 25,
+    "ashOfWar": "Eruption"
+   },
+   "attack": "Eruption - Slam and Pullback",
+   "hits": "1,2,3",
+   "expected": [
+    300,
+    367,
+    67
+   ],
+   "test": 26,
+   "note": "Slam 300 → 667, then lava +67 per tick"
+  },
+  {
+   "id": "ig-a3-black-flame-tornado-faith-str-hit1",
+   "status": "in-game",
+   "testedOn": "2026-11-14",
+   "attacker": "test-faith",
+   "defender": "test-str",
+   "weapon": {
+    "weapon": "Banished Knight's Halberd",
+    "infusion": "Flame Art",
+    "upgrade": 25,
+    "ashOfWar": "Black Flame Tornado"
+   },
+   "attack": "Black Flame Tornado - Tornado",
+   "hits": "1",
+   "expected": [
+    82
+   ],
+   "test": 24,
+   "note": "First hit (weapon swing)"
+  },
+  {
+   "id": "ig-open-beasts-roar-dex-str",
+   "status": "open",
+   "testedOn": "2026-11-14",
+   "attacker": "test-dex",
+   "defender": "test-str",
+   "weapon": {
+    "weapon": "Wakizashi",
+    "infusion": "Keen",
+    "upgrade": 25,
+    "ashOfWar": "Beast's Roar"
+   },
+   "attack": "Beast's Roar - Roar",
+   "hits": "1",
+   "expected": [
+    293
+   ],
+   "test": 6,
+   "note": "Point blank. 1 high (294.44 unrounded)",
+   "engineNow": [
+    294
+   ]
+  },
+  {
+   "id": "ig-open-glintblade-dex-int",
+   "status": "open",
+   "testedOn": "2026-11-14",
+   "attacker": "test-dex",
+   "defender": "test-int",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Keen",
+    "upgrade": 25,
+    "ashOfWar": "Glintblade Phalanx"
+   },
+   "attack": "Glintstone Phalanx - Cast",
+   "hits": "1",
+   "expected": [
+    56
+   ],
+   "test": 35,
+   "note": "Blades alternate 56, 113 (113 = two blades in one number). Engine 57.92 per blade; the int-7 scaling term is the only difference from an exact fit",
+   "engineNow": [
+    57
+   ]
+  },
+  {
+   "id": "ig-open-lightning-slash-swing-dex-int",
+   "status": "open",
+   "testedOn": "2026-11-14",
+   "attacker": "test-dex",
+   "defender": "test-int",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Keen",
+    "upgrade": 25,
+    "ashOfWar": "Lightning Slash"
+   },
+   "attack": "Lightning Slash - Sword Slash",
+   "hits": "2",
+   "expected": [
+    399
+   ],
+   "test": 38,
+   "note": "Weapon swing (MV 170), not an A3 hit. 11 low",
+   "engineNow": [
+    388
+   ]
+  },
+  {
+   "id": "ig-open-lightning-slash-bolt-dex-int",
+   "status": "open",
+   "testedOn": "2026-11-14",
+   "attacker": "test-dex",
+   "defender": "test-int",
+   "weapon": {
+    "weapon": "Shamshir",
+    "infusion": "Keen",
+    "upgrade": 25,
+    "ashOfWar": "Lightning Slash"
+   },
+   "attack": "Lightning Slash - Sword Slash",
+   "hits": "3",
+   "expected": [
+    381
+   ],
+   "test": 38,
+   "note": "The planner lists child row 301600849 (60 lightning). The game hits with AtkParam 300000371 (120 lightning, behavior 300000371 → Bullet 2090 → 2091 → 2092); with the A3 formula that row gives 381. Needs a hit-resolution change (docs/09 Q16)",
+   "engineNow": [
+    159
+   ]
+  },
+  {
+   "id": "ig-open-black-flame-tornado-faith-str-ticks",
+   "status": "open",
+   "testedOn": "2026-11-14",
+   "attacker": "test-faith",
+   "defender": "test-str",
+   "weapon": {
+    "weapon": "Banished Knight's Halberd",
+    "infusion": "Flame Art",
+    "upgrade": 25,
+    "ashOfWar": "Black Flame Tornado"
+   },
+   "attack": "Black Flame Tornado - Tornado",
+   "hits": "2",
+   "expected": [
+    155
+   ],
+   "test": 24,
+   "note": "Running total 237, 239, 241, 243, 245, 401, 406, 411, 561, 577, 593 … ~1601: big ticks +155/+156/+150, small ticks +2/+5/+16 (likely black flame's % HP burn, not modelled). Engine tornado hit 153, launch hit 508. Not enough to pin which hits land",
+   "engineNow": [
+    153
+   ]
+  }
+ ],
+ "evidence": {
+  "counters": {
+   "note": "A4 (not modelled yet). dex Keen Estoc 1h R1 → str, base 224. Counter into Knight's Greatsword 2H R2 windup.",
+   "readings": [
+    {
+     "counter": 258,
+     "times": 1,
+     "ratio": 1.152
+    },
+    {
+     "counter": 239,
+     "times": 2,
+     "ratio": 1.067
+    },
+    {
+     "counter": 274,
+     "times": 2,
+     "spearTalisman": true,
+     "ratio": "≈ 239 × 1.15"
+    }
+   ],
+   "engineNow": {
+    "plannerModel": 275
+   }
+  },
+  "notInCalc": [
+   "Great Katana: Keen Sword Dance (dex → str) running total 374 → 748 → 1192 (374, 374, 444); Keen Piercing Fang (dex → str) 660; Heavy Spinning Slash (str → dex) 250 → 373 → 637; Heavy Wild Strikes (str → dex) R1 follow-up 292 → 739, R2 follow-up 292 → 388 → 980 (small middle hit, may be missed on the R1 follow-up)",
+   "Reverse-Bladed Sword (dex → int): Cold Spinning Slash 184 → 267 → 483; Cold Beast's Roar 264 both, 176 far",
+   "Frost: dex Cold Hand Axe off-hand L1 → str, frostbite on the 4th hit (twice). Status buildup isn't reported yet"
+  ],
+  "confirmedRules": [
+   "A13: the HA minimum is a floor, not added: Kick staggers a 133-poise target; Beast's Roar staggers the test partner mid-Kick",
+   "A8: backstab and riposte get no 2H bonus in-game (AtkParam flag), the planner applies it",
+   "A9: Lightning Slash buff +85 lightning (266 vs 252 on the 1h R1)"
+  ],
+  "stillToTest": [
+   "Lightning-infused Shamshir 1h R1 with and without Lightning Slash"
+  ]
+ }
+}

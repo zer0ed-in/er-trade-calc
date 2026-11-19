@@ -18,8 +18,8 @@ Builds are exports from Emilia's ER Build Planner ("Export and save"). Commands,
 - Numbers checked against the planner are golden tests that must pass exactly (`fixtures/golden/`).
 - Anything that depends on an unconfirmed assumption says so: every result lists the assumption IDs it used (`ertc assumptions`).
 - Where the data can't answer (e.g. a skill hit with no scaling data), the result is **unknown**, never a guess.
-- ⚠ **Projectile damage uses an unverified formula (A3).** Skill projectiles (Storm Blade's wind, Sacred Blade's wave…) use a formula
-  that hasn't been checked in-game yet; every result that uses it says so at the top. Normal attacks and weapon swings are planner-checked.
+- Skill projectile damage (Storm Blade's wind, Sacred Blade's wave…, assumption A3) is checked in-game (2026-11-14); the few hits
+  that are still off are listed in `docs/public/formulas.md` section 3. Normal attacks and weapon swings are planner- and in-game-checked.
 
 ## Credits
 Data: Emilia (sovietspaceship) — [ER Build Planner](https://er-build-planner.nyasu.business) & [Frame Data Explorer](https://er-frame-data.nyasu.business).

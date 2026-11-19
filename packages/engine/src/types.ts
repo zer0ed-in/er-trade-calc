@@ -49,6 +49,8 @@ export interface PlannerEffect {
   model: string;
   type?: string;
   conditions?: string[];
+  /** Attack categories the effect is limited to (game data: its item's SpEffect magicSubCategoryChange1–3). null = couldn't be matched. */
+  categories?: number[] | null;
   duration?: number;
   activation?: string;
 }
@@ -93,6 +95,8 @@ export interface WeaponMeta {
   category: string;
   weight: number;
   isBuffable: boolean;
+  /** Infusions this weapon can take greases on (EquipParamWeapon.isEnhance of the infused row). */
+  greaseInfusions: string[];
   allowAshOfWar: boolean;
   attackAttributes: string[];
   requirements: Record<string, number>;
@@ -102,6 +106,9 @@ export interface WeaponMeta {
   saWeaponDamage: number;
   /** EquipParamWeapon: weapon toughness used in hyper armour (× 1000 = display poise, as the planner shows it). */
   toughnessCorrectRate: number;
+  /** EquipParamWeapon physical damage types (0 slash, 1 strike, 2 pierce, 3 standard): hits with atkAttribute 253 use the first, 252 the second. */
+  atkAttribute: number;
+  atkAttribute2: number;
 }
 
 /** ToughnessParam row (hyper-armour window strength). Field names from the 1.17.3 paramdef. */
@@ -165,6 +172,8 @@ export interface HitRow {
     dmgLevel: number;
     /** Damage level against players (raw; not used by the engine yet, see docs/09). */
     dmgLevel_vsPlayer: number;
+    /** Attack categories (subCategory1–4, non-zero). Talisman/armour effects limited to categories match against these. */
+    subCategories: number[];
   };
 }
 
@@ -186,6 +195,8 @@ export type CorrectionAttackRow = {
 export interface ReinforcementLevel {
   level: number;
   damage: Record<DamageType | "stamina", number>;
+  /** Skill (flat) attack rate: ReinforceParamWeapon f32 at row offset 0x7C (regulation.bin; 1.0 at +0, 4.0 at max). */
+  skillRate: number;
   scaling: Record<"strength" | "dexterity" | "intelligence" | "faith" | "arcane", number>;
 }
 
@@ -210,6 +221,8 @@ export interface RawGameData {
   toughness: Record<string, ToughnessRow>;
   /** GameSystemCommonParam.baseToughnessRecoverTime (s) and PlayerCommonParam.toughnessRecoverCorrection (regulation.bin). */
   poiseRecovery: { baseToughnessRecoverTime: number; toughnessRecoverCorrection: number };
+  /** Status buildup drain on players, points per second (PlayerCommonParam.resistRecoverPoint_*_Player, regulation.bin). */
+  statusDrain: Record<string, number>;
   plannerRulesets: unknown;
   /** Which ash fits which weapon and infusion (gen ash-compat.json, planner rule verified against EquipParamGem). */
   ashCompat: AshCompat;

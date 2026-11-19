@@ -7,8 +7,8 @@ it says so. Where we're still relying on an assumption, it says that too.
 > **Status: draft.** Sections marked ✅ are checked against Emilia's ER Build Planner. Sections marked ⚠️ depend on an assumption
 > (listed at the end) that hasn't been confirmed yet.
 
-> ⚠ **Projectile damage uses an unverified formula (A3).** Skill projectiles (wind, waves, shockwaves) are calculated with the formula in
-> section 3, which hasn't been checked in-game yet. Every result that uses it shows this warning. Normal attacks and weapon swings don't.
+> **Skill projectile damage (A3) is confirmed in-game** (2026-11-14): the formula in section 3 reproduced 20 of 24 recorded
+> projectile and skill-flat numbers exactly; the rest are listed there.
 
 ---
 
@@ -75,8 +75,9 @@ does the same and warns you.
 
 Greases and buffs like Sacred Blade or Lightning Slash **add a fixed amount** to one damage type.
 
-Greases only go on **Standard, Heavy or Keen** weapons (checked in-game); the calculator refuses a grease on any other infusion.
+Greases only go where the game's weapon data allows them (each infused weapon has a "can be enhanced with resin" flag). For normal weapons that is **Standard, Heavy, Keen and Quality**; the calculator refuses a grease anywhere else.
 Weapon-art buffs like Sacred Blade aren't greases and aren't limited this way.
+A weapon holds **one** such buff at a time: greases, Sacred Blade, Flaming Strike and Lightning Slash share one effect category in the game data, so a new one replaces the old. The calculator refuses two at once.
 
 $$
 AR'_t = AR_t + \underbrace{F_t}_{\text{flat buff}}
@@ -84,20 +85,28 @@ $$
 
 The same +90 holy is worth very different amounts depending on the weapon (section 9 shows why).
 
-### Skill projectiles ⚠️ (assumption A3)
-> ⚠ Projectile damage uses an unverified formula (A3). An in-game test against a friend's build is planned to confirm or correct it.
-
-Some skill hits (Storm Blade's wind, Beast's Roar's shockwave, Sacred Blade's golden wave) carry their own fixed damage. We use:
+### Skill projectiles ✅ (A3, checked in-game)
+Some skill hits (Storm Blade's wind, Beast's Roar's shockwave, Sacred Blade's golden wave, Ice Spear) carry their own fixed damage:
 
 $$
 P_t \;=\; \underbrace{F_t}_{\text{skill's own damage}} \times
-\underbrace{U}_{\text{upgrade multiplier}} \times
-\Big(1 + \sum_{\text{stat}} \underbrace{o_{\text{stat}}}_{\text{skill's rate}} \times \underbrace{c_{\text{stat}}}_{\text{upgrade scaling}} \times \underbrace{C(\text{stat})}_{\text{stat curve}}\Big)
+\underbrace{R}_{\text{skill rate}} \times
+\Big(1 + \sum_{\text{stat}} \underbrace{k_{\text{stat}}}_{\text{scaling}} \times \underbrace{C(\text{stat})}_{\text{stat curve}}\Big)
 $$
 
-- **Skill's rate** — fixed per skill (e.g. Storm Blade wind: 0.15 str + 0.15 dex).
-- **Upgrade multiplier / upgrade scaling** — from the weapon's upgrade table at +25 (e.g. damage ×2.45, str scaling ×1.5).
+- **Skill rate R** — from the weapon's upgrade table: 1.0 at +0, **4.0 at +25 (and somber +10)**, the same for every infusion.
+  It is a separate column from the weapon's own damage rate (×2.35 for Heavy), which is why infusion barely changes a projectile.
+- **Scaling k** — if the skill hit names its own scaling table, k = the table's rate × the weapon's upgrade scaling for that stat
+  (Storm Blade wind: 0.15 str + 0.15 dex; e.g. Heavy at +25: 0.15 × 2.8 for str, 0.15 × 0 for dex). If it names none, the weapon's
+  own scaling is used, exactly as for its attack rating (Lightning Slash's stomp, the magic part of Loretta's Slash, Eruption's fire).
 - **Stat curve** — the weapon's curve for that damage type at your stat. Two-handing never counts here.
+
+Example (str build, Heavy Shamshir +25, Storm Blade wind into the dex build): 150 × 4 × (1 + 0.15 × 2.8 × 0.75) = 789 attack → **346** in-game.
+
+Checked in-game against the four test builds (Zer0 and a test partner, PS5, patch 1.17): Storm Blade, Ice Spear, Sacred Blade, Glintblade
+Phalanx, Beast's Roar, Lightning Slash's stomp, Loretta's Slash, Ground Slam, Eruption and Kick match exactly. Still off:
+Beast's Roar on the dex build (hit 1: 294 vs 293), Glintblade Phalanx on the dex build (57 vs 56 per blade), and Lightning Slash's
+bolt (the calculator uses the 60-lightning child row; the game hits with the 120-lightning row, which gives the in-game 381).
 
 Which stats count is decided by the skill itself, not your infusion:
 
@@ -108,8 +117,6 @@ Which stats count is decided by the skill itself, not your infusion:
 | Ground Slam | strength only |
 | Sacred Blade wave | faith only |
 | Lightning Slash bolt | dexterity only |
-
-The stat list is confirmed from the game data; the exact formula above is still an assumption.
 
 Each skill hit's fixed damage and scaling table come from the attack row found the same way (behavior → attack row, or behavior →
 projectile → attack row). Example: Ice Spear's projectile is 230 magic with the dex + int table. A hit that still has no row would be shown
@@ -364,7 +371,7 @@ For Heavy Knight, that's simply **RL = (sum of all eight stats) − 79**.
   reaches your resistance (robustness for bleed and frost), which comes from your level, a stat, your armour, and resistance effects on
   your gear at their own value (Divine Bird Helm: Focus −45. The planner doubles this to −90; in-game the helm lowers Focus by 43,
   because its +3 str / +4 dex raise your level-based focus by about 2).
-  Proc damage (planner formulas): bleed 15% max HP + 100, frostbite 10% max HP + 30, madness 15% max HP + 100. Buildup decay isn't modelled.
+  Proc damage (planner formulas): bleed 15% max HP + 100, frostbite 10% max HP + 30, madness 15% max HP + 100. Between repeated attacks, buildup drains at the game's rate for players (per second: bleed 7, frostbite 5, sleep 5, poison 4, scarlet rot 4, madness 4, deathblight 3) over a time you give, because recovery frames aren't in our data. Drain within one attack and any resistance change after a proc aren't modelled.
 
 ---
 
@@ -372,14 +379,14 @@ For Heavy Knight, that's simply **RL = (sum of all eight stats) − 79**.
 
 | ID | What we assume | Why it matters |
 |---|---|---|
-| A3 | Exact skill projectile damage formula (section 3) — which stats count is confirmed | Storm Blade wind, Beast's Roar, Sacred Blade wave |
 | A4 | Counter hits: −15 points of pierce negation (planner) vs pierce ×1.15 (game effect); Spear Talisman stacking | Pierce counter hits only |
 | A12 | Poise goes back to full after a break | Poise across several hits |
-| A13 | Hyper-armour minimum is scaled by weapon toughness when the row doesn't say otherwise | HA windows of normal attacks |
 
 Confirmed since the first draft: frame numbers already include animation speed changes; the planner's "+1" on startup is a counting setting;
 defence parts are rounded down separately (section 5); the ladder poise maximum of 133 (section 11); two-handing per hit,
-Lightning Slash's value, and Kick's damage and poise now come from the game data (regulation.bin 1.17.3). Kick's timing isn't in the
+Lightning Slash's value, and Kick's damage and poise now come from the game data (regulation.bin 1.17.3). Checked in-game (2026-11-14):
+the skill projectile formula (A3, section 3), the hyper-armour minimum being a floor rather than an addition (A13), Lightning Slash's +85,
+and backstabs/ripostes getting no two-handed bonus. Kick's timing isn't in the
 animation data, so trades with Kick still aren't judged.
 
 Values for talismans, tears and greases come from Emilia's planner tables (her data copy doesn't include the raw effect rows).
