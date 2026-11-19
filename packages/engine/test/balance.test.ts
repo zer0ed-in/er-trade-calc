@@ -80,12 +80,12 @@ describe("attack classifier", () => {
 
 describe("evaluator, Mirror view, search and report", () => {
   const ev = new BalanceEvaluator(data, ex.variants, { ...DEFAULT_BALANCE_CONFIG, rlMin: 115, rlMax: 130, rlStep: 5 });
-  it("bulk table: every classified attack of every variant into every body, Kick = 1 damage (A10)", () => {
+  it("bulk table: every classified attack of every variant into every body; Kick damage from its game rows (A10 removed)", () => {
     const { summary, rows } = bulkTable(ev);
     expect(summary.rows).toBe(rows.length);
     expect(summary.defenders).toBe(2);
     const kick = rows.find((r) => String(r.variant).startsWith("dex/estoc") && r.attack === "Kick");
-    expect(kick?.damage).toBe(1);
+    expect(kick?.damage).toBeGreaterThan(1); // AtkParam 301100800/801 (A3 flat path), no longer the A10 placeholder of 1
   });
   it("Mirror at RL 125 compares the same setup across bodies, normal and ash separately; reference 2H R1 1 numbers hold", () => {
     const ms = ev.mirror(NO_RULES, true);
@@ -107,9 +107,7 @@ describe("evaluator, Mirror view, search and report", () => {
     const report = balanceReport({ ev, doc, expansion: ex, result, bulk: bulkTable(ev).summary, date: "2026-11-13", setupsPath: "inline", tablePath: "t.json" });
     expect(report).toMatch(/## Verdict/);
     expect(report).toMatch(/No balanced set exists|balance every Mirror matchup/);
-    expect(report).toMatch(/Not supported right now: Kick stagger/);
     expect(report).toMatch(/Not supported right now: FP budget/);
-    expect(report).toMatch(/A10/);
     expect(report).toMatch(/Data: Emilia/);
   });
 });

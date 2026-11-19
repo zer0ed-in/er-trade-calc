@@ -509,5 +509,5 @@ export function searchBalance(ev: BalanceEvaluator, views?: View[]): SearchResul
 }
 
 /** Assumptions a balance result must name loudly (docs/10 report). */
-export const LOUD_ASSUMPTIONS: AssumptionId[] = ["A3", "A4", "A8", "A10"];
+export const LOUD_ASSUMPTIONS: AssumptionId[] = ["A3", "A4", "A8"]; // A10 removed 2026-11-13 (Kick from game data)
 export const assumptionLine = (id: AssumptionId) => `${id} — ${ASSUMPTIONS[id].question} (${ASSUMPTIONS[id].status})`;

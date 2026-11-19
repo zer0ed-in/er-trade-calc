@@ -3,7 +3,6 @@
 import { resolveAttack } from "../attacks/attacks.ts";
 import { prepareFighter, type Fighter } from "../duel/fighter.ts";
 import type { GameData } from "../game-data.ts";
-import { GREASE_INFUSIONS } from "../game-data.ts";
 import { checkLegality, type LadderRuleset } from "../legality/ladder.ts";
 import { mainDamageStat } from "../sweep/sweep.ts";
 import { EngineError, type Build, type StatKey, type Stats, type WeaponSlot } from "../types.ts";
@@ -148,7 +147,7 @@ export function expandSetups(data: GameData, ruleset: LadderRuleset, doc: Setups
             if (!mainCarriers.length) { skipped.push({ where, kind: "game", reason: `${setup.main.weapon}: no legal ash carries ${infusion}` }); continue; }
             const buffs: (Variant["buff"] | undefined)[] = [undefined];
             const meta = data.weaponMeta.get(setup.main.weapon)!;
-            if (setup.greases !== false && meta.isBuffable && GREASE_INFUSIONS.includes(infusion)) for (const g of doc.defaults.grease_candidates) buffs.push({ name: g, kind: "grease" });
+            if (setup.greases !== false && meta.isBuffable && meta.greaseInfusions.includes(infusion)) for (const g of doc.defaults.grease_candidates) buffs.push({ name: g, kind: "grease" });
             if (ash && (ASH_BUFFS as readonly string[]).includes(ash)) buffs.push({ name: ash, kind: "ash-buff" });
 
             for (const buff of buffs) {
